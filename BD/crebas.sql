@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     25/02/2016 14:27:01                          */
+/* Created on:     25/02/2016 17:06:30                          */
 /*==============================================================*/
 
 
@@ -27,6 +27,10 @@ drop table CONTRATOSITUACAO;
 drop index IDX_CDGRUPO;
 
 drop table GRUPO;
+
+drop index IDX_IDMODALIDADELUTA;
+
+drop table MOLIDADELUTA;
 
 drop index IDX_NUMCPFCNPJ;
 
@@ -184,14 +188,11 @@ IDCLIENTECONTRATO
 create table CLIENTELUTA (
    IDCLIENTELUTA        BIGINT               not null,
    IDACADEMIA           BIGINT               null,
-   DSMODALIDADE         VARCHAR(40)          null,
+   IDMODALIDADELUTA     BIGINT               null,
    DSGRADUACAO          VARCHAR(40)          null,
    DATAINICIOACADEMIA   TIMESTAMP            null,
    constraint PK_CLIENTELUTA primary key (IDCLIENTELUTA)
 );
-
-comment on column CLIENTELUTA.DSMODALIDADE is
-'Descreve a modalidade de luta que o cliente treina';
 
 comment on column CLIENTELUTA.DSGRADUACAO is
 'Descreve a graduação/faixa atual do cliente';
@@ -251,6 +252,22 @@ create table GRUPO (
 /*==============================================================*/
 create  index IDX_CDGRUPO on GRUPO (
 CDGRUPO
+);
+
+/*==============================================================*/
+/* Table: MOLIDADELUTA                                          */
+/*==============================================================*/
+create table MOLIDADELUTA (
+   IDMODALIDADELUTA     BIGINT               not null,
+   DSMODALIDADELUTA     VARCHAR(40)          null,
+   constraint PK_MOLIDADELUTA primary key (IDMODALIDADELUTA)
+);
+
+/*==============================================================*/
+/* Index: IDX_IDMODALIDADELUTA                                  */
+/*==============================================================*/
+create unique index IDX_IDMODALIDADELUTA on MOLIDADELUTA (
+IDMODALIDADELUTA
 );
 
 /*==============================================================*/
@@ -530,6 +547,11 @@ alter table CLIENTECONTRATO
 alter table CLIENTELUTA
    add constraint FK_CLIENTEL_REFERENCE_PESSOA foreign key (IDACADEMIA)
       references PESSOA (IDPESSOA)
+      on delete restrict on update restrict;
+
+alter table CLIENTELUTA
+   add constraint FK_CLIENTEL_REFERENCE_MOLIDADE foreign key (IDMODALIDADELUTA)
+      references MOLIDADELUTA (IDMODALIDADELUTA)
       on delete restrict on update restrict;
 
 alter table PESSOAENDERECO
