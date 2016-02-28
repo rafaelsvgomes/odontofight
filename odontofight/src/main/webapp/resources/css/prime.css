@@ -1,0 +1,49 @@
+.header {
+	margin-top: 20px;
+	padding-bottom: 20px;
+	position: relative;
+}
+
+.logo {
+	float: left;
+	width: 158px;
+	height: 71px;
+	padding-right: 20px;
+}
+
+.title {
+	font-size: 26px;
+	line-height: 38px;
+	padding-bottom: 40px;
+	margin: 0;
+	padding: 0;
+	padding-top: 20px;
+	color: #D16727;
+}
+
+.ui-wizard-step-title {
+    font-size: 14px;
+}
+
+<!-- Cabeçalho -->
+.menu-opcoes ul {
+  font-size: 15px;
+}
+
+.menu-opcoes a {
+   color: #003366;
+}
+
+.menu-opcoes ul li {
+  display: inline;
+  margin-left: 20px;
+}
+
+.menu-opcoes {
+  float: right;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: #333333;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}

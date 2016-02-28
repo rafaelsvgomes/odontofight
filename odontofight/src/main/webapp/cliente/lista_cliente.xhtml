@@ -1,0 +1,80 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/template.xhtml">
+	<ui:define name="pageTitle">
+		<h:outputText value="#{msg['page.title.lista.cliente']}" />
+	</ui:define>
+	
+	<f:metadata>
+		<f:event type="preRenderView" listener="#{clienteMB.iniciarListarClientes()}" />
+	</f:metadata>
+	
+	<ui:define name="content">
+		<div style="border-bottom: 1px solid #E5E5E5;">
+			<h3>
+				<h:outputText value="#{msg['label.clientes']}" />
+				<small> <h:outputText value="#{msg['label.listagem']}" /></small>
+			</h3>
+		</div>
+		<h:form>
+			<p:dataTable id="dataTable" var="cliente"
+				value="#{clienteMB.listaClientes}" paginator="true" rows="10" paginatorPosition="bottom"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				currentPageReportTemplate="{currentPage} de {totalPages}" rowsPerPageTemplate="10,20,50" emptyMessage="#{msg['alerta.nenhum.cliente.encontrado']}" >
+				<p:column style="text-align: center; width: 20px">
+					<f:facet name="header">
+						<h:outputText value="#" />
+					</f:facet>
+					<h:outputText value="#{cliente.id}"/>
+				</p:column>
+	
+				<p:column sortBy="#{cliente.nomePessoa}">
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.pessoa.nome']}" />
+					</f:facet>
+					<h:link outcome="editar_cliente" value="#{cliente.nomePessoa}"
+						title="#{msg['label.editar']} #{cliente.nomePessoa}">
+						<f:param name="id" value="#{cliente.id}" />
+					</h:link>
+				</p:column>
+				
+				<p:column sortBy="#{cliente.tipoPessoa.descTipoPessoa}" style="text-align: center;">
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.pessoa.tppessoa']}" />
+					</f:facet>
+					<h:outputText value="#{cliente.tipoPessoa.descTipoPessoa}" />
+				</p:column>
+	
+				<p:column sortBy="#{cliente.numCpfCnpj}">
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.pessoa.cpf.cnpj']}" />
+					</f:facet>
+					<h:outputText value="#{cliente.numCpfCnpj}" />
+				</p:column>
+				
+				<p:column sortBy="#{cliente.clienteSituacao.descClienteSituacao}">
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.cliente.situacao']}" />
+					</f:facet>
+					<h:outputText value="#{cliente.clienteSituacao.descClienteSituacao}" />
+				</p:column>
+				
+				<p:column style="text-align: center">
+					<f:facet name="header" >
+						<h:outputText value="#{msg['label.ativar']}" />
+					</f:facet>
+					<p:commandLink action="#{clienteMB.ativarCliente(cliente.id)}" update="growl, dataTable" onclick="PF('dlgExec').show();" oncomplete="PF('dlgExec').hide();"
+						rendered="#{cliente.clienteSituacao.id != 2}">
+						<i class="icon-ok-sign" style="color:green;"></i>
+		            </p:commandLink>
+				</p:column>
+				
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

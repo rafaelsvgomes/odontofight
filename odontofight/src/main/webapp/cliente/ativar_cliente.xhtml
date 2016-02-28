@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/template.xhtml">
+	<ui:define name="pageTitle">
+		<h:outputText value="#{msg['page.title.lista.cliente']}" />
+	</ui:define>
+	
+	<f:metadata>
+		<f:event type="preRenderView" listener="#{clienteMB.iniciarPagamento()}" />
+	</f:metadata>
+
+	<ui:define name="content">
+		<div style="border-bottom: 1px solid #E5E5E5;">
+			<h3>
+				<h:outputText value="#{msg['label.clientes']}" />
+				<small> <h:outputText value="#{msg['label.ativar']}" /></small>
+			</h3>
+		</div>
+		<h:form styleClass="form-horizontal">
+				<ui:include src="/cliente/form_plano_assinatura.xhtml" />
+		</h:form>
+		<h:form styleClass="form-horizontal">
+			<fieldset>
+					<legend>
+						<small> <h:outputText value="#{msg['label.cliente.pagamento']}" /></small>
+					</legend>
+					
+					<p:outputPanel id="painelPagSeguro">
+					<div class="control-group">
+						<label class="control-label">
+							<h:outputText value="#{msg['label.pagamento.origem']} *" />
+						</label>
+						<div class="controls">
+							<p:selectOneMenu value="#{clienteMB.pedido.origemPagamento}" converter="entityConverter" label="#{msg['label.pagamento.origem']}" required="true" immediate="true">
+				                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
+				                <f:selectItems value="#{clienteMB.listaOrigemPagamento}" var="op" itemLabel="#{op.descOrigemPagamento}" />
+				                <p:ajax update="painelPagSeguro" event="change" onstart="PF('dlgExec').show();" oncomplete="PF('dlgExec').hide();"/>
+			    	        </p:selectOneMenu>
+						</div>
+					</div>
+					
+					<ui:fragment rendered="#{clienteMB.isPagSeguro}">
+						<div class="control-group">
+							<label class="control-label"> 
+								<h:outputText value="#{msg['label.cliente.pagamento']} *" />
+							</label>
+							
+							<div class="controls">
+								<ui:include src="/cliente/ligthbox_pagseguro.xhtml" />
+							</div>
+						</div>
+						</ui:fragment>
+					</p:outputPanel>
+				</fieldset>
+				<p:separator/>
+			
+				<div class="controls">
+					<p:commandButton value="#{msg['button.salvar']}" action="#{clienteMB.salvar}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
+						oncomplete="PF('dlgExec').hide();" rendered="#{clienteMB.cliente != null}" />
+					
+					<p:button value="#{msg['button.cancelar']}" outcome="lista_cliente" styleClass="btn" />
+					
+					<!-- p:commandButton value="#{msg['button.excluir']}" onclick="PF('confirmation').show();" rendered="#{clienteMB.cliente.id != null}" immediate="true" styleClass="btn btn-danger" /-->
+				</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

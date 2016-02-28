@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<style type="text/css">
+	.ui-diagram-element {	
+                width:5em; 
+                height:5em;
+                line-height:5em;
+                text-align: center;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.8);
+                border-radius: 5em;
+                border: 1px solid #404a4e;
+                background-color: #404a4e;
+                color: #cccccc;
+            }
+            
+            .ui-diagram-element:hover {
+                background-color: #20282b;
+            }
+	}
+</style>
+</h:head>
+<h:body>
+	<h1>Hello World PrimeFaces</h1>
+
+	<h:form id="form">
+		<p:growl id="msgs" showDetail="true" />
+
+		<p:diagram value="#{diagramEditableView.model}" style="height:600px" styleClass="ui-widget-content" var="el">
+			<f:facet name="element">
+				<h:outputText value="#{el.name}" style="display:block;margin-top:1em;" />
+				<p:graphicImage name="demo/images/#{el.image}" />
+			</f:facet>
+			<p:ajax event="connect" listener="#{diagramEditableView.onConnect}" />
+			<p:ajax event="disconnect" listener="#{diagramEditableView.onDisconnect}" />
+			<p:ajax event="connectionChange" listener="#{diagramEditableView.onConnectionChange}" />
+		</p:diagram>
+	</h:form>
+
+</h:body>
+</html>

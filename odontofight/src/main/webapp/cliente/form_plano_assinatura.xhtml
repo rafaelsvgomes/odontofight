@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<fieldset>
+		<legend>
+			<small> <h:outputText value="#{msg['label.pessoa.planoassinatura']}" /></small>
+		</legend>
+		
+		<div class="control-group">
+			<label class="control-label">
+				<h:outputText value="#{msg['label.cliente.plano']} *" />
+			</label>
+			<div class="controls">
+				<p:selectOneMenu value="#{clienteMB.cliente.planoAssinatura}" converter="entityConverter" label="#{msg['label.cliente.plano']}" required="true">
+	                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
+	                <f:selectItems value="#{clienteMB.listaPlanoAssinatura}" var="plano" itemLabel="#{plano.nomePlanoAssinatura}" />
+	                <p:ajax update="dataTableProdutos" event="change" listener="#{clienteMB.atualizaListaProdutosPlanoAssinatura()}" 
+	                	onstart="PF('dlgExec').show();" oncomplete="PF('dlgExec').hide();"  />
+	   	        </p:selectOneMenu>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>
+			<small> <h:outputText value="Produtos do plano" /></small>
+		</legend>
+		
+		<p:dataTable id="dataTableProdutos" var="produto" value="#{clienteMB.listaProdutosPlanoAssinatura}" 
+			emptyMessage="#{msg['alerta.nenhum.produto.encontrado']}">
+			<p:column style="text-align: center; width: 20px">
+				<f:facet name="header">
+					<h:outputText value="#" />
+				</f:facet>
+				<h:outputText value="#{produto.id}" style="text-align: center;"/>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="#{msg['label.produto.nome']}" />
+				</f:facet>
+				<h:outputText value="#{produto.nomeProduto}" />
+			</p:column>
+			<p:column style="text-align: center;">
+				<f:facet name="header">
+					<h:outputText value="#{msg['label.produto.vlpontosproduto']}" />
+				</f:facet>
+				<h:outputText value="#{produto.valorPontoProduto}" style="text-align: center;"/>
+			</p:column>
+		</p:dataTable>
+	</fieldset>
+</ui:composition>

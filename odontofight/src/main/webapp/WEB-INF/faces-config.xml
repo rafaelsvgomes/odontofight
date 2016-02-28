@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<faces-config version="2.1" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+	<validator>
+		<validator-id>validator.CpfValidator</validator-id>
+		<validator-class>br.com.odontofight.entidade.validation.CpfCnpjValidator</validator-class>
+	</validator>
+	<application>
+		<!-- configuracoes do locale (i18n) -->
+		<locale-config>
+			<default-locale>pt_BR</default-locale>
+		</locale-config>
+		<resource-bundle>
+			<base-name>messages_labels</base-name>
+			<var>msg</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>propriedades</base-name>
+			<var>prp</var>
+		</resource-bundle>
+		
+		<resource-bundle>
+			<base-name>validationmessages</base-name>
+			<var>vmsg</var>
+		</resource-bundle>
+		<message-bundle>validationmessages</message-bundle>
+	</application>
+</faces-config>

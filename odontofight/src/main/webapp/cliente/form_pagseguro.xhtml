@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+		<form>
+			<span onclick="javascript:redirect()" class="linkClass"/>
+		</form>
+		<div style="display:none:"> <!-- If you want it hidden -->
+	    	<form method="post" target="pagseguro" action="${prp['action.pagseguro.teste']}">  
+		        <!-- Campos obrigatórios -->  
+		        <input name="receiverEmail" type="hidden" value="${prp['conta.pagseguro']}" />  
+		        <input name="currency" type="hidden" value="BRL" />  
+		  
+		        <!-- Itens do pagamento (ao menos um item é obrigatório) -->  
+		        <input name="itemId1" type="hidden" value="0001" />  
+		        <input name="itemDescription1" type="hidden" value="${clienteMB.cliente.planoAssinatura.nomePlanoAssinatura}" />  
+		        <input name="itemAmount1" type="hidden" value="${clienteMB.cliente.planoAssinatura.valorAdesao}" />  
+		        <input name="itemQuantity1" type="hidden" value="1" />  
+	<!-- 			<input name="itemShippingCost1" type="hidden" value="0.00" />   -->
+	<!-- 	        <input name="itemWeight1" type="hidden" value="0" />   -->
+		        
+		        <!-- Código de referência do pagamento no seu sistema (opcional) -->  
+		        <input name="reference" type="hidden" value="${clienteMB.cliente.planoAssinatura.nomePlanoAssinatura}" />  
+		          
+		        <!-- Dados do comprador (opcionais) -->  
+		        <input name="senderName" type="hidden" value="${clienteMB.cliente.nomePessoa}" />  
+		        <input name="senderAreaCode" type="hidden" value="${clienteMB.DDDCelular}" />  
+		        <input name="senderPhone" type="hidden" value="${clienteMB.celular.descTelefone}" />  
+		        <input name="senderEmail" type="hidden" value="${clienteMB.cliente.descEmail}" />  
+		  
+		        <!-- submit do form (obrigatório) -->  
+		        <input alt="Pague com PagSeguro" name="submit"  type="image" src="https://p.simg.uol.com.br/out/pagseguro/i/botoes/pagamentos/120x53-pagar.gif"/>  
+			</form>  
+		</div>
+</ui:composition>
