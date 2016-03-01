@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     25/02/2016 17:06:30                          */
+/* Created on:     29/02/2016 13:13:18                          */
 /*==============================================================*/
 
 
@@ -27,6 +27,10 @@ drop table CONTRATOSITUACAO;
 drop index IDX_CDGRUPO;
 
 drop table GRUPO;
+
+drop index IDX_IDLOGPEDIDOSITUACAO;
+
+drop table LOGPEDIDOSITUACAO;
 
 drop index IDX_IDMODALIDADELUTA;
 
@@ -58,6 +62,10 @@ drop index IDX_IDSITUACAOPARCELA;
 
 drop table SITUACAOPARCELA;
 
+drop index IDX_IDSTATUSPAGAMENTO;
+
+drop table STATUSPAGAMENTO;
+
 drop index IDX_IDTIPOENDERECO;
 
 drop table TIPOENDERECO;
@@ -88,6 +96,8 @@ drop sequence SEQCLIENTECONTRATO;
 
 drop sequence SEQCLIENTELUTA;
 
+drop sequence SEQLOGPEDIDOSITUACAO;
+
 drop sequence SEQPESSOA;
 
 drop sequence SEQPESSOACONTA;
@@ -110,6 +120,9 @@ create sequence SEQCLIENTECONTRATO
 increment 1;
 
 create sequence SEQCLIENTELUTA
+increment 1;
+
+create sequence SEQLOGPEDIDOSITUACAO
 increment 1;
 
 create sequence SEQPESSOA
@@ -252,6 +265,28 @@ create table GRUPO (
 /*==============================================================*/
 create  index IDX_CDGRUPO on GRUPO (
 CDGRUPO
+);
+
+/*==============================================================*/
+/* Table: LOGPEDIDOSITUACAO                                     */
+/*==============================================================*/
+create table LOGPEDIDOSITUACAO (
+   IDLOGPEDIDOSITUACAO  SERIAL               not null,
+   IDPLANOPAGAMENTO     BIGINT               not null,
+   IDSTATUSPAGAMENTO    BIGINT               null,
+   CODTRANSACAO         VARCHAR(100)         null,
+   DATAHORAPEDIDOSITUACAO TIMESTAMP            null,
+   constraint PK_LOGPEDIDOSITUACAO primary key (IDLOGPEDIDOSITUACAO)
+);
+
+comment on table LOGPEDIDOSITUACAO is
+'Se foi Em mãos, PagSeguro, etc.';
+
+/*==============================================================*/
+/* Index: IDX_IDLOGPEDIDOSITUACAO                               */
+/*==============================================================*/
+create unique index IDX_IDLOGPEDIDOSITUACAO on LOGPEDIDOSITUACAO (
+IDLOGPEDIDOSITUACAO
 );
 
 /*==============================================================*/
@@ -404,6 +439,22 @@ IDSITUACAOPARCELA
 );
 
 /*==============================================================*/
+/* Table: STATUSPAGAMENTO                                       */
+/*==============================================================*/
+create table STATUSPAGAMENTO (
+   IDSTATUSPAGAMENTO    BIGINT               not null,
+   DSSTATUSPAGAMENTO    VARCHAR(100)         null,
+   constraint PK_STATUSPAGAMENTO primary key (IDSTATUSPAGAMENTO)
+);
+
+/*==============================================================*/
+/* Index: IDX_IDSTATUSPAGAMENTO                                 */
+/*==============================================================*/
+create unique index IDX_IDSTATUSPAGAMENTO on STATUSPAGAMENTO (
+IDSTATUSPAGAMENTO
+);
+
+/*==============================================================*/
 /* Table: TIPOENDERECO                                          */
 /*==============================================================*/
 create table TIPOENDERECO (
@@ -552,6 +603,16 @@ alter table CLIENTELUTA
 alter table CLIENTELUTA
    add constraint FK_CLIENTEL_REFERENCE_MOLIDADE foreign key (IDMODALIDADELUTA)
       references MOLIDADELUTA (IDMODALIDADELUTA)
+      on delete restrict on update restrict;
+
+alter table LOGPEDIDOSITUACAO
+   add constraint FK_LOGPEDID_REFERENCE_PLANOPAG foreign key (IDPLANOPAGAMENTO)
+      references PLANOPAGAMENTO (IDPLANOPAGAMENTO)
+      on delete restrict on update restrict;
+
+alter table LOGPEDIDOSITUACAO
+   add constraint FK_LOGPEDID_REFERENCE_STATUSPA foreign key (IDSTATUSPAGAMENTO)
+      references STATUSPAGAMENTO (IDSTATUSPAGAMENTO)
       on delete restrict on update restrict;
 
 alter table PESSOAENDERECO
