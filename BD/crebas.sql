@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     29/02/2016 13:13:18                          */
+/* Created on:     03/03/2016 08:46:34                          */
 /*==============================================================*/
 
 
@@ -158,7 +158,6 @@ increment 1;
 create table CLIENTE (
    IDCLIENTE            BIGINT               not null,
    IDCLIENTELUTA        BIGINT               null,
-   IDPLANOASSINATURA    BIGINT               not null,
    IDCLIENTESITUACAO    BIGINT               not null,
    IDPESSOAINDICACAO    BIGINT               null,
    DATAATUALIZACAO      TIMESTAMP            not null,
@@ -180,6 +179,7 @@ create table CLIENTECONTRATO (
    IDCLIENTECONTRATO    BIGINT               not null,
    IDCLIENTE            BIGINT               null,
    IDCONTRATOSITUACAO   BIGINT               null,
+   IDPLANOASSINATURA    BIGINT               null,
    VLCONTRATO           NUMERIC(12,2)        null,
    VLPARCELA            NUMERIC(12,2)        null,
    QTDPARCELA           BIGINT               null,
@@ -571,11 +571,6 @@ alter table CLIENTE
       on delete restrict on update restrict;
 
 alter table CLIENTE
-   add constraint FK_CLIENTE_FK_CLIENT_PLANOASS foreign key (IDPLANOASSINATURA)
-      references PLANOASSINATURA (IDPLANOASSINATURA)
-      on delete restrict on update restrict;
-
-alter table CLIENTE
    add constraint FK_CLIENTE_REFERENCE_PESSOA foreign key (IDPESSOAINDICACAO)
       references PESSOA (IDPESSOA)
       on delete restrict on update restrict;
@@ -583,6 +578,11 @@ alter table CLIENTE
 alter table CLIENTE
    add constraint FK_CLIENTE_REFERENCE_CLIENTEL foreign key (IDCLIENTELUTA)
       references CLIENTELUTA (IDCLIENTELUTA)
+      on delete restrict on update restrict;
+
+alter table CLIENTECONTRATO
+   add constraint FK_CLIENTEC_FK_CLIENT_PLANOASS foreign key (IDPLANOASSINATURA)
+      references PLANOASSINATURA (IDPLANOASSINATURA)
       on delete restrict on update restrict;
 
 alter table CLIENTECONTRATO
