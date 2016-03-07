@@ -110,9 +110,6 @@ public abstract class Pessoa extends EntidadeGenerica {
     private List<PessoaTelefone> listaTelefone;
 
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
-    private List<PessoaConta> listaPessoaConta;
-
-    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
     private List<UsuarioPessoa> listaUsuarioPessoa;
 
     public Long getId() {
@@ -201,14 +198,6 @@ public abstract class Pessoa extends EntidadeGenerica {
 
     public void setDescEmail(String descEmail) {
         this.descEmail = descEmail;
-    }
-
-    public List<PessoaConta> getListaPessoaConta() {
-        return listaPessoaConta;
-    }
-
-    public void setListaPessoaConta(List<PessoaConta> listaPessoaConta) {
-        this.listaPessoaConta = listaPessoaConta;
     }
 
     public List<UsuarioPessoa> getListaUsuarioPessoa() {

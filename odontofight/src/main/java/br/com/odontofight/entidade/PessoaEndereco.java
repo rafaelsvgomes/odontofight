@@ -7,7 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -15,7 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PESSOAENDERECO")
 @SequenceGenerator(name = "SEQPESSOAENDERECO", sequenceName = "SEQPESSOAENDERECO", allocationSize = 1)
-@NamedQueries({ @NamedQuery(name = PessoaEndereco.LISTAR_POR_ID_PESSOA, query = "SELECT e FROM PessoaEndereco e WHERE e.pessoa.id = :idPessoa") })
+@NamedQuery(name = PessoaEndereco.LISTAR_POR_ID_PESSOA, query = "SELECT e FROM PessoaEndereco e WHERE e.pessoa.id = :idPessoa")
 public class PessoaEndereco extends EntidadeGenerica {
     private static final long serialVersionUID = 3017364402878640980L;
 
@@ -55,9 +54,7 @@ public class PessoaEndereco extends EntidadeGenerica {
     @ManyToOne
     @JoinColumn(name = "CODUF", nullable = false)
     private UF uf;
-    
 
-    
     public PessoaEndereco() {
     }
 

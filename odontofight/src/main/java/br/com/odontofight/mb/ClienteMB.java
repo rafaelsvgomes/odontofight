@@ -10,20 +10,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 
-import br.com.odontofight.entidade.Banco;
 import br.com.odontofight.entidade.Cliente;
-import br.com.odontofight.entidade.ClienteRede;
 import br.com.odontofight.entidade.ClienteSituacao;
 import br.com.odontofight.entidade.Grupo;
 import br.com.odontofight.entidade.OrigemPagamento;
-import br.com.odontofight.entidade.Pedido;
 import br.com.odontofight.entidade.Pessoa;
-import br.com.odontofight.entidade.PessoaConta;
 import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaTelefone;
 import br.com.odontofight.entidade.PlanoAssinatura;
-import br.com.odontofight.entidade.Produto;
-import br.com.odontofight.entidade.TipoConta;
 import br.com.odontofight.entidade.TipoEndereco;
 import br.com.odontofight.entidade.TipoTelefone;
 import br.com.odontofight.entidade.UF;
@@ -59,8 +53,6 @@ public class ClienteMB extends GenericMB {
     private PessoaTelefone telefone;
 
     private PessoaTelefone celular;
-
-    private PessoaConta pessoaConta;
 
     private List<Cliente> listaClientes;
 

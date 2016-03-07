@@ -7,10 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -21,7 +17,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PlanoAssinatura")
 @SequenceGenerator(name = "seqplanoassinatura", sequenceName = "seqplanoassinatura", allocationSize = 1)
-@NamedQueries({ @NamedQuery(name = PlanoAssinatura.LISTAR_SIPLES, query = "SELECT new br.com.odontofight.entidade.PlanoAssinatura(p.id, p.nomePlanoAssinatura, p.valorAdesao, p.produto.id) FROM PlanoAssinatura p") })
+// @NamedQuery(name = PlanoAssinatura.LISTAR_SIPLES, query =
+// "SELECT new br.com.odontofight.entidade.PlanoAssinatura(p.id, p.nomePlanoAssinatura, p.valorAdesao, p.produto.id) FROM PlanoAssinatura p")
 public class PlanoAssinatura extends EntidadeGenerica {
     private static final long serialVersionUID = 1L;
 
@@ -30,12 +27,9 @@ public class PlanoAssinatura extends EntidadeGenerica {
     public PlanoAssinatura() {
     }
 
-    public PlanoAssinatura(Short id, String nomePlano, BigDecimal valorAdesao, Long idProduto) {
+    public PlanoAssinatura(Short id, String nomePlano) {
         this.id = id;
         this.nomePlanoAssinatura = nomePlano;
-        this.valorAdesao = valorAdesao;
-        this.produto = new Produto();
-        this.produto.setId(idProduto);
     }
 
     @Id
@@ -46,31 +40,14 @@ public class PlanoAssinatura extends EntidadeGenerica {
     @Column(nullable = false)
     private String nomePlanoAssinatura;
 
-    @ManyToOne
-    @JoinColumn(name = "idProduto")
-    private Produto produto;
-
     @Column(name = "dsplanoassinatura")
     private String descPlanoAssinatura;
 
-    @Column(name = "vladesao")
-    private BigDecimal valorAdesao;
-
-    @Column(name = "vlRenovacao")
-    private BigDecimal valorRenovacao;
-
-    @Column(name = "vlCompraMinima")
-    private BigDecimal valorCompraMinima;
+    @Column(name = "vlPlanoAssinatura")
+    private BigDecimal valorPlanoAssinatura;
 
     private Boolean bolAtivo;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     * 
-     * Sobrescrevendo para ser encontrado via converter
-     */
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -79,13 +56,6 @@ public class PlanoAssinatura extends EntidadeGenerica {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     * 
-     * Sobrescrevendo para ser encontrado via converter
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -127,28 +97,12 @@ public class PlanoAssinatura extends EntidadeGenerica {
         this.descPlanoAssinatura = descPlanoAssinatura;
     }
 
-    public BigDecimal getValorAdesao() {
-        return valorAdesao;
+    public BigDecimal getValorPlanoAssinatura() {
+        return valorPlanoAssinatura;
     }
 
-    public void setValorAdesao(BigDecimal valorAdesao) {
-        this.valorAdesao = valorAdesao;
-    }
-
-    public BigDecimal getValorRenovacao() {
-        return valorRenovacao;
-    }
-
-    public void setValorRenovacao(BigDecimal valorRenovacao) {
-        this.valorRenovacao = valorRenovacao;
-    }
-
-    public BigDecimal getValorCompraMinima() {
-        return valorCompraMinima;
-    }
-
-    public void setValorCompraMinima(BigDecimal valorCompraMinima) {
-        this.valorCompraMinima = valorCompraMinima;
+    public void setValorPlanoAssinatura(BigDecimal valorPlanoAssinatura) {
+        this.valorPlanoAssinatura = valorPlanoAssinatura;
     }
 
     public Boolean getBolAtivo() {
@@ -157,14 +111,6 @@ public class PlanoAssinatura extends EntidadeGenerica {
 
     public void setBolAtivo(Boolean bolAtivo) {
         this.bolAtivo = bolAtivo;
-    }
-
-    public Produto getProduto() {
-        return produto;
-    }
-
-    public void setProduto(Produto produto) {
-        this.produto = produto;
     }
 
 }
