@@ -90,7 +90,6 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
 
     /**
      * @return List<PlanoAssinatura>
-     * 
      */
     @SuppressWarnings("unchecked")
     public List<PlanoAssinatura> listarPlanoAssinatura() {

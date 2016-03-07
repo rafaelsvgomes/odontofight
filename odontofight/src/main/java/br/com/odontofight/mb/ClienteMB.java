@@ -292,5 +292,4 @@ public class ClienteMB extends GenericMB {
     public List<ModalidadeLuta> getListaModalidadeLuta() {
         return listaModalidadeLuta;
     }
-
 }
