@@ -6,6 +6,14 @@
 		<validator-id>validator.CpfValidator</validator-id>
 		<validator-class>br.com.odontofight.entidade.validation.CpfCnpjValidator</validator-class>
 	</validator>
+	<converter>
+    	<converter-id>converter.TelefoneConverter</converter-id>
+     	<converter-class>br.com.odontofight.entidade.converter.TelefoneConverter</converter-class>
+	</converter>
+	<converter>
+    	<converter-id>converter.CpfCnpjConverter</converter-id>
+     	<converter-class>br.com.odontofight.entidade.converter.CpfCnpjConverter</converter-class>
+	</converter>
 	<application>
 		<!-- configuracoes do locale (i18n) -->
 		<locale-config>

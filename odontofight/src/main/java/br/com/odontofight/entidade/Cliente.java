@@ -1,6 +1,7 @@
 package br.com.odontofight.entidade;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Transient;
 
 import br.com.odontofight.enums.TipoPessoa;
 import br.com.odontofight.enums.TipoSexo;
@@ -23,7 +25,7 @@ import br.com.odontofight.enums.TipoSexo;
         @NamedQuery(name = Cliente.OBTER_POR_DESC_USUARIO, query = "SELECT c.id FROM Cliente c WHERE c.descEmail = :descUsuario"),
         @NamedQuery(name = Cliente.OBTER_POR_NUM_CPF_CNPJ, query = "SELECT c.id FROM Cliente c WHERE c.numCpfCnpj = :numCpfCnpj"),
         @NamedQuery(name = Cliente.OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO, query = "SELECT c.id FROM Cliente c WHERE c.numCpfCnpj = :numCpfCnpj and c.id not in (:idSelecionado)"),
-        @NamedQuery(name = Cliente.LISTAR_CLIENTES_INDICADORES, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa) FROM Cliente c"),
+        @NamedQuery(name = Cliente.LISTAR_CLIENTES_INDICACAO, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa) FROM Cliente c"),
         // @NamedQuery(name = Cliente.OBTER_CLIENTE_EDITAR, query =
         // "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.descRazaoSocial, c.tipoPessoa, c.numCpfCnpj, c.tipoSexo, "
         // +
@@ -39,7 +41,7 @@ public class Cliente extends Pessoa {
     public static final String OBTER_POR_DESC_USUARIO = "obterPorDescUsuario";
     public static final String OBTER_POR_NUM_CPF_CNPJ = "obterPorNumCpfCnpj";
     public static final String OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO = "obterPorNumCpfCnpjIgnoraSelecionado";
-    public static final String LISTAR_CLIENTES_INDICADORES = "listarClientesIndicadores";
+    public static final String LISTAR_CLIENTES_INDICACAO = "listarClientesIndicacao";
     public static final String OBTER_CLIENTE_EDITAR = "obterClienteEditar";
     public static final String LISTAR_CLIENTES_SIMPLES = "listarClientesSimples";
 
@@ -76,17 +78,16 @@ public class Cliente extends Pessoa {
     @JoinColumn(name = "idClienteSituacao", nullable = true)
     private ClienteSituacao clienteSituacao;
 
-    @ManyToOne
-    @JoinColumn(name = "idPessoa", nullable = true)
-    private Pessoa PessoaIndicacao;
+    // @ManyToOne
+    // @JoinColumn(name = "idPessoa", nullable = true)
+    @Transient
+    private Pessoa clienteIndicacao;
 
     @ManyToOne
     @JoinColumn(name = "idClienteLuta", nullable = true)
     private ClienteLuta clienteLuta;
 
     private Date dataAtualizacao;
-
-    private Date dataVencimentoParcela;
 
     @Override
     public int hashCode() {
@@ -113,20 +114,46 @@ public class Cliente extends Pessoa {
         return true;
     }
 
+    public PessoaTelefone getTelefoneCelular() {
+        for (PessoaTelefone tel : this.getListaTelefone()) {
+            if (tel.getTipoTelefone().getId().equals(TipoTelefone.CELULAR)) {
+                return tel;
+            }
+        }
+        return null;
+    }
+
+    public PessoaTelefone getTelefoneResidencial() {
+        for (PessoaTelefone tel : this.getListaTelefone()) {
+            if (tel.getTipoTelefone().getId().equals(TipoTelefone.RESIDENCIAL)) {
+                return tel;
+            }
+        }
+        return null;
+    }
+
+    public void addPessoaTelefone(PessoaTelefone telefone) {
+        if (getListaTelefone() == null) {
+            setListaTelefone(new ArrayList<PessoaTelefone>());
+        }
+        getListaTelefone().add(telefone);
+        telefone.setPessoa(this);
+    }
+
+    public void addPessoaEndereco(PessoaEndereco endereco) {
+        if (getListaEndereco() == null) {
+            setListaEndereco(new ArrayList<PessoaEndereco>());
+        }
+        getListaEndereco().add(endereco);
+        endereco.setPessoa(this);
+    }
+
     public ClienteSituacao getClienteSituacao() {
         return clienteSituacao;
     }
 
     public void setClienteSituacao(ClienteSituacao clienteSituacao) {
         this.clienteSituacao = clienteSituacao;
-    }
-
-    public Pessoa getPessoaIndicacao() {
-        return PessoaIndicacao;
-    }
-
-    public void setPessoaIndicacao(Pessoa pessoaIndicacao) {
-        PessoaIndicacao = pessoaIndicacao;
     }
 
     public ClienteLuta getClienteLuta() {
@@ -145,12 +172,12 @@ public class Cliente extends Pessoa {
         this.dataAtualizacao = dataAtualizacao;
     }
 
-    public Date getDataVencimentoParcela() {
-        return dataVencimentoParcela;
+    public Pessoa getClienteIndicacao() {
+        return clienteIndicacao;
     }
 
-    public void setDataVencimentoParcela(Date dataVencimentoParcela) {
-        this.dataVencimentoParcela = dataVencimentoParcela;
+    public void setClienteIndicacao(Pessoa clienteIndicacao) {
+        this.clienteIndicacao = clienteIndicacao;
     }
 
 }

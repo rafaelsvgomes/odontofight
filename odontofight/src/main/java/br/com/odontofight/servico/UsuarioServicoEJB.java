@@ -39,6 +39,19 @@ public class UsuarioServicoEJB extends GenericPersistencia<Usuario, Long> {
 
         Object[] usuario = (Object[]) em.createNativeQuery(sql).setParameter("userName", userName).getSingleResult();
 
+        return montarUsuarioLogado(usuario);
+    }
+
+    public UsuarioLogado obterUsuario(Long idUser) {
+        String sql = "SELECT up.idpessoa, u.dsusuario, c.idclientesituacao, ug.cdgrupo, u.idusuario, p.nomepessoa FROM usuario u, usuariopessoa up, usuariogrupo ug, cliente c, pessoa p "
+                + "WHERE u.idusuario = up.idusuario and up.idpessoa = c.idcliente and u.idusuario = ug.idusuario and c.idcliente = p.idpessoa and u.idusuario = :idUser";
+
+        Object[] usuario = (Object[]) em.createNativeQuery(sql).setParameter("idUser", idUser).getSingleResult();
+
+        return montarUsuarioLogado(usuario);
+    }
+
+    private UsuarioLogado montarUsuarioLogado(Object[] usuario) {
         UsuarioLogado usuarioLogado = new UsuarioLogado();
         usuarioLogado.setIdCliente(((BigInteger) usuario[0]).longValue());
         usuarioLogado.setDescUsuario((String) usuario[1]);

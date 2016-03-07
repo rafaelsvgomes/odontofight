@@ -7,9 +7,13 @@
  */
 package br.com.odontofight.mb;
 
+import java.io.IOException;
+
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import br.com.odontofight.entidade.ClienteSituacao;
 import br.com.odontofight.entidade.Grupo;
@@ -48,6 +52,15 @@ public class UsuarioMB extends GenericMB {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.alterar.senha", ex.getMessage());
         }
+    }
+
+    public void efetuarLogout() throws IOException {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+        session.invalidate();
+
+        FacesContext.getCurrentInstance().getExternalContext().redirect("../index.jsp");
+        FacesContext.getCurrentInstance().responseComplete();
     }
 
     public boolean isAdmin() {

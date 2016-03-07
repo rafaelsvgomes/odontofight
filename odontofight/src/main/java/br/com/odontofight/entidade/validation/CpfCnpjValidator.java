@@ -6,13 +6,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-import br.com.odontofight.util.CpfCnpjUtil;
 import br.com.odontofight.util.MensagemUtil;
 
 public class CpfCnpjValidator implements Validator {
     @Override
     public void validate(FacesContext context, UIComponent component, Object valorTela) throws ValidatorException {
-        String cpfCnpj = CpfCnpjUtil.getCpfCnpjLimpo(String.valueOf(valorTela));
+        String cpfCnpj = String.valueOf(valorTela);
 
         if (cpfCnpj.length() == 11 && !validaCPF(cpfCnpj)) {
             throw new ValidatorException(getMessage("cpf.invalido", component));
