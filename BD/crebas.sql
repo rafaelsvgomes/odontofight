@@ -1,8 +1,12 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     03/03/2016 08:46:34                          */
+/* Created on:     07/03/2016 09:13:29                          */
 /*==============================================================*/
 
+
+drop index IDX_CODBANCO;
+
+drop table BANCO;
 
 drop index IDX_IDCLIENTE;
 
@@ -42,9 +46,21 @@ drop index IDX_IDPESSOA;
 
 drop table PESSOA;
 
+drop index IDX_IDPESSOAACADEMIA;
+
+drop table PESSOAACADEMIA;
+
+drop index IDX_IDPESSOACONTA;
+
+drop table PESSOACONTA;
+
 drop index IDX_IDPESSOAENDERECO;
 
 drop table PESSOAENDERECO;
+
+drop index IDX_IDPESSOAINDICACAO;
+
+drop table PESSOAINDICACAO;
 
 drop index IDX_IDPESSOATELEFONE;
 
@@ -65,6 +81,10 @@ drop table SITUACAOPARCELA;
 drop index IDX_IDSTATUSPAGAMENTO;
 
 drop table STATUSPAGAMENTO;
+
+drop index IDX_IDTIPOCONTA;
+
+drop table TIPOCONTA;
 
 drop index IDX_IDTIPOENDERECO;
 
@@ -153,6 +173,22 @@ create sequence SEQUSUARIOPESSOA
 increment 1;
 
 /*==============================================================*/
+/* Table: BANCO                                                 */
+/*==============================================================*/
+create table BANCO (
+   CODBANCO             INT4                 not null,
+   DSBANCO              VARCHAR(40)          not null,
+   constraint PK_BANCO primary key (CODBANCO)
+);
+
+/*==============================================================*/
+/* Index: IDX_CODBANCO                                          */
+/*==============================================================*/
+create unique index IDX_CODBANCO on BANCO (
+CODBANCO
+);
+
+/*==============================================================*/
 /* Table: CLIENTE                                               */
 /*==============================================================*/
 create table CLIENTE (
@@ -161,7 +197,6 @@ create table CLIENTE (
    IDCLIENTESITUACAO    BIGINT               not null,
    IDPESSOAINDICACAO    BIGINT               null,
    DATAATUALIZACAO      TIMESTAMP            not null,
-   DIAVENCIMENTOPARCELA BIGINT               null,
    constraint PK_CLIENTE primary key (IDCLIENTE)
 );
 
@@ -180,6 +215,7 @@ create table CLIENTECONTRATO (
    IDCLIENTE            BIGINT               null,
    IDCONTRATOSITUACAO   BIGINT               null,
    IDPLANOASSINATURA    BIGINT               null,
+   DIAVENCIMENTOPARCELA BIGINT               null,
    VLCONTRATO           NUMERIC(12,2)        null,
    VLPARCELA            NUMERIC(12,2)        null,
    QTDPARCELA           BIGINT               null,
@@ -200,8 +236,8 @@ IDCLIENTECONTRATO
 /*==============================================================*/
 create table CLIENTELUTA (
    IDCLIENTELUTA        BIGINT               not null,
-   IDACADEMIA           BIGINT               null,
    IDMODALIDADELUTA     BIGINT               null,
+   IDPESSOAACADEMIA     BIGINT               null,
    DSGRADUACAO          VARCHAR(40)          null,
    DATAINICIOACADEMIA   TIMESTAMP            null,
    constraint PK_CLIENTELUTA primary key (IDCLIENTELUTA)
@@ -310,6 +346,7 @@ IDMODALIDADELUTA
 /*==============================================================*/
 create table PESSOA (
    IDPESSOA             BIGINT               not null,
+   IDPESSOACONTA        BIGINT               null,
    NOMEPESSOA           VARCHAR(50)          not null,
    DSRAZAOSOCIAL        VARCHAR(50)          null,
    CODTIPOPESSOA        CHAR(1)              not null
@@ -338,6 +375,42 @@ NUMCPFCNPJ
 );
 
 /*==============================================================*/
+/* Table: PESSOAACADEMIA                                        */
+/*==============================================================*/
+create table PESSOAACADEMIA (
+   IDPESSOAACADEMIA     BIGINT               not null,
+   constraint PK_PESSOAACADEMIA primary key (IDPESSOAACADEMIA)
+);
+
+/*==============================================================*/
+/* Index: IDX_IDPESSOAACADEMIA                                  */
+/*==============================================================*/
+create  index IDX_IDPESSOAACADEMIA on PESSOAACADEMIA (
+IDPESSOAACADEMIA
+);
+
+/*==============================================================*/
+/* Table: PESSOACONTA                                           */
+/*==============================================================*/
+create table PESSOACONTA (
+   IDPESSOACONTA        BIGINT               not null,
+   IDPESSOA             BIGINT               not null,
+   IDTIPOCONTA          BIGINT               null,
+   CODBANCO             INT4                 not null,
+   NUMAGENCIA           VARCHAR(10)          not null,
+   NUMCONTA             BIGINT               not null,
+   BOLCONTAPRINCIPAL    BOOL                 not null,
+   constraint PK_PESSOACONTA primary key (IDPESSOACONTA)
+);
+
+/*==============================================================*/
+/* Index: IDX_IDPESSOACONTA                                     */
+/*==============================================================*/
+create  index IDX_IDPESSOACONTA on PESSOACONTA (
+IDPESSOACONTA
+);
+
+/*==============================================================*/
 /* Table: PESSOAENDERECO                                        */
 /*==============================================================*/
 create table PESSOAENDERECO (
@@ -359,6 +432,21 @@ create table PESSOAENDERECO (
 /*==============================================================*/
 create unique index IDX_IDPESSOAENDERECO on PESSOAENDERECO (
 IDPESSOAENDERECO
+);
+
+/*==============================================================*/
+/* Table: PESSOAINDICACAO                                       */
+/*==============================================================*/
+create table PESSOAINDICACAO (
+   IDPESSOAINDICACAO    BIGINT               not null,
+   constraint PK_PESSOAINDICACAO primary key (IDPESSOAINDICACAO)
+);
+
+/*==============================================================*/
+/* Index: IDX_IDPESSOAINDICACAO                                 */
+/*==============================================================*/
+create  index IDX_IDPESSOAINDICACAO on PESSOAINDICACAO (
+IDPESSOAINDICACAO
 );
 
 /*==============================================================*/
@@ -452,6 +540,22 @@ create table STATUSPAGAMENTO (
 /*==============================================================*/
 create unique index IDX_IDSTATUSPAGAMENTO on STATUSPAGAMENTO (
 IDSTATUSPAGAMENTO
+);
+
+/*==============================================================*/
+/* Table: TIPOCONTA                                             */
+/*==============================================================*/
+create table TIPOCONTA (
+   IDTIPOCONTA          BIGINT               not null,
+   DSTIPOCONTA          VARCHAR(30)          not null,
+   constraint PK_TIPOCONTA primary key (IDTIPOCONTA)
+);
+
+/*==============================================================*/
+/* Index: IDX_IDTIPOCONTA                                       */
+/*==============================================================*/
+create  index IDX_IDTIPOCONTA on TIPOCONTA (
+IDTIPOCONTA
 );
 
 /*==============================================================*/
@@ -561,6 +665,11 @@ IDUSUARIOPESSOA
 );
 
 alter table CLIENTE
+   add constraint FK_CLIENTE_FK_CLIENT_CLIENTEL foreign key (IDCLIENTELUTA)
+      references CLIENTELUTA (IDCLIENTELUTA)
+      on delete restrict on update restrict;
+
+alter table CLIENTE
    add constraint FK_CLIENTE_FK_CLIENT_CLIENTES foreign key (IDCLIENTESITUACAO)
       references CLIENTESITUACAO (IDCLIENTESITUACAO)
       on delete restrict on update restrict;
@@ -571,13 +680,18 @@ alter table CLIENTE
       on delete restrict on update restrict;
 
 alter table CLIENTE
-   add constraint FK_CLIENTE_REFERENCE_PESSOA foreign key (IDPESSOAINDICACAO)
-      references PESSOA (IDPESSOA)
+   add constraint FK_CLIENTE_FK_CLIENT_PESSOAIN foreign key (IDPESSOAINDICACAO)
+      references PESSOAINDICACAO (IDPESSOAINDICACAO)
       on delete restrict on update restrict;
 
-alter table CLIENTE
-   add constraint FK_CLIENTE_REFERENCE_CLIENTEL foreign key (IDCLIENTELUTA)
-      references CLIENTELUTA (IDCLIENTELUTA)
+alter table CLIENTECONTRATO
+   add constraint FK_CLIENTEC_FK_CLIENT_CLIENTE foreign key (IDCLIENTE)
+      references CLIENTE (IDCLIENTE)
+      on delete restrict on update restrict;
+
+alter table CLIENTECONTRATO
+   add constraint FK_CLIENTEC_FK_CLIENT_CONTRATO foreign key (IDCONTRATOSITUACAO)
+      references CONTRATOSITUACAO (IDCONTRATOSITUACAO)
       on delete restrict on update restrict;
 
 alter table CLIENTECONTRATO
@@ -585,34 +699,44 @@ alter table CLIENTECONTRATO
       references PLANOASSINATURA (IDPLANOASSINATURA)
       on delete restrict on update restrict;
 
-alter table CLIENTECONTRATO
-   add constraint FK_CLIENTEC_REFERENCE_CONTRATO foreign key (IDCONTRATOSITUACAO)
-      references CONTRATOSITUACAO (IDCONTRATOSITUACAO)
-      on delete restrict on update restrict;
-
-alter table CLIENTECONTRATO
-   add constraint FK_CLIENTEC_REFERENCE_CLIENTE foreign key (IDCLIENTE)
-      references CLIENTE (IDCLIENTE)
-      on delete restrict on update restrict;
-
 alter table CLIENTELUTA
-   add constraint FK_CLIENTEL_REFERENCE_PESSOA foreign key (IDACADEMIA)
-      references PESSOA (IDPESSOA)
-      on delete restrict on update restrict;
-
-alter table CLIENTELUTA
-   add constraint FK_CLIENTEL_REFERENCE_MOLIDADE foreign key (IDMODALIDADELUTA)
+   add constraint FK_CLIENTEL_FK_CLIENT_MOLIDADE foreign key (IDMODALIDADELUTA)
       references MOLIDADELUTA (IDMODALIDADELUTA)
       on delete restrict on update restrict;
 
+alter table CLIENTELUTA
+   add constraint FK_CLIENTEL_FK_CLIENT_PESSOAAC foreign key (IDPESSOAACADEMIA)
+      references PESSOAACADEMIA (IDPESSOAACADEMIA)
+      on delete restrict on update restrict;
+
 alter table LOGPEDIDOSITUACAO
-   add constraint FK_LOGPEDID_REFERENCE_PLANOPAG foreign key (IDPLANOPAGAMENTO)
+   add constraint FK_LOGPEDID_FK_LOGPED_PLANOPAG foreign key (IDPLANOPAGAMENTO)
       references PLANOPAGAMENTO (IDPLANOPAGAMENTO)
       on delete restrict on update restrict;
 
 alter table LOGPEDIDOSITUACAO
-   add constraint FK_LOGPEDID_REFERENCE_STATUSPA foreign key (IDSTATUSPAGAMENTO)
+   add constraint FK_LOGPEDID_FK_LOGPED_STATUSPA foreign key (IDSTATUSPAGAMENTO)
       references STATUSPAGAMENTO (IDSTATUSPAGAMENTO)
+      on delete restrict on update restrict;
+
+alter table PESSOA
+   add constraint FK_PESSOA_FK_PESSOA_PESSOACO foreign key (IDPESSOACONTA)
+      references PESSOACONTA (IDPESSOACONTA)
+      on delete restrict on update restrict;
+
+alter table PESSOAACADEMIA
+   add constraint FK_PESSOAAC_FK_PESSOA_PESSOA foreign key (IDPESSOAACADEMIA)
+      references PESSOA (IDPESSOA)
+      on delete restrict on update restrict;
+
+alter table PESSOACONTA
+   add constraint FK_PESSOACO_FK_PESSOA_BANCO foreign key (CODBANCO)
+      references BANCO (CODBANCO)
+      on delete restrict on update restrict;
+
+alter table PESSOACONTA
+   add constraint FK_PESSOACO_FK_PESSOA_TIPOCONT foreign key (IDTIPOCONTA)
+      references TIPOCONTA (IDTIPOCONTA)
       on delete restrict on update restrict;
 
 alter table PESSOAENDERECO
@@ -630,6 +754,11 @@ alter table PESSOAENDERECO
       references UF (CODUF)
       on delete restrict on update restrict;
 
+alter table PESSOAINDICACAO
+   add constraint FK_PESSOAIN_FK_PESSOA_PESSOA foreign key (IDPESSOAINDICACAO)
+      references PESSOA (IDPESSOA)
+      on delete restrict on update restrict;
+
 alter table PESSOATELEFONE
    add constraint FK_PESSOATE_FK_PESSOA_PESSOA foreign key (IDPESSOA)
       references PESSOA (IDPESSOA)
@@ -641,12 +770,12 @@ alter table PESSOATELEFONE
       on delete restrict on update restrict;
 
 alter table PLANOPAGAMENTO
-   add constraint FK_PLANOPAG_REFERENCE_CLIENTEC foreign key (IDCLIENTECONTRATO)
+   add constraint FK_PLANOPAG_FK_PLANOP_CLIENTEC foreign key (IDCLIENTECONTRATO)
       references CLIENTECONTRATO (IDCLIENTECONTRATO)
       on delete restrict on update restrict;
 
 alter table PLANOPAGAMENTO
-   add constraint FK_PLANOPAG_REFERENCE_SITUACAO foreign key (IDSITUACAOPARCELA)
+   add constraint FK_PLANOPAG_FK_PLANOP_SITUACAO foreign key (IDSITUACAOPARCELA)
       references SITUACAOPARCELA (IDSITUACAOPARCELA)
       on delete restrict on update restrict;
 
