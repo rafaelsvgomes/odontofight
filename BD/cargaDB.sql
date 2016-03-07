@@ -86,10 +86,10 @@ insert into grupo values ('CLIENTE');
 insert into grupo values ('GESTOR');
 
 --INSERT PESSOA ADM
-INSERT INTO pessoa values (nextval('seqpessoa'), 'Administrador', null, 'F', '00000000000', 'M', '2000-01-01', '2000-01-01', 'admin@odontofight.com.br');
-INSERT INTO cliente select p.idpessoa, 1, 2, '2000-01-01' from pessoa p where p.nomepessoa = 'Administrador';
-INSERT INTO usuario values (nextval('sequsuario'), 'admin', 'bdfb8ce799ed1782a38a47c8090f6941');--adminclay123
+INSERT INTO pessoa values (nextval('seqpessoa'), null, 'Administrador', null, 'F', '00000000000', 'M', '2000-01-01', '2000-01-01', 'admin@clay.com');
+INSERT INTO cliente select p.idpessoa, null, 1, null, '2000-01-01' from pessoa p where p.nomepessoa = 'Administrador';
+INSERT INTO USUARIO values (nextval('sequsuario'), 'admin', 'bdfb8ce799ed1782a38a47c8090f6941');--adminclay123
 INSERT INTO usuariopessoa select nextval('sequsuariopessoa'), p.idpessoa, u.idusuario from pessoa p, usuario u where p.nomepessoa = 'Administrador' and u.dsusuario = 'admin';
-INSERT INTO usuariogrupo select nextval('sequsuariogrupo'), 'ADMIN', u.idusuario from usuario u where u.dsusuario = 'admin';
+INSERT INTO USUARIOGRUPO select nextval('sequsuariogrupo'), 'ADMIN', u.idusuario from usuario u where u.dsusuario = 'admin';
 
 

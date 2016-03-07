@@ -1,6 +1,5 @@
 package br.com.odontofight.mb;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,29 +11,22 @@ import javax.faces.event.ValueChangeEvent;
 
 import br.com.odontofight.entidade.Cliente;
 import br.com.odontofight.entidade.ClienteSituacao;
-import br.com.odontofight.entidade.Grupo;
+import br.com.odontofight.entidade.ModalidadeLuta;
 import br.com.odontofight.entidade.OrigemPagamento;
-import br.com.odontofight.entidade.Pessoa;
+import br.com.odontofight.entidade.PessoaAcademia;
 import br.com.odontofight.entidade.PessoaEndereco;
+import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
 import br.com.odontofight.entidade.PlanoAssinatura;
 import br.com.odontofight.entidade.TipoEndereco;
 import br.com.odontofight.entidade.TipoTelefone;
 import br.com.odontofight.entidade.UF;
-import br.com.odontofight.entidade.Usuario;
-import br.com.odontofight.entidade.UsuarioGrupo;
-import br.com.odontofight.entidade.UsuarioPessoa;
 import br.com.odontofight.enums.TipoPessoa;
 import br.com.odontofight.exception.CEPProxyException;
 import br.com.odontofight.servico.ClienteServicoEJB;
-import br.com.odontofight.util.CpfCnpjUtil;
-import br.com.odontofight.util.Email;
-import br.com.odontofight.util.EmailUtil;
 import br.com.odontofight.util.MensagemUtil;
-import br.com.odontofight.util.SenhaUtil;
 import br.com.odontofight.vo.CepServiceVO;
 import br.com.odontofight.webservices.CepService;
-import br.com.uol.pagseguro.exception.PagSeguroServiceException;
 
 @ManagedBean(name = "clienteMB")
 @ViewScoped
@@ -58,21 +50,15 @@ public class ClienteMB extends GenericMB {
 
     private List<UF> listaUfs;
 
-    private List<Banco> listaBancos;
-
-    private List<TipoConta> listaTipoConta;
-
     private List<PlanoAssinatura> listaPlanoAssinatura;
 
-    private List<Produto> listaProdutosPlanoAssinatura;
+    private List<PessoaIndicacao> listaPessoasIndicacao;
 
-    private List<Cliente> listaClientesIndicadores;
+    private List<PessoaAcademia> listaPessoasAcademia;
+
+    private List<ModalidadeLuta> listaModalidadeLuta;
 
     private List<OrigemPagamento> listaOrigemPagamento;
-
-    private Pedido pedido;
-
-    private Boolean isPagSeguro;
 
     public ClienteMB() {
     }
@@ -81,9 +67,8 @@ public class ClienteMB extends GenericMB {
     @SuppressWarnings("unchecked")
     public void init() {
         listaUfs = ejb.findAll(UF.class);
-        listaBancos = ejb.findAll(Banco.class);
-        listaTipoConta = ejb.findAll(TipoConta.class);
-        listaPlanoAssinatura = ejb.listarPlanoAssinatura();
+        listaModalidadeLuta = ejb.findAll(ModalidadeLuta.class);
+        // listaPlanoAssinatura = ejb.listarPlanoAssinatura();
     }
 
     public void incluir() {
@@ -95,15 +80,18 @@ public class ClienteMB extends GenericMB {
             cliente.setClienteSituacao(new ClienteSituacao(ClienteSituacao.CADASTRADO));
             setTelefonePessoa();
             setEnderecoPessoa();
-            setPessoaConta();
 
-            ClienteRede clienteRede = new ClienteRede();
-            clienteRede.setClienteIndicador(new Cliente(getUsuarioLogado().getIdCliente(), getUsuarioLogado().getNomePessoa()));
-            clienteRede.setCliente(cliente);
-            cliente.setClienteRede(clienteRede);
-
-            initListaClienteIndicador();
+            initListaPessoasIndicacao();
+            initListaPessoasAcademia();
         }
+    }
+
+    private void initListaPessoasIndicacao() {
+        listaPessoasIndicacao = ejb.listarPessoasIndicacao();
+    }
+
+    private void initListaPessoasAcademia() {
+        listaPessoasAcademia = ejb.listarPessoasAcademia();
     }
 
     public void editar() {
@@ -118,52 +106,9 @@ public class ClienteMB extends GenericMB {
     private void iniciarClienteEditar(Long idCliente) {
         cliente = ejb.obterPessoa(idCliente);
         endereco = cliente.getListaEndereco().get(0);
-        pessoaConta = cliente.getListaPessoaConta().get(0);
+        telefone = cliente.getTelefoneResidencial();
+        celular = cliente.getTelefoneCelular();
 
-        if (cliente.getClienteRede() != null) {
-            listaClientesIndicadores = new ArrayList<Cliente>();
-            listaClientesIndicadores.add(cliente.getClienteRede().getClienteIndicador());
-        }
-
-        listaProdutosPlanoAssinatura = ejb.listarProdutosKit(cliente.getPlanoAssinatura().getProduto().getId());
-
-        for (PessoaTelefone tel : cliente.getListaTelefone()) {
-            if (tel.getTipoTelefone().getId().equals(TipoTelefone.RESIDENCIAL)) {
-                telefone = tel;
-            } else {
-                celular = tel;
-            }
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void iniciarPagamento() {
-        // TODO: rafael
-        // Na hora de gravar salva a alteração efetuada no plano (Ou pode deixar pra alterar só no cadastro) chama o pagamento.
-        // Implementar ativar com botão no listar se for grupo admin.
-        if (!isPostBack()) {
-            iniciarClienteEditar(getUsuarioLogado().getIdCliente());
-
-            listaOrigemPagamento = ejb.findAll(OrigemPagamento.class);
-            listaProdutosPlanoAssinatura = ejb.listarProdutosKit(cliente.getPlanoAssinatura().getProduto().getId());
-            pedido = new Pedido();
-        }
-    }
-
-    private String checkoutCode;
-
-    public Boolean getIsPagSeguro() throws PagSeguroServiceException {
-        if (pedido.getOrigemPagamento() != null) {
-            isPagSeguro = pedido.getOrigemPagamento().getId() == OrigemPagamento.PAG_SEGURO;
-            if (isPagSeguro) {
-                checkoutCode = new CreateCheckout().getCheckoutCode();
-            }
-        }
-        return isPagSeguro;
-    }
-
-    public void setIsPagSeguro(Boolean pagSeguro) {
-        this.isPagSeguro = pagSeguro;
     }
 
     public String ativarCliente(Long idCliente) {
@@ -182,108 +127,39 @@ public class ClienteMB extends GenericMB {
     }
 
     private void setEnderecoPessoa() {
-        endereco = new PessoaEndereco();
-        endereco.setPessoa(cliente);
-
-        endereco.setTipoEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL));
-        cliente.setListaEndereco(new ArrayList<PessoaEndereco>());
-        cliente.getListaEndereco().add(endereco);
+        endereco = new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), cliente);
+        cliente.addPessoaEndereco(endereco);
     }
 
     private void setTelefonePessoa() {
-        telefone = new PessoaTelefone();
-        telefone.setPessoa(cliente);
-        celular = new PessoaTelefone();
-        celular.setPessoa(cliente);
-
-        telefone.setTipoTelefone(new TipoTelefone(TipoTelefone.RESIDENCIAL));
-        celular.setTipoTelefone(new TipoTelefone(TipoTelefone.CELULAR));
-
-        cliente.setListaTelefone(new ArrayList<PessoaTelefone>());
-        cliente.getListaTelefone().add(telefone);
-        cliente.getListaTelefone().add(celular);
-    }
-
-    private void setPessoaConta() {
-        pessoaConta = new PessoaConta();
-        pessoaConta.setPessoa(cliente);
-        pessoaConta.setBanco(new Banco());
-        pessoaConta.setTipoConta(new TipoConta());
-        pessoaConta.setBolContaPrincipal(Boolean.TRUE);
-        cliente.setListaPessoaConta(new ArrayList<PessoaConta>());
-        cliente.getListaPessoaConta().add(pessoaConta);
-    }
-
-    private void setUsuario() {
-        if (idSelecionado == null) {
-            Usuario usuario = new Usuario();
-            UsuarioPessoa usuarioPessoa = new UsuarioPessoa();
-            UsuarioGrupo usuarioGrupo = new UsuarioGrupo();
-            usuarioGrupo.setGrupo(new Grupo(Grupo.USER));
-
-            usuario.setDescUsuario(cliente.getDescEmail());
-            usuario.setDescSenha(SenhaUtil.gerarSenhaUsuario(cliente));
-            usuario.getListaUsuarioPessoa().add(usuarioPessoa);
-            usuario.getListaUsuarioGrupo().add(usuarioGrupo);
-
-            usuarioPessoa.setPessoa(cliente);
-            usuarioPessoa.setUsuario(usuario);
-
-            usuarioGrupo.setUsuario(usuario);
-
-            cliente.getListaUsuarioPessoa().add(usuarioPessoa);
-        }
+        telefone = new PessoaTelefone(new TipoTelefone(TipoTelefone.RESIDENCIAL), cliente);
+        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), cliente);
+        cliente.addPessoaTelefone(telefone);
+        cliente.addPessoaTelefone(celular);
     }
 
     public String salvar() {
-        Boolean enviarEmail = Boolean.FALSE;
         try {
             if (cliente.getId() == null || cliente.getId() == 0) {
                 cliente.setDataCadastro(new Date());
                 cliente.setDataAtualizacao(new Date());
-                enviarEmail = Boolean.TRUE;
             } else {
                 cliente.setDataAtualizacao(new Date());
             }
-
-            // TODO: rafael - Substituir replaces por Validator
-            cliente.setNumCpfCnpj(CpfCnpjUtil.getCpfCnpjLimpo(cliente.getNumCpfCnpj()));
-            cliente.getListaEndereco().get(0).setNumCep(cliente.getListaEndereco().get(0).getNumCep().replace("-", ""));
-
-            setUsuario();
 
             ejb.save(cliente);
         } catch (Exception ex) {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.salvar.cliente", ex.getMessage());
             return "";
-        } finally {
-            // TODO: rafael - ajustar lógica de enviar email e salvar sincronamente
-            if (enviarEmail) {
-                try {
-                    EmailUtil.enviaEmail(getEmailCadastro());
-                } catch (Exception emailEx) {
-                    emailEx.printStackTrace();
-                    MensagemUtil.addMensagemErro("msg.cliente.salvo.erro.enviar.email", emailEx.getMessage());
-                }
-            }
         }
         MensagemUtil.addMensagemSucesso("msg.sucesso.salvar.cliente");
         return "lista_cliente?faces-redirect=true";
     }
 
-    private Email getEmailCadastro() {
-        Email mensagem = new Email();
-        mensagem.setDestino(cliente.getDescEmail());
-        mensagem.setMensagem("Usuario Cadastrado com Sucesso!!! \nUsuario: " + cliente.getDescEmail() + "\nSenha: " + SenhaUtil.getSenhaPadrao(cliente));
-        mensagem.setTitulo("Cadastro com sucesso - Odontofight");
-        return mensagem;
-    }
-
     public String remover() {
         try {
             ejb.remove(cliente);
-            System.out.println("Cliente removido");
         } catch (Exception ex) {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.remover.cliente", ex.getMessage());
@@ -365,10 +241,6 @@ public class ClienteMB extends GenericMB {
         }
     }
 
-    private void initListaClienteIndicador() {
-        listaClientesIndicadores = ejb.listarClientesIndicadores();
-    }
-
     public List<Cliente> getListaClientes() {
         return listaClientes;
     }
@@ -377,26 +249,8 @@ public class ClienteMB extends GenericMB {
         return listaUfs;
     }
 
-    public List<Banco> getListaBancos() {
-        return listaBancos;
-    }
-
-    public List<TipoConta> getListaTipoConta() {
-        return listaTipoConta;
-    }
-
     public List<PlanoAssinatura> getListaPlanoAssinatura() {
         return listaPlanoAssinatura;
-    }
-
-    public void atualizaListaProdutosPlanoAssinatura() {
-        if (cliente.getPlanoAssinatura() != null) {
-            listaProdutosPlanoAssinatura = ejb.listarProdutosKit(cliente.getPlanoAssinatura().getProduto().getId());
-        }
-    }
-
-    public List<Produto> getListaProdutosPlanoAssinatura() {
-        return listaProdutosPlanoAssinatura;
     }
 
     public Long getIdSelecionado() {
@@ -407,7 +261,7 @@ public class ClienteMB extends GenericMB {
         this.idSelecionado = idSelecionado;
     }
 
-    public Pessoa getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
@@ -419,44 +273,24 @@ public class ClienteMB extends GenericMB {
         return telefone;
     }
 
-    public String getDDDCelular() {
-        for (PessoaTelefone tel : cliente.getListaTelefone()) {
-            if (tel.getTipoTelefone().getId().equals(TipoTelefone.CELULAR)) {
-                return tel.getDescTelefone().substring(0, 2);
-            }
-        }
-        return null;
-    }
-
     public PessoaTelefone getCelular() {
         return celular;
-    }
-
-    public PessoaConta getPessoaConta() {
-        return pessoaConta;
-    }
-
-    public List<Cliente> getListaClientesIndicadores() {
-        return listaClientesIndicadores;
-    }
-
-    public Pedido getPedido() {
-        return pedido;
-    }
-
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
     }
 
     public List<OrigemPagamento> getListaOrigemPagamento() {
         return listaOrigemPagamento;
     }
 
-    public String getCheckoutCode() {
-        return checkoutCode;
+    public List<PessoaIndicacao> getListaPessoasIndicacao() {
+        return listaPessoasIndicacao;
     }
 
-    public void setCheckoutCode(String checkoutCode) {
-        this.checkoutCode = checkoutCode;
+    public List<PessoaAcademia> getListaPessoasAcademia() {
+        return listaPessoasAcademia;
     }
+
+    public List<ModalidadeLuta> getListaModalidadeLuta() {
+        return listaModalidadeLuta;
+    }
+
 }

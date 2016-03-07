@@ -20,7 +20,6 @@ public class Solicitacao extends HttpServlet {
      */
     public Solicitacao() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     /**

@@ -11,7 +11,6 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 import br.com.odontofight.servico.ClienteServicoEJB;
-import br.com.odontofight.util.CpfCnpjUtil;
 import br.com.odontofight.util.MensagemUtil;
 
 @ManagedBean(name = "cpfCnpjUtilizadoValidator")
@@ -27,7 +26,7 @@ public class CpfCnpjUtilizadoValidator implements Validator {
         if (submittedValue == null) {
             return;
         }
-        String numCpfCnpj = CpfCnpjUtil.getCpfCnpjLimpo((String) submittedValue);
+        String numCpfCnpj = String.valueOf(submittedValue);
         UIParameter p = (UIParameter) component.findComponent("idSelecionado");
         Long idClienteSelecionado = p.getValue() != null ? (Long) p.getValue() : null;
 

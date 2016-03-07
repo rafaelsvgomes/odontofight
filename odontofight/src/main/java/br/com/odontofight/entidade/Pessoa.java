@@ -210,4 +210,38 @@ public abstract class Pessoa extends EntidadeGenerica {
     public void setListaUsuarioPessoa(List<UsuarioPessoa> listaUsuarioPessoa) {
         this.listaUsuarioPessoa = listaUsuarioPessoa;
     }
+
+    public PessoaTelefone getTelefoneCelular() {
+        for (PessoaTelefone tel : this.getListaTelefone()) {
+            if (tel.getTipoTelefone().getId().equals(TipoTelefone.CELULAR)) {
+                return tel;
+            }
+        }
+        return null;
+    }
+
+    public PessoaTelefone getTelefoneResidencial() {
+        for (PessoaTelefone tel : this.getListaTelefone()) {
+            if (tel.getTipoTelefone().getId().equals(TipoTelefone.RESIDENCIAL)) {
+                return tel;
+            }
+        }
+        return null;
+    }
+
+    public void addPessoaTelefone(PessoaTelefone telefone) {
+        if (getListaTelefone() == null) {
+            setListaTelefone(new ArrayList<PessoaTelefone>());
+        }
+        getListaTelefone().add(telefone);
+        telefone.setPessoa(this);
+    }
+
+    public void addPessoaEndereco(PessoaEndereco endereco) {
+        if (getListaEndereco() == null) {
+            setListaEndereco(new ArrayList<PessoaEndereco>());
+        }
+        getListaEndereco().add(endereco);
+        endereco.setPessoa(this);
+    }
 }

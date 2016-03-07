@@ -34,6 +34,11 @@
    color: #003366;
 }
 
+.centro {
+	margin-left:35%;
+	height: 300px;
+}
+
 .menu-opcoes ul li {
   display: inline;
   margin-left: 20px;

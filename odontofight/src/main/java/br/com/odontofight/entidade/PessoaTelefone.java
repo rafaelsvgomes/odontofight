@@ -25,6 +25,14 @@ public class PessoaTelefone extends EntidadeGenerica {
 
     public static final String LISTAR_POR_ID_PESSOA = "listarTelefonePorIdPessoa";
 
+    public PessoaTelefone() {
+    }
+
+    public PessoaTelefone(TipoTelefone tipoTelefone, Pessoa pessoa) {
+        this.tipoTelefone = tipoTelefone;
+        this.pessoa = pessoa;
+    }
+
     @Id
     @Column(name = "IDPessoaTelefone")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqpessoatelefone")
@@ -40,6 +48,32 @@ public class PessoaTelefone extends EntidadeGenerica {
 
     @Column(name = "dsTelefone", nullable = false)
     private String descTelefone;
+
+    /**
+     * Método responsável por obter apenas o ddd
+     * 
+     * @return String
+     * 
+     */
+    public String getDDD() {
+        if (this.getDescTelefone() != null) {
+            return this.getDescTelefone().substring(0, 2);
+        }
+        return null;
+    }
+
+    /**
+     * Método responsável por obter o número sem ddd
+     * 
+     * @return String
+     * 
+     */
+    public String getNumero() {
+        if (this.getDescTelefone() != null) {
+            return this.getDescTelefone().substring(2);
+        }
+        return null;
+    }
 
     public Long getId() {
         return id;

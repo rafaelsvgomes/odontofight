@@ -32,15 +32,15 @@ public class ClienteLuta extends EntidadeGenerica {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "idAcademia", nullable = false)
-    private Pessoa pessoaAcademia;
+    @JoinColumn(name = "idPessoaAcademia", nullable = false)
+    private PessoaAcademia pessoaAcademia;
 
     @ManyToOne
     @JoinColumn(name = "idModalidadeLuta", nullable = false)
     private ModalidadeLuta modalidadeLuta;
 
     @Column(name = "dsGraduacao")
-    private String descGraduação;
+    private String descGraduacao;
 
     private Date dataInicioAcademia;
 
@@ -56,7 +56,7 @@ public class ClienteLuta extends EntidadeGenerica {
         return pessoaAcademia;
     }
 
-    public void setPessoaAcademia(Pessoa pessoaAcademia) {
+    public void setPessoaAcademia(PessoaAcademia pessoaAcademia) {
         this.pessoaAcademia = pessoaAcademia;
     }
 
@@ -68,12 +68,12 @@ public class ClienteLuta extends EntidadeGenerica {
         this.modalidadeLuta = modalidadeLuta;
     }
 
-    public String getDescGraduação() {
-        return descGraduação;
+    public String getDescGraduacao() {
+        return descGraduacao;
     }
 
-    public void setDescGraduação(String descGraduação) {
-        this.descGraduação = descGraduação;
+    public void setDescGraduacao(String descGraduacao) {
+        this.descGraduacao = descGraduacao;
     }
 
     public Date getDataInicioAcademia() {

@@ -20,6 +20,19 @@ public class PessoaEndereco extends EntidadeGenerica {
 
     public static final String LISTAR_POR_ID_PESSOA = "listarEnderecoPorIdPessoa";
 
+    public PessoaEndereco() {
+    }
+
+    public PessoaEndereco(String numCep) {
+        super();
+        this.numCep = numCep;
+    }
+
+    public PessoaEndereco(TipoEndereco tipoEndereco2, Cliente cliente) {
+        this.tipoEndereco = tipoEndereco2;
+        this.pessoa = cliente;
+    }
+
     @Id
     @Column(name = "IDPESSOAENDERECO")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQPESSOAENDERECO")
@@ -54,14 +67,6 @@ public class PessoaEndereco extends EntidadeGenerica {
     @ManyToOne
     @JoinColumn(name = "CODUF", nullable = false)
     private UF uf;
-
-    public PessoaEndereco() {
-    }
-
-    public PessoaEndereco(String numCep) {
-        super();
-        this.numCep = numCep;
-    }
 
     public Long getId() {
         return id;

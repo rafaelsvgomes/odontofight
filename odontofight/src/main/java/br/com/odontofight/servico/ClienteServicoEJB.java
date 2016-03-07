@@ -9,11 +9,11 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import br.com.odontofight.entidade.Cliente;
-import br.com.odontofight.entidade.PessoaConta;
+import br.com.odontofight.entidade.PessoaAcademia;
 import br.com.odontofight.entidade.PessoaEndereco;
+import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
 import br.com.odontofight.entidade.PlanoAssinatura;
-import br.com.odontofight.entidade.Produto;
 
 /**
  * Session Bean implementation class ClienteEJB
@@ -53,7 +53,6 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
 
         cliente.setListaEndereco(em.createNamedQuery(PessoaEndereco.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
         cliente.setListaTelefone(em.createNamedQuery(PessoaTelefone.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
-        cliente.setListaPessoaConta(em.createNamedQuery(PessoaConta.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
         return cliente;
     }
 
@@ -62,8 +61,6 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
         Cliente cliente = find(idCliente);
         if (cliente != null) {
             cliente.setListaTelefone(em.createNamedQuery(PessoaTelefone.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", cliente.getId()).getResultList());
-            cliente.getPlanoAssinatura().getProduto().getListaProdutoFilho().get(0);
-            cliente.getPlanoAssinatura().getProduto().setListaProdutoFilho(cliente.getPlanoAssinatura().getProduto().getListaProdutoFilho());
         }
         return cliente;
     }
@@ -92,34 +89,28 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
     }
 
     /**
-     * Método responsável por recuperar os produtos de um produto pai
-     * 
-     * @param idProdutoPai
-     * @return List<Produto>
-     * 
-     */
-    public List<Produto> listarProdutosKit(Long idProdutoPai) {
-        Produto produtoPai = em.find(Produto.class, idProdutoPai);
-        produtoPai.getListaProdutoFilho().get(0);
-        return produtoPai.getListaProdutoFilho();
-    }
-
-    /**
-     * @return Object
-     * 
-     */
-    @SuppressWarnings("unchecked")
-    public List<Cliente> listarClientesIndicadores() {
-        return em.createNamedQuery(Cliente.LISTAR_CLIENTES_INDICADORES).getResultList();
-    }
-
-    /**
      * @return List<PlanoAssinatura>
      * 
      */
     @SuppressWarnings("unchecked")
     public List<PlanoAssinatura> listarPlanoAssinatura() {
         return em.createNamedQuery(PlanoAssinatura.LISTAR_SIPLES).getResultList();
+    }
+
+    /**
+     * @return List<PessoaIndicacao>
+     */
+    @SuppressWarnings("unchecked")
+    public List<PessoaIndicacao> listarPessoasIndicacao() {
+        return em.createNamedQuery(PessoaIndicacao.LISTAR_PESSOAS_INDICACAO).getResultList();
+    }
+
+    /**
+     * @return List<PessoaAcademia>
+     */
+    @SuppressWarnings("unchecked")
+    public List<PessoaAcademia> listarPessoasAcademia() {
+        return em.createNamedQuery(PessoaAcademia.LISTAR_PESSOAS_ACADEMIA).getResultList();
     }
 
 }

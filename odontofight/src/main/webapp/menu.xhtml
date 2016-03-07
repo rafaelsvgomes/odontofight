@@ -5,7 +5,6 @@
 	xmlns:p="http://primefaces.org/ui">
 
 	<h:form>  
-	    <p:growl id="messages"/>
 	 
 	    <p:menubar>
 	        <p:submenu label="Cliente" icon="ui-icon-document">
@@ -17,10 +16,9 @@
 	            <p:menuitem value="Aterar Senha" outcome="/usuario/senha" icon="ui-icon-arrowreturnthick-1-w" />
 	        </p:submenu>
 	 
-	 
 	        <f:facet name="options">
 	        	<small><h:outputText value="#{usuarioLogado.getDescUsuario()}" /></small>
-	            <p:commandButton type="button" immediate="true" action="#{logoutMB.efetuarLogout()}" value="Logout" icon="ui-icon-extlink" />
+	            <p:commandButton immediate="true" action="#{usuarioMB.efetuarLogout}" value="Logout" icon="ui-icon-extlink" />
 	        </f:facet>
 	    </p:menubar>
 	</h:form>

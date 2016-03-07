@@ -5,7 +5,7 @@
 
 	<persistence-unit name="odontofight_pu" transaction-type="JTA">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<jta-data-source>java:jboss/datasources/PostgreSQLDS</jta-data-source>
+		<jta-data-source>java:jboss/datasources/OfPostgreSQLDS</jta-data-source>
 		
 		<properties>
 			<property name="hibernate.show_sql" value="true" />
