@@ -47,7 +47,7 @@ insert into banco values (070, 'BRB');
 insert into banco values (756, 'Banco Cooperativo do Brasil');
 
 --ModalidadeLuta
-insert into modalidadeluta values (1, 'Jiu Jitsu');
+insert into modalidadeluta values (1, 'Jiu-Jítsu');
 insert into modalidadeluta values (2, 'Boxe');
 insert into modalidadeluta values (3, 'Judo');
 insert into modalidadeluta values (4, 'Muay Tai');
