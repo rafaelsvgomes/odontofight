@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     07/03/2016 09:28:22                          */
+/* Created on:     07/03/2016 13:31:14                          */
 /*==============================================================*/
 
 
@@ -23,6 +23,10 @@ drop table CLIENTELUTA;
 drop index IDX_IDCLIENTESITUACAO;
 
 drop table CLIENTESITUACAO;
+
+drop index IDX_IDCONTRATORATEIO;
+
+drop table CONTRATORATEIO;
 
 drop index IDX_IDCONTRATOSITUACAO;
 
@@ -116,6 +120,8 @@ drop sequence SEQCLIENTECONTRATO;
 
 drop sequence SEQCLIENTELUTA;
 
+drop sequence SEQCONTRATORATEIO;
+
 drop sequence SEQLOGPEDIDOSITUACAO;
 
 drop sequence SEQPESSOA;
@@ -142,6 +148,9 @@ create sequence SEQCLIENTECONTRATO
 increment 1;
 
 create sequence SEQCLIENTELUTA
+increment 1;
+
+create sequence SEQCONTRATORATEIO
 increment 1;
 
 create sequence SEQLOGPEDIDOSITUACAO
@@ -275,6 +284,26 @@ comment on table CLIENTESITUACAO is
 /*==============================================================*/
 create unique index IDX_IDCLIENTESITUACAO on CLIENTESITUACAO (
 IDCLIENTESITUACAO
+);
+
+/*==============================================================*/
+/* Table: CONTRATORATEIO                                        */
+/*==============================================================*/
+create table CONTRATORATEIO (
+   IDCONTRATORATEIO     BIGINT               not null,
+   IDCLIENTECONTRATO    BIGINT               null,
+   IDPESSOAINDICACAO    BIGINT               null,
+   VLPERCENTUALRATEIO   BIGINT               null,
+   VLPAGO               NUMERIC(12,2)        null,
+   DATAREPASSE          TIMESTAMP            null,
+   constraint PK_CONTRATORATEIO primary key (IDCONTRATORATEIO)
+);
+
+/*==============================================================*/
+/* Index: IDX_IDCONTRATORATEIO                                  */
+/*==============================================================*/
+create  index IDX_IDCONTRATORATEIO on CONTRATORATEIO (
+IDCONTRATORATEIO
 );
 
 /*==============================================================*/
@@ -712,6 +741,16 @@ alter table CLIENTELUTA
 alter table CLIENTELUTA
    add constraint FK_CLIENTEL_FK_CLIENT_PESSOAAC foreign key (IDPESSOAACADEMIA)
       references PESSOAACADEMIA (IDPESSOAACADEMIA)
+      on delete restrict on update restrict;
+
+alter table CONTRATORATEIO
+   add constraint FK_CONTRATO_REFERENCE_CLIENTEC foreign key (IDCLIENTECONTRATO)
+      references CLIENTECONTRATO (IDCLIENTECONTRATO)
+      on delete restrict on update restrict;
+
+alter table CONTRATORATEIO
+   add constraint FK_CONTRATO_REFERENCE_PESSOAIN foreign key (IDPESSOAINDICACAO)
+      references PESSOAINDICACAO (IDPESSOAINDICACAO)
       on delete restrict on update restrict;
 
 alter table LOGPEDIDOSITUACAO
