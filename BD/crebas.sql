@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     07/03/2016 09:13:29                          */
+/* Created on:     07/03/2016 09:24:44                          */
 /*==============================================================*/
 
 
@@ -128,6 +128,8 @@ drop sequence SEQPESSOAREDE;
 
 drop sequence SEQPLANOASSINATURA;
 
+drop sequence SEQPLANOPAGAMENTO;
+
 drop sequence SEQTELEFONE;
 
 drop sequence SEQUSUARIO;
@@ -158,6 +160,9 @@ create sequence SEQPESSOAREDE
 increment 1;
 
 create sequence SEQPLANOASSINATURA
+increment 1;
+
+create sequence SEQPLANOPAGAMENTO
 increment 1;
 
 create sequence SEQTELEFONE
@@ -497,9 +502,9 @@ create table PLANOPAGAMENTO (
    IDCLIENTECONTRATO    BIGINT               null,
    IDSITUACAOPARCELA    BIGINT               null,
    DATAVENCIMENTOPARCELA TIMESTAMP            null,
-   VALORPARCELA         NUMERIC(12,2)        null,
+   VLPARCELA            NUMERIC(12,2)        null,
    DATAPAGAMENTOPARCELA TIMESTAMP            null,
-   VALORPAGO            NUMERIC(12,2)        null,
+   VLPAGO               NUMERIC(12,2)        null,
    constraint PK_PLANOPAGAMENTO primary key (IDPLANOPAGAMENTO)
 );
 
