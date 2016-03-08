@@ -1,9 +1,9 @@
 package br.com.odontofight.entidade;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -77,9 +77,9 @@ public class Cliente extends Pessoa {
 
     @ManyToOne
     @JoinColumn(name = "idPessoaIndicacao", nullable = true)
-    private Pessoa pessoaIndicacao;
+    private PessoaIndicacao pessoaIndicacao;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idClienteLuta", nullable = true)
     private ClienteLuta clienteLuta;
 
@@ -110,40 +110,6 @@ public class Cliente extends Pessoa {
         return true;
     }
 
-    public PessoaTelefone getTelefoneCelular() {
-        for (PessoaTelefone tel : this.getListaTelefone()) {
-            if (tel.getTipoTelefone().getId().equals(TipoTelefone.CELULAR)) {
-                return tel;
-            }
-        }
-        return null;
-    }
-
-    public PessoaTelefone getTelefoneResidencial() {
-        for (PessoaTelefone tel : this.getListaTelefone()) {
-            if (tel.getTipoTelefone().getId().equals(TipoTelefone.RESIDENCIAL)) {
-                return tel;
-            }
-        }
-        return null;
-    }
-
-    public void addPessoaTelefone(PessoaTelefone telefone) {
-        if (getListaTelefone() == null) {
-            setListaTelefone(new ArrayList<PessoaTelefone>());
-        }
-        getListaTelefone().add(telefone);
-        telefone.setPessoa(this);
-    }
-
-    public void addPessoaEndereco(PessoaEndereco endereco) {
-        if (getListaEndereco() == null) {
-            setListaEndereco(new ArrayList<PessoaEndereco>());
-        }
-        getListaEndereco().add(endereco);
-        endereco.setPessoa(this);
-    }
-
     public ClienteSituacao getClienteSituacao() {
         return clienteSituacao;
     }
@@ -168,11 +134,12 @@ public class Cliente extends Pessoa {
         this.dataAtualizacao = dataAtualizacao;
     }
 
-    public Pessoa getPessoaIndicacao() {
+    public PessoaIndicacao getPessoaIndicacao() {
         return pessoaIndicacao;
     }
 
-    public void setPessoaIndicacao(Pessoa pessoaIndicacao) {
+    public void setPessoaIndicacao(PessoaIndicacao pessoaIndicacao) {
         this.pessoaIndicacao = pessoaIndicacao;
     }
+
 }

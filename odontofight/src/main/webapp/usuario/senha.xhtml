@@ -67,7 +67,7 @@
 			<div class="controls">
 				<p:commandButton value="#{msg['button.salvar']}" oncomplete="(!args.validationFailed) ? PF('confirmation').show() : PF('confirmation').hide()" styleClass="btn btn-success" />
 			</div>
-			<p:confirmDialog id="confirmDialog" message="#{msg['alterar.senha.confirma']}" header="#{msg['excluir.cliente']}" severity="alert" widgetVar="confirmation">  
+			<p:confirmDialog id="confirmDialog" message="#{msg['alterar.senha.confirma']}" header="#{msg['page.title.alterar.senha']}" severity="alert" widgetVar="confirmation">  
 		        <p:commandButton id="confirm" value="#{msg['confirma.sim']}"  action="#{usuarioMB.alterarSenha()}" update="messages, senhaGrowl" oncomplete="PF('confirmation').hide(); PF('dlgExec').hide();" onclick="PF('dlgExec').show();"/>  
 		        <p:commandButton id="decline" value="#{msg['confirma.nao']}" update="messages" onclick="PF('confirmation').hide()" type="button" />
 		    </p:confirmDialog>

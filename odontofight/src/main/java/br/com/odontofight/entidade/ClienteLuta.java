@@ -23,7 +23,6 @@ public class ClienteLuta extends EntidadeGenerica {
     private static final long serialVersionUID = 1L;
 
     public ClienteLuta() {
-        super();
     }
 
     @Id
@@ -52,7 +51,7 @@ public class ClienteLuta extends EntidadeGenerica {
         this.id = id;
     }
 
-    public Pessoa getPessoaAcademia() {
+    public PessoaAcademia getPessoaAcademia() {
         return pessoaAcademia;
     }
 

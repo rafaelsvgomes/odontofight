@@ -10,6 +10,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 
 import br.com.odontofight.entidade.Cliente;
+import br.com.odontofight.entidade.ClienteLuta;
 import br.com.odontofight.entidade.ClienteSituacao;
 import br.com.odontofight.entidade.ModalidadeLuta;
 import br.com.odontofight.entidade.OrigemPagamento;
@@ -74,15 +75,15 @@ public class ClienteMB extends GenericMB {
     public void incluir() {
         if (!isPostBack()) {
             idSelecionado = null;
+            initListaPessoasIndicacao();
+            initListaPessoasAcademia();
 
             cliente = new Cliente();
             cliente.setTipoPessoa(TipoPessoa.F);
             cliente.setClienteSituacao(new ClienteSituacao(ClienteSituacao.CADASTRADO));
+            cliente.setClienteLuta(new ClienteLuta());
             setTelefonePessoa();
             setEnderecoPessoa();
-
-            initListaPessoasIndicacao();
-            initListaPessoasAcademia();
         }
     }
 
@@ -111,21 +112,6 @@ public class ClienteMB extends GenericMB {
 
     }
 
-    public String ativarCliente(Long idCliente) {
-        try {
-            cliente = ejb.obterPessoa(idCliente);
-            cliente.setClienteSituacao(new ClienteSituacao(ClienteSituacao.ATIVO));
-            ejb.save(cliente);
-
-            MensagemUtil.addMensagemSucesso("msg.sucesso.ativar.cliente");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            MensagemUtil.addMensagemErro("msg.erro.salvar.cliente", ex.getMessage());
-        }
-        // TODO: rafael - Ao utilizar este return nao aparece o p:growl de sucesso e erro.
-        return "lista_cliente?faces-redirect=true";
-    }
-
     private void setEnderecoPessoa() {
         endereco = new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), cliente);
         cliente.addPessoaEndereco(endereco);
@@ -147,6 +133,10 @@ public class ClienteMB extends GenericMB {
                 cliente.setDataAtualizacao(new Date());
             }
 
+            if (!salvarClienteLuta()) {
+                cliente.setClienteLuta(null);
+            }
+
             ejb.save(cliente);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -155,6 +145,15 @@ public class ClienteMB extends GenericMB {
         }
         MensagemUtil.addMensagemSucesso("msg.sucesso.salvar.cliente");
         return "lista_cliente?faces-redirect=true";
+    }
+
+    private Boolean salvarClienteLuta() {
+        if (cliente.getClienteLuta() != null
+                && (cliente.getClienteLuta().getId() != null || cliente.getClienteLuta().getPessoaAcademia() != null || cliente.getClienteLuta().getModalidadeLuta() != null
+                        || !cliente.getClienteLuta().getDescGraduacao().isEmpty() || cliente.getClienteLuta().getDataInicioAcademia() != null)) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 
     public String remover() {

@@ -14,10 +14,10 @@ import javax.persistence.PrimaryKeyJoinColumn;
 public class PessoaAcademia extends Pessoa {
     private static final long serialVersionUID = 1L;
 
+    public static final String LISTAR_PESSOAS_ACADEMIA = "listarPessoasAcademia";
+
     public PessoaAcademia() {
     }
-
-    public static final String LISTAR_PESSOAS_ACADEMIA = "listarPessoasAcademia";
 
     public PessoaAcademia(Long id, String nomePessoa) {
         super(id, nomePessoa);

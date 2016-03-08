@@ -62,17 +62,6 @@
 					</f:facet>
 					<h:outputText value="#{cliente.clienteSituacao.descClienteSituacao}" />
 				</p:column>
-				
-				<p:column style="text-align: center">
-					<f:facet name="header" >
-						<h:outputText value="#{msg['label.ativar']}" />
-					</f:facet>
-					<p:commandLink action="#{clienteMB.ativarCliente(cliente.id)}" update="growl, dataTable" onclick="PF('dlgExec').show();" oncomplete="PF('dlgExec').hide();"
-						rendered="#{cliente.clienteSituacao.id != 2}">
-						<i class="icon-ok-sign" style="color:green;"></i>
-		            </p:commandLink>
-				</p:column>
-				
 			</p:dataTable>
 		</h:form>
 	</ui:define>
