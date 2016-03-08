@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     07/03/2016 13:31:14                          */
+/* Created on:     08/03/2016 08:31:24                          */
 /*==============================================================*/
 
 
@@ -42,7 +42,7 @@ drop table LOGPEDIDOSITUACAO;
 
 drop index IDX_IDMODALIDADELUTA;
 
-drop table MOLIDADELUTA;
+drop table MODALIDADELUTA;
 
 drop index IDX_NUMCPFCNPJ;
 
@@ -360,18 +360,18 @@ IDLOGPEDIDOSITUACAO
 );
 
 /*==============================================================*/
-/* Table: MOLIDADELUTA                                          */
+/* Table: MODALIDADELUTA                                        */
 /*==============================================================*/
-create table MOLIDADELUTA (
+create table MODALIDADELUTA (
    IDMODALIDADELUTA     BIGINT               not null,
    DSMODALIDADELUTA     VARCHAR(40)          null,
-   constraint PK_MOLIDADELUTA primary key (IDMODALIDADELUTA)
+   constraint PK_MODALIDADELUTA primary key (IDMODALIDADELUTA)
 );
 
 /*==============================================================*/
 /* Index: IDX_IDMODALIDADELUTA                                  */
 /*==============================================================*/
-create unique index IDX_IDMODALIDADELUTA on MOLIDADELUTA (
+create unique index IDX_IDMODALIDADELUTA on MODALIDADELUTA (
 IDMODALIDADELUTA
 );
 
@@ -734,8 +734,8 @@ alter table CLIENTECONTRATO
       on delete restrict on update restrict;
 
 alter table CLIENTELUTA
-   add constraint FK_CLIENTEL_FK_CLIENT_MOLIDADE foreign key (IDMODALIDADELUTA)
-      references MOLIDADELUTA (IDMODALIDADELUTA)
+   add constraint FK_CLIENTEL_FK_CLIENT_MODALIDA foreign key (IDMODALIDADELUTA)
+      references MODALIDADELUTA (IDMODALIDADELUTA)
       on delete restrict on update restrict;
 
 alter table CLIENTELUTA
