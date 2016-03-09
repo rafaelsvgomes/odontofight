@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     08/03/2016 08:31:24                          */
+/* Created on:     09/03/2016 08:39:05                          */
 /*==============================================================*/
 
 
@@ -19,10 +19,6 @@ drop table CLIENTECONTRATO;
 drop index IDX_IDCLIENTELUTA;
 
 drop table CLIENTELUTA;
-
-drop index IDX_IDCLIENTESITUACAO;
-
-drop table CLIENTESITUACAO;
 
 drop index IDX_IDCONTRATORATEIO;
 
@@ -77,6 +73,10 @@ drop table PLANOASSINATURA;
 drop index IDX_IDPLANOPAGAMENTO;
 
 drop table PLANOPAGAMENTO;
+
+drop index IDX_IDCLIENTESITUACAO;
+
+drop table SITUACAO;
 
 drop index IDX_IDSITUACAOPARCELA;
 
@@ -208,7 +208,7 @@ CODBANCO
 create table CLIENTE (
    IDCLIENTE            BIGINT               not null,
    IDCLIENTELUTA        BIGINT               null,
-   IDCLIENTESITUACAO    BIGINT               not null,
+   IDSITUACAO           BIGINT               not null,
    IDPESSOAINDICACAO    BIGINT               null,
    DATAATUALIZACAO      TIMESTAMP            not null,
    constraint PK_CLIENTE primary key (IDCLIENTE)
@@ -265,25 +265,6 @@ comment on column CLIENTELUTA.DSGRADUACAO is
 /*==============================================================*/
 create unique index IDX_IDCLIENTELUTA on CLIENTELUTA (
 IDCLIENTELUTA
-);
-
-/*==============================================================*/
-/* Table: CLIENTESITUACAO                                       */
-/*==============================================================*/
-create table CLIENTESITUACAO (
-   IDCLIENTESITUACAO    BIGINT               not null,
-   DSCLIENTESITUACAO    VARCHAR(30)          not null,
-   constraint PK_CLIENTESITUACAO primary key (IDCLIENTESITUACAO)
-);
-
-comment on table CLIENTESITUACAO is
-'CADASTRADO, PENDENTE, ATIVO, INATIVO, BLOQUEADO';
-
-/*==============================================================*/
-/* Index: IDX_IDCLIENTESITUACAO                                 */
-/*==============================================================*/
-create unique index IDX_IDCLIENTESITUACAO on CLIENTESITUACAO (
-IDCLIENTESITUACAO
 );
 
 /*==============================================================*/
@@ -413,6 +394,8 @@ NUMCPFCNPJ
 /*==============================================================*/
 create table PESSOAACADEMIA (
    IDPESSOAACADEMIA     BIGINT               not null,
+   IDSITUACAO           BIGINT               null,
+   DATAATUALIZACAO      TIMESTAMP            null,
    constraint PK_PESSOAACADEMIA primary key (IDPESSOAACADEMIA)
 );
 
@@ -473,6 +456,8 @@ IDPESSOAENDERECO
 /*==============================================================*/
 create table PESSOAINDICACAO (
    IDPESSOAINDICACAO    BIGINT               not null,
+   IDSITUACAO           BIGINT               null,
+   DATAATUALIZACAO      TIMESTAMP            null,
    constraint PK_PESSOAINDICACAO primary key (IDPESSOAINDICACAO)
 );
 
@@ -542,6 +527,25 @@ create table PLANOPAGAMENTO (
 /*==============================================================*/
 create unique index IDX_IDPLANOPAGAMENTO on PLANOPAGAMENTO (
 IDPLANOPAGAMENTO
+);
+
+/*==============================================================*/
+/* Table: SITUACAO                                              */
+/*==============================================================*/
+create table SITUACAO (
+   IDSITUACAO           BIGINT               not null,
+   DSSITUACAO           VARCHAR(30)          not null,
+   constraint PK_SITUACAO primary key (IDSITUACAO)
+);
+
+comment on table SITUACAO is
+'CADASTRADO, PENDENTE, ATIVO, INATIVO, BLOQUEADO';
+
+/*==============================================================*/
+/* Index: IDX_IDCLIENTESITUACAO                                 */
+/*==============================================================*/
+create unique index IDX_IDCLIENTESITUACAO on SITUACAO (
+IDSITUACAO
 );
 
 /*==============================================================*/
@@ -704,11 +708,6 @@ alter table CLIENTE
       on delete restrict on update restrict;
 
 alter table CLIENTE
-   add constraint FK_CLIENTE_FK_CLIENT_CLIENTES foreign key (IDCLIENTESITUACAO)
-      references CLIENTESITUACAO (IDCLIENTESITUACAO)
-      on delete restrict on update restrict;
-
-alter table CLIENTE
    add constraint FK_CLIENTE_FK_CLIENT_PESSOA foreign key (IDCLIENTE)
       references PESSOA (IDPESSOA)
       on delete restrict on update restrict;
@@ -716,6 +715,11 @@ alter table CLIENTE
 alter table CLIENTE
    add constraint FK_CLIENTE_FK_CLIENT_PESSOAIN foreign key (IDPESSOAINDICACAO)
       references PESSOAINDICACAO (IDPESSOAINDICACAO)
+      on delete restrict on update restrict;
+
+alter table CLIENTE
+   add constraint FK_CLIENTE_FK_CLIENT_SITUACAO foreign key (IDSITUACAO)
+      references SITUACAO (IDSITUACAO)
       on delete restrict on update restrict;
 
 alter table CLIENTECONTRATO
@@ -744,12 +748,12 @@ alter table CLIENTELUTA
       on delete restrict on update restrict;
 
 alter table CONTRATORATEIO
-   add constraint FK_CONTRATO_REFERENCE_CLIENTEC foreign key (IDCLIENTECONTRATO)
+   add constraint FK_CONTRATO_FK_CLIENT_CLIENTEC foreign key (IDCLIENTECONTRATO)
       references CLIENTECONTRATO (IDCLIENTECONTRATO)
       on delete restrict on update restrict;
 
 alter table CONTRATORATEIO
-   add constraint FK_CONTRATO_REFERENCE_PESSOAIN foreign key (IDPESSOAINDICACAO)
+   add constraint FK_CONTRATO_FK_CONTRA_PESSOAIN foreign key (IDPESSOAINDICACAO)
       references PESSOAINDICACAO (IDPESSOAINDICACAO)
       on delete restrict on update restrict;
 
@@ -771,6 +775,11 @@ alter table PESSOA
 alter table PESSOAACADEMIA
    add constraint FK_PESSOAAC_FK_PESSOA_PESSOA foreign key (IDPESSOAACADEMIA)
       references PESSOA (IDPESSOA)
+      on delete restrict on update restrict;
+
+alter table PESSOAACADEMIA
+   add constraint FK_PESSOAAC_FK_PESSOA_SITUACAO foreign key (IDSITUACAO)
+      references SITUACAO (IDSITUACAO)
       on delete restrict on update restrict;
 
 alter table PESSOACONTA
@@ -801,6 +810,11 @@ alter table PESSOAENDERECO
 alter table PESSOAINDICACAO
    add constraint FK_PESSOAIN_FK_PESSOA_PESSOA foreign key (IDPESSOAINDICACAO)
       references PESSOA (IDPESSOA)
+      on delete restrict on update restrict;
+
+alter table PESSOAINDICACAO
+   add constraint FK_PESSOAIN_FK_PESSOA_SITUACAO foreign key (IDSITUACAO)
+      references SITUACAO (IDSITUACAO)
       on delete restrict on update restrict;
 
 alter table PESSOATELEFONE
