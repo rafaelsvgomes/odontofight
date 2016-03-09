@@ -20,7 +20,7 @@
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.indicacao']} *" />
 					<p:selectOneMenu id="selectPessoaIndicacao" value="#{clienteMB.cliente.pessoaIndicacao}" label="#{msg['label.pessoa.indicacao']}" required="true"
-						disabled="#{clienteMB.idSelecionado != null}" converter="entityConverter" filter="true" filterMatchMode="contains">
+						converter="entityConverter" filter="true" filterMatchMode="contains">
 		                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
 		                <f:selectItems value="#{clienteMB.listaPessoasIndicacao}" var="pessoaIndica" itemLabel="#{pessoaIndica.id} - #{pessoaIndica.nomePessoa}" itemValue="#{pessoaIndica}"/>
 	    	        </p:selectOneMenu>
@@ -182,7 +182,7 @@
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.cliente.academia']}" />
 					<p:selectOneMenu id="selectAcademia" value="#{clienteMB.cliente.clienteLuta.pessoaAcademia}" label="#{msg['label.cliente.academia']}" 
-						disabled="#{clienteMB.idSelecionado != null}" converter="entityConverter" filter="true" filterMatchMode="contains">
+						converter="entityConverter" filter="true" filterMatchMode="contains">
 		                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
 		                <f:selectItems value="#{clienteMB.listaPessoasAcademia}" var="pessoaAcademia" itemLabel="#{pessoaAcademia.id} - #{pessoaAcademia.nomePessoa}" itemValue="#{pessoaAcademia}"/>
 	    	        </p:selectOneMenu>
@@ -192,7 +192,7 @@
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.cliente.modalidade']}" />
 					<p:selectOneMenu id="selectModalidade" value="#{clienteMB.cliente.clienteLuta.modalidadeLuta}" label="#{msg['label.cliente.modalidade']}" 
-						disabled="#{clienteMB.idSelecionado != null}" converter="entityConverter" filter="true" filterMatchMode="contains">
+						converter="entityConverter" filter="true" filterMatchMode="contains">
 		                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
 		                <f:selectItems value="#{clienteMB.listaModalidadeLuta}" var="modalidade" itemLabel="#{modalidade.id} - #{modalidade.descModalidadeLuta}" itemValue="#{modalidade}"/>
 	    	        </p:selectOneMenu>

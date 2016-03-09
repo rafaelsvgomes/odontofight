@@ -1,6 +1,5 @@
 package br.com.odontofight.entidade;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -24,13 +23,9 @@ import br.com.odontofight.enums.TipoSexo;
         @NamedQuery(name = Cliente.OBTER_POR_DESC_USUARIO, query = "SELECT c.id FROM Cliente c WHERE c.descEmail = :descUsuario"),
         @NamedQuery(name = Cliente.OBTER_POR_NUM_CPF_CNPJ, query = "SELECT c.id FROM Cliente c WHERE c.numCpfCnpj = :numCpfCnpj"),
         @NamedQuery(name = Cliente.OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO, query = "SELECT c.id FROM Cliente c WHERE c.numCpfCnpj = :numCpfCnpj and c.id not in (:idSelecionado)"),
-        // @NamedQuery(name = Cliente.OBTER_CLIENTE_EDITAR, query =
-        // "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.descRazaoSocial, c.tipoPessoa, c.numCpfCnpj, c.tipoSexo, "
-        // +
-        // "c.dataNascimento, c.descEmail, c.dataCadastro, c.clienteSituacao.id, c.clienteSituacao.descClienteSituacao, c.clienteRede.id, c.clienteRede.clienteIndicador.id, "
-        // +
-        // "c.clienteRede.clienteIndicador.nomePessoa, c.planoAssinatura.id, c.planoAssinatura.nomePlanoAssinatura, c.planoAssinatura.valorAdesao, c.planoAssinatura.produto.id) "
-        // + "FROM Cliente c WHERE c.id = :idCliente"),
+        @NamedQuery(name = Cliente.OBTER_CLIENTE_EDITAR, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.descRazaoSocial, c.tipoPessoa, c.numCpfCnpj, "
+                + "c.tipoSexo, c.dataNascimento, c.descEmail, c.dataCadastro, c.clienteSituacao.id, c.clienteSituacao.descClienteSituacao, c.pessoaIndicacao.id, c.pessoaIndicacao.nomePessoa) "
+                + "FROM Cliente c WHERE c.id = :idCliente"),
         @NamedQuery(name = Cliente.LISTAR_CLIENTES_SIMPLES, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.tipoPessoa, c.numCpfCnpj, c.clienteSituacao.id, "
                 + "c.clienteSituacao.descClienteSituacao) FROM Cliente c") })
 public class Cliente extends Pessoa {
@@ -62,8 +57,7 @@ public class Cliente extends Pessoa {
      * OBTER_CLIENTE_EDITAR
      */
     public Cliente(Long id, String nomePessoa, String descRazaoSocial, TipoPessoa tipoPessoa, String numCpfCnpj, TipoSexo tipoSexo, Date dataNascimento, String descEmail,
-            Date dataCadastro, Long idClienteSituacao, String descClienteSituacao, Long idClienteRede, Long idClienteIndicador, String nomeClienteIndicador,
-            Short idPlanoAssinatura, String nomePlanoAssinatura, BigDecimal valorAdesao, Long idProdutoPlano) {
+            Date dataCadastro, Long idClienteSituacao, String descClienteSituacao, Long idPessoaIndicacao, String nomePessoaIndicao) {
         super(id, nomePessoa, descRazaoSocial, tipoPessoa, numCpfCnpj, tipoSexo, dataNascimento, descEmail, dataCadastro);
         this.clienteSituacao = new ClienteSituacao(idClienteSituacao, descClienteSituacao);
     }

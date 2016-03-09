@@ -13,7 +13,6 @@ import br.com.odontofight.entidade.PessoaAcademia;
 import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
-import br.com.odontofight.entidade.PlanoAssinatura;
 
 /**
  * Session Bean implementation class ClienteEJB
@@ -21,6 +20,7 @@ import br.com.odontofight.entidade.PlanoAssinatura;
 
 @Stateless
 @LocalBean
+@SuppressWarnings("unchecked")
 public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
 
     @PersistenceContext
@@ -38,7 +38,6 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
         super(Cliente.class);
     }
 
-    @SuppressWarnings("unchecked")
     public List<Cliente> listarClientesSimples() {
         return em.createNamedQuery(Cliente.LISTAR_CLIENTES_SIMPLES).getResultList();
     }
@@ -47,21 +46,12 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
      * @param id
      * @return Pessoa
      */
-    @SuppressWarnings("unchecked")
     public Cliente obterPessoa(Long id) {
-        Cliente cliente = (Cliente) em.createNamedQuery(Cliente.OBTER_CLIENTE_EDITAR).setParameter("idCliente", id).getSingleResult();
+        Cliente cliente = em.find(Cliente.class, id);
+        // Cliente cliente = (Cliente) em.createNamedQuery(Cliente.OBTER_CLIENTE_EDITAR).setParameter("idCliente", id).getSingleResult();
 
         cliente.setListaEndereco(em.createNamedQuery(PessoaEndereco.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
         cliente.setListaTelefone(em.createNamedQuery(PessoaTelefone.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
-        return cliente;
-    }
-
-    @SuppressWarnings("unchecked")
-    public Cliente obterCliente(Long idCliente) {
-        Cliente cliente = find(idCliente);
-        if (cliente != null) {
-            cliente.setListaTelefone(em.createNamedQuery(PessoaTelefone.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", cliente.getId()).getResultList());
-        }
         return cliente;
     }
 
@@ -89,17 +79,8 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
     }
 
     /**
-     * @return List<PlanoAssinatura>
-     */
-    @SuppressWarnings("unchecked")
-    public List<PlanoAssinatura> listarPlanoAssinatura() {
-        return em.createNamedQuery(PlanoAssinatura.LISTAR_SIPLES).getResultList();
-    }
-
-    /**
      * @return List<PessoaIndicacao>
      */
-    @SuppressWarnings("unchecked")
     public List<PessoaIndicacao> listarPessoasIndicacao() {
         return em.createNamedQuery(PessoaIndicacao.LISTAR_PESSOAS_INDICACAO).getResultList();
     }
@@ -107,7 +88,6 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
     /**
      * @return List<PessoaAcademia>
      */
-    @SuppressWarnings("unchecked")
     public List<PessoaAcademia> listarPessoasAcademia() {
         return em.createNamedQuery(PessoaAcademia.LISTAR_PESSOAS_ACADEMIA).getResultList();
     }

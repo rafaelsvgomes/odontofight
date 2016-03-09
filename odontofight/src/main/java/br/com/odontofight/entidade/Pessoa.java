@@ -237,6 +237,11 @@ public abstract class Pessoa extends EntidadeGenerica {
         telefone.setPessoa(this);
     }
 
+    public void removePessoaTelefone(PessoaTelefone telefone) {
+        this.getListaTelefone().remove(telefone);
+        telefone.setPessoa(null);
+    }
+
     public void addPessoaEndereco(PessoaEndereco endereco) {
         if (getListaEndereco() == null) {
             setListaEndereco(new ArrayList<PessoaEndereco>());

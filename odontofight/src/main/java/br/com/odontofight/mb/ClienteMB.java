@@ -18,7 +18,6 @@ import br.com.odontofight.entidade.PessoaAcademia;
 import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
-import br.com.odontofight.entidade.PlanoAssinatura;
 import br.com.odontofight.entidade.TipoEndereco;
 import br.com.odontofight.entidade.TipoTelefone;
 import br.com.odontofight.entidade.UF;
@@ -50,8 +49,6 @@ public class ClienteMB extends GenericMB {
     private List<Cliente> listaClientes;
 
     private List<UF> listaUfs;
-
-    private List<PlanoAssinatura> listaPlanoAssinatura;
 
     private List<PessoaIndicacao> listaPessoasIndicacao;
 
@@ -86,6 +83,18 @@ public class ClienteMB extends GenericMB {
         }
     }
 
+    private void setEnderecoPessoa() {
+        endereco = new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), cliente);
+        cliente.addPessoaEndereco(endereco);
+    }
+
+    private void setTelefonePessoa() {
+        telefone = new PessoaTelefone(new TipoTelefone(TipoTelefone.RESIDENCIAL), cliente);
+        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), cliente);
+        cliente.addPessoaTelefone(telefone);
+        cliente.addPessoaTelefone(celular);
+    }
+
     private void initListaPessoasIndicacao() {
         listaPessoasIndicacao = ejb.listarPessoasIndicacao();
     }
@@ -99,28 +108,14 @@ public class ClienteMB extends GenericMB {
             if (idSelecionado == null) {
                 return;
             }
-            iniciarClienteEditar(idSelecionado);
+            initListaPessoasIndicacao();
+            initListaPessoasAcademia();
+
+            cliente = ejb.obterPessoa(idSelecionado);
+            endereco = cliente.getListaEndereco().get(0);
+            telefone = cliente.getTelefoneResidencial();
+            celular = cliente.getTelefoneCelular();
         }
-    }
-
-    private void iniciarClienteEditar(Long idCliente) {
-        cliente = ejb.obterPessoa(idCliente);
-        endereco = cliente.getListaEndereco().get(0);
-        telefone = cliente.getTelefoneResidencial();
-        celular = cliente.getTelefoneCelular();
-
-    }
-
-    private void setEnderecoPessoa() {
-        endereco = new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), cliente);
-        cliente.addPessoaEndereco(endereco);
-    }
-
-    private void setTelefonePessoa() {
-        telefone = new PessoaTelefone(new TipoTelefone(TipoTelefone.RESIDENCIAL), cliente);
-        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), cliente);
-        cliente.addPessoaTelefone(telefone);
-        cliente.addPessoaTelefone(celular);
     }
 
     public String salvar() {
@@ -136,6 +131,8 @@ public class ClienteMB extends GenericMB {
                 cliente.setClienteLuta(null);
             }
 
+            verificarTelefone();
+
             ejb.save(cliente);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -144,6 +141,18 @@ public class ClienteMB extends GenericMB {
         }
         MensagemUtil.addMensagemSucesso("msg.sucesso.salvar.cliente");
         return "lista_cliente?faces-redirect=true";
+    }
+
+    private void verificarTelefone() {
+        if (telefone.getDescTelefone().isEmpty()) {
+            cliente.removePessoaTelefone(telefone);
+            telefone = null;
+        }
+        if (celular.getDescTelefone().isEmpty()) {
+            cliente.removePessoaTelefone(celular);
+            celular = null;
+        }
+
     }
 
     private Boolean salvarClienteLuta() {
@@ -245,10 +254,6 @@ public class ClienteMB extends GenericMB {
 
     public List<UF> getListaUfs() {
         return listaUfs;
-    }
-
-    public List<PlanoAssinatura> getListaPlanoAssinatura() {
-        return listaPlanoAssinatura;
     }
 
     public Long getIdSelecionado() {
