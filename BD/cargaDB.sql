@@ -72,12 +72,12 @@ insert into statuspagamento values (5,'Em disputa');
 insert into statuspagamento values (6,'Devolvida');
 insert into statuspagamento values (7,'Cancelada');
 
---ClienteSituacao
-insert into clientesituacao values (1,'Cadastrado');
-insert into clientesituacao values (2,'Ativo');
-insert into clientesituacao values (3,'Inativo');
-insert into clientesituacao values (4,'Bloqueado');
-insert into clientesituacao values (5,'Aguardando Pagamento');
+--Situacao
+insert into situacao values (1,'Cadastrado');
+insert into situacao values (2,'Ativo');
+insert into situacao values (3,'Inativo');
+insert into situacao values (4,'Bloqueado');
+insert into situacao values (5,'Aguardando Pagamento');
 
 --GRUPO
 insert into grupo values ('ADMIN');
