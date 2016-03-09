@@ -10,13 +10,13 @@
 	</ui:define>
 	
 	<f:metadata>
-		<f:event type="preRenderView" listener="#{pessoaMB.iniciarListarPessoas()}" />
+		<f:event type="preRenderView" listener="#{pessoaMB.iniciarListarPessoasAcademia()}" />
 	</f:metadata>
 	
 	<ui:define name="content">
 		<div style="border-bottom: 1px solid #E5E5E5;">
 			<h3>
-				<h:outputText value="#{msg['label.pessoas']}" />
+				<h:outputText value="#{msg['label.pessoas.academia']}" />
 				<small> <h:outputText value="#{msg['label.listagem']}" /></small>
 			</h3>
 		</div>
@@ -36,7 +36,7 @@
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.pessoa.nome']}" />
 					</f:facet>
-					<h:link outcome="editar_pessoa" value="#{pessoa.nomePessoa}"
+					<h:link outcome="editar_pessoa_academia" value="#{pessoa.nomePessoa}"
 						title="#{msg['label.editar']} #{pessoa.nomePessoa}">
 						<f:param name="id" value="#{pessoa.id}" />
 					</h:link>

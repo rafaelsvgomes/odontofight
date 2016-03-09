@@ -20,8 +20,8 @@ import br.com.odontofight.enums.TipoPessoa;
 public class PessoaIndicacao extends Pessoa {
     private static final long serialVersionUID = 1L;
 
-    public static final String LISTAR_PESSOAS_INDICACAO = "listarPessoasIndicacao";
-    public static final String LISTAR_PESSOAS_SIMPLES = "listarPessoasSimples";
+    public static final String LISTAR_PESSOAS_INDICACAO = "PessoaIndicacao.listarPessoasIndicacao";
+    public static final String LISTAR_PESSOAS_SIMPLES = "PessoaIndicacao.listarPessoasSimples";
 
     public PessoaIndicacao() {
     }

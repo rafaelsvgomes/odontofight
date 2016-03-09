@@ -9,9 +9,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 
-import br.com.odontofight.entidade.Cliente;
 import br.com.odontofight.entidade.Pessoa;
+import br.com.odontofight.entidade.PessoaAcademia;
 import br.com.odontofight.entidade.PessoaEndereco;
+import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
 import br.com.odontofight.entidade.TipoEndereco;
 import br.com.odontofight.entidade.TipoTelefone;
@@ -50,32 +51,54 @@ public class PessoaMB extends GenericMB {
 
     @PostConstruct
     @SuppressWarnings("unchecked")
-    public void init() {
+    public void iniciar() {
         listaUfs = ejb.findAll(UF.class);
     }
 
-    public void incluir() {
-        if (!isPostBack()) {
-            idSelecionado = null;
+    private void iniciarIncuir() {
+        idSelecionado = null;
+        pessoa.setTipoPessoa(TipoPessoa.F);
+        setTelefonePessoa();
+        setEnderecoPessoa();
 
-            pessoa = new Cliente();
-            pessoa.setTipoPessoa(TipoPessoa.F);
-            setTelefonePessoa();
-            setEnderecoPessoa();
+    }
+
+    public void iniciarIncluirIndicacao() {
+        if (!isPostBack()) {
+            pessoa = new PessoaIndicacao();
+            iniciarIncuir();
         }
     }
 
-    public void editar() {
+    public void iniciarIncluirAcademia() {
+        if (!isPostBack()) {
+            pessoa = new PessoaAcademia();
+            iniciarIncuir();
+        }
+    }
+
+    public void iniciarEditarAcademia() {
         if (!isPostBack()) {
             if (idSelecionado == null) {
                 return;
             }
-            iniciarClienteEditar(idSelecionado);
+            pessoa = ejb.obterPessoaAcademia(idSelecionado);
+            iniciarPessoaEditar(idSelecionado);
         }
     }
 
-    private void iniciarClienteEditar(Long idCliente) {
-        pessoa = ejb.obterPessoa(idCliente);
+    public void iniciarEditarIndicacao() {
+        if (!isPostBack()) {
+            if (idSelecionado == null) {
+                return;
+            }
+
+            pessoa = ejb.obterPessoaIndicacao(idSelecionado);
+            iniciarPessoaEditar(idSelecionado);
+        }
+    }
+
+    private void iniciarPessoaEditar(Long idPessoa) {
         endereco = pessoa.getListaEndereco().get(0);
         telefone = pessoa.getTelefoneResidencial();
         celular = pessoa.getTelefoneCelular();
@@ -112,7 +135,11 @@ public class PessoaMB extends GenericMB {
             return "";
         }
         MensagemUtil.addMensagemSucesso("msg.sucesso.salvar.pessoa");
-        return "lista_pessoa?faces-redirect=true";
+        if (pessoa instanceof PessoaIndicacao) {
+            return "lista_pessoa_indicacao?faces-redirect=true";
+        } else {
+            return "lista_pessoa_academia?faces-redirect=true";
+        }
     }
 
     public String remover() {
@@ -120,7 +147,7 @@ public class PessoaMB extends GenericMB {
             ejb.remove(pessoa);
         } catch (Exception ex) {
             ex.printStackTrace();
-            MensagemUtil.addMensagemErro("msg.erro.remover.cliente", ex.getMessage());
+            MensagemUtil.addMensagemErro("msg.erro.remover.pessoa", ex.getMessage());
             return "";
         }
         return "lista_pessoa?faces-redirect=true";
@@ -193,9 +220,15 @@ public class PessoaMB extends GenericMB {
         return null;
     }
 
-    public void iniciarListarPessoas() {
+    public void iniciarListarPessoasIndicacao() {
         if (!isPostBack()) {
-            listaPessoas = ejb.listarPessoasSimples();
+            listaPessoas = ejb.listarPessoasIndicacaoSimples();
+        }
+    }
+
+    public void iniciarListarPessoasAcademia() {
+        if (!isPostBack()) {
+            listaPessoas = ejb.listarPessoasAcademiaSimples();
         }
     }
 

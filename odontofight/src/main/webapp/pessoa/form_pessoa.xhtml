@@ -164,7 +164,7 @@
 			<p:commandButton value="#{msg['button.salvar']}" action="#{pessoaMB.salvar}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
 				oncomplete="PF('dlgExec').hide();" rendered="#{pessoaMB.pessoa != null}" />
 			
-			<p:button value="#{msg['button.cancelar']}" outcome="lista_pessoa" styleClass="btn" />
+			<p:button value="#{msg['button.cancelar']}" outcome="/layout/home.xhtml" styleClass="btn" />
 		</div>
 		<p:confirmDialog id="confirmDialog" message="#{msg['excluir.cliente.confirma']}" header="#{msg['excluir.cliente']}" severity="alert" widgetVar="confirmation">  
 	        <p:commandButton id="confirm" value="#{msg['confirma.sim']}" update="messages" oncomplete="PF('confirmation').hide()" action="#{pessoaMB.remover}" />  

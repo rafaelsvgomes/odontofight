@@ -52,3 +52,14 @@
   color: #333333;
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
+
+.form-horizontal .control-label
+{    
+	text-align: right;
+    width: 50px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+}
+
+ 
+ 

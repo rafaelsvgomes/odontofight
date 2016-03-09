@@ -5,16 +5,17 @@
 
 <ui:composition template="../layout/template.xhtml">
 	<ui:define name="pageTitle">
-		<h:outputText value="#{msg['page.title.incluir.cliente']}" />
+		<h:outputText value="#{msg['page.title.editar.pessoa']}" />
 	</ui:define>
-	
+
 	<f:metadata>
-		<f:event type="preRenderView" listener="#{pessoaMB.incluir}" />
+		<f:viewParam name="id" value="#{pessoaMB.idSelecionado}" />
+		<f:event type="preRenderView" listener="#{pessoaMB.iniciarEditarAcademia()}" />
 	</f:metadata>
 
 	<ui:define name="content">
 		<ui:include src="form_pessoa.xhtml">
-			<ui:param name="subtitle" value="#{msg['label.indicacao.incluir']}" />
+			<ui:param name="subtitle" value="#{msg['label.academia.editar']}" />
 		</ui:include>
 	</ui:define>
 </ui:composition>
