@@ -1,0 +1,178 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div>
+		<h3>
+			<h:outputText value="#{msg['label.pessoa']}" />
+			<small> <h:outputText value="#{subtitle}" /></small>
+		</h3>
+	</div>
+	
+	<h:form styleClass="form-horizontal">
+		<fieldset>
+			<legend>
+				<small> <h:outputText value="Dados Pessoais" /></small>
+			</legend>
+			<div class="control-group">
+				<div class="controls">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.tppessoa']} *" /> 
+					<p:selectOneRadio id="tppessoa" value="#{pessoaMB.pessoa.tipoPessoa}" label="#{msg['label.pessoa.tppessoa']}" required="true">
+						<f:selectItem itemLabel="Pessoa Física" itemValue="F" />
+						<f:selectItem itemLabel="Pessoa Jurídica" itemValue="J" />
+						<p:ajax update="painelCpfCnpj" event="change" onstart="PF('dlgExec').show();" oncomplete="PF('dlgExec').hide();"/>
+					</p:selectOneRadio>
+				</div>
+			</div>
+			<p:outputPanel id="painelCpfCnpj">
+				<div class="control-group">
+					<div class="controls">
+						<p:outputLabel styleClass="control-label" value="#{pessoaMB.pessoa.tipoPessoa == 'J' ? msg['label.pessoa.cnpj'] : msg['label.pessoa.cpf']} *" /> 
+						<p:inputMask id="cnpj" mask="#{pessoaMB.pessoa.tipoPessoa == 'J' ? '99.999.999/9999-99' : '999.999.999-99'}" converter="converter.CpfCnpjConverter"   
+							label="#{pessoaMB.pessoa.tipoPessoa == 'J' ? msg['label.pessoa.cnpj'] : msg['label.pessoa.cpf']}" 
+							value="#{pessoaMB.pessoa.numCpfCnpj}" required="true" styleClass="input-large" 
+							validator="#{cpfCnpjUtilizadoValidator.validate}">
+							<f:param id="idSelecionado" name="idSelecionado" value="#{pessoaMB.idSelecionado}"/>
+						</p:inputMask>
+					</div>
+				</div>
+			
+				<div class="control-group">
+					<div class="controls">
+						<p:outputLabel styleClass="control-label" value="#{pessoaMB.pessoa.tipoPessoa == 'J' ? msg['label.pessoa.nomeempresa'] : msg['label.pessoa.nome']} *" />
+						<p:inputText id="nome" value="#{pessoaMB.pessoa.nomePessoa}" label="#{msg['label.pessoa.nome']}"  required="true" styleClass="input-large">
+							<f:validateLength minimum="5" maximum="100" />
+						</p:inputText>
+					</div>
+				</div>
+				<ui:fragment rendered="#{pessoaMB.pessoa.tipoPessoa == 'J'}" >
+					<div class="control-group">
+						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.dsrazaosocial']} *" rendered="#{pessoaMB.pessoa.tipoPessoa == 'J'}" />
+							<p:inputText id="rzSocial" value="#{pessoaMB.pessoa.descRazaoSocial}" label="#{msg['label.pessoa.dsrazaosocial']}" required="true" 
+									rendered="#{pessoaMB.pessoa.tipoPessoa == 'J'}" styleClass="input-large"/>
+						</div>
+					</div>
+				</ui:fragment>
+
+				<ui:fragment rendered="#{pessoaMB.pessoa.tipoPessoa == 'F'}" >
+					<div class="control-group">
+						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.dtnascimento']} *" />
+							<p:inputMask id="date" value="#{pessoaMB.pessoa.dataNascimento}" mask="99/99/9999" label="#{msg['label.pessoa.dtnascimento']}" required="true">
+								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+							</p:inputMask>
+						</div>
+					</div>
+				
+					<div class="control-group">
+						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.sexo']} *" />
+					        <p:selectOneRadio id="sexo" value="#{pessoaMB.pessoa.tipoSexo}" label="#{msg['label.pessoa.sexo']}" required="true" >
+					            <f:selectItem itemLabel="Masculino" itemValue="M" />
+					            <f:selectItem itemLabel="Feminino" itemValue="F" />
+					        </p:selectOneRadio>
+						</div>
+					</div>
+				</ui:fragment>
+			</p:outputPanel>
+			<div class="control-group">
+				<div class="controls">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.telefone']}" />
+			        <p:inputMask mask="(99)99999999?9" value="#{pessoaMB.telefone.descTelefone}" converter="converter.TelefoneConverter" label="#{msg['label.pessoa.telefone']}" 
+			        	styleClass="input-large" />
+				</div>
+			</div>
+			
+			<div class="control-group">
+				<div class="controls">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.celular']} *" />
+			        <p:inputMask mask="(99)99999999?9" value="#{pessoaMB.celular.descTelefone}"  converter="converter.TelefoneConverter" label="#{msg['label.pessoa.celular']}" 
+			        	required="true" styleClass="input-large" />
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.email']} *" />
+					<p:inputText value="#{pessoaMB.pessoa.descEmail}" validator="#{emailValidator.validate}" label="#{msg['label.pessoa.email']}" 
+						disabled="#{pessoaMB.idSelecionado != null}" required="true" styleClass="input-large">
+						<f:validateLength minimum="5" maximum="100" />
+					</p:inputText>
+				</div>
+			</div>
+		</fieldset>
+		
+		<fieldset>
+			<legend>
+				<small> <h:outputText value="Endereço" /></small>
+			</legend>
+			<div class="control-group">
+				<div class="controls">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.cep']} *" />
+			        <p:inputMask id="cliente_cep" mask="99999-999" valueChangeListener="#{pessoaMB.buscarCep}" value="#{pessoaMB.endereco.numCep}" label="#{msg['label.pessoa.endereco.cep']}" 
+			        	required="true" styleClass="input-small"  >
+						<p:ajax event="blur" process="@this" update="cliente_descendereco, cliente_bairro, cliente_cidade, select_uf" onstart="PF('dlgExec').show();" oncomplete="PF('dlgExec').hide();"/>
+					</p:inputMask>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco']} *" />
+			        <p:inputText id="cliente_descendereco" value="#{pessoaMB.endereco.descEndereco}" label="#{msg['label.pessoa.endereco']}" required="true" styleClass="input-large"/>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.num']} *" />
+			        <p:inputText id="end_num" value="#{pessoaMB.endereco.descNumero}" label="#{msg['label.pessoa.endereco.num']}" required="true" styleClass="input-small"/>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.compl']}" />
+			        <p:inputText value="#{pessoaMB.endereco.descComplemento}" label="#{msg['label.pessoa.endereco.compl']}" styleClass="input-large"/>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.bairro']} *" />
+			        <p:inputText id="cliente_bairro" value="#{pessoaMB.endereco.descBairro}" label="#{msg['label.pessoa.endereco.bairro']}" required="true" styleClass="input-large"/>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.cidade']} *" />
+			        <p:inputText id="cliente_cidade" value="#{pessoaMB.endereco.descCidade}" label="#{msg['label.pessoa.endereco.cidade']}" required="true" styleClass="input-large"/>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.estado']} *" />
+					<p:selectOneMenu id="select_uf" value="#{pessoaMB.endereco.uf}" converter="ufConverter" label="#{msg['label.pessoa.endereco.estado']}" required="true">
+		                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
+		                <f:selectItems value="#{pessoaMB.listaUfs}" var="uf" itemLabel="#{uf.descUf}" />
+	    	        </p:selectOneMenu>
+				</div>
+			</div>
+		</fieldset>
+	
+		<p:separator/>
+	
+		<div class="controls">
+			<p:commandButton value="#{msg['button.salvar']}" action="#{pessoaMB.salvar}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
+				oncomplete="PF('dlgExec').hide();" rendered="#{pessoaMB.pessoa != null}" />
+			
+			<p:button value="#{msg['button.cancelar']}" outcome="lista_pessoa" styleClass="btn" />
+		</div>
+		<p:confirmDialog id="confirmDialog" message="#{msg['excluir.cliente.confirma']}" header="#{msg['excluir.cliente']}" severity="alert" widgetVar="confirmation">  
+	        <p:commandButton id="confirm" value="#{msg['confirma.sim']}" update="messages" oncomplete="PF('confirmation').hide()" action="#{pessoaMB.remover}" />  
+	        <p:commandButton id="decline" value="#{msg['confirma.nao']}" update="messages" onclick="PF('confirmation').hide()" type="button" />
+	    </p:confirmDialog>
+	    
+	    <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
+		
+		<h:inputHidden value="#{pessoaMB.pessoa.id}" />
+	</h:form>
+</ui:fragment>

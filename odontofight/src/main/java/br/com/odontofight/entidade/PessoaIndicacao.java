@@ -1,8 +1,11 @@
 package br.com.odontofight.entidade;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrimaryKeyJoinColumn;
+
+import br.com.odontofight.enums.TipoPessoa;
 
 /**
  * Entity implementation class for Entity: PessoaIndicacao
@@ -10,17 +13,29 @@ import javax.persistence.PrimaryKeyJoinColumn;
  */
 @Entity
 @PrimaryKeyJoinColumn(name = "idPessoaIndicacao", referencedColumnName = "idPessoa")
-@NamedQuery(name = PessoaIndicacao.LISTAR_PESSOAS_INDICACAO, query = "SELECT new br.com.odontofight.entidade.PessoaIndicacao(p.id, p.nomePessoa) FROM PessoaIndicacao p")
+@NamedQueries({
+        @NamedQuery(name = PessoaIndicacao.LISTAR_PESSOAS_INDICACAO, query = "SELECT new br.com.odontofight.entidade.PessoaIndicacao(p.id, p.nomePessoa) FROM PessoaIndicacao p"),
+        @NamedQuery(name = PessoaIndicacao.LISTAR_PESSOAS_SIMPLES, query = "SELECT new br.com.odontofight.entidade.PessoaIndicacao(p.id, p.nomePessoa, p.tipoPessoa, p.numCpfCnpj) "
+                + " FROM PessoaIndicacao p") })
 public class PessoaIndicacao extends Pessoa {
     private static final long serialVersionUID = 1L;
 
     public static final String LISTAR_PESSOAS_INDICACAO = "listarPessoasIndicacao";
+    public static final String LISTAR_PESSOAS_SIMPLES = "listarPessoasSimples";
 
     public PessoaIndicacao() {
     }
 
     public PessoaIndicacao(Long id, String nomePessoa) {
         super(id, nomePessoa);
+    }
+
+    /**
+     * LISTAR_PESSOAS_SIMPLES
+     */
+    public PessoaIndicacao(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj) {
+        super(id, nomePessoa, tipoPessoa, numCpfCnpj);
+
     }
 
     @Override

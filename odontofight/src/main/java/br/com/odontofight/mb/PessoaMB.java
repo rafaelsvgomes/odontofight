@@ -10,36 +10,32 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 
 import br.com.odontofight.entidade.Cliente;
-import br.com.odontofight.entidade.ClienteLuta;
-import br.com.odontofight.entidade.ClienteSituacao;
-import br.com.odontofight.entidade.ModalidadeLuta;
-import br.com.odontofight.entidade.OrigemPagamento;
-import br.com.odontofight.entidade.PessoaAcademia;
+import br.com.odontofight.entidade.Pessoa;
 import br.com.odontofight.entidade.PessoaEndereco;
-import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
-import br.com.odontofight.entidade.PlanoAssinatura;
 import br.com.odontofight.entidade.TipoEndereco;
 import br.com.odontofight.entidade.TipoTelefone;
 import br.com.odontofight.entidade.UF;
 import br.com.odontofight.enums.TipoPessoa;
 import br.com.odontofight.exception.CEPProxyException;
-import br.com.odontofight.servico.ClienteServicoEJB;
+import br.com.odontofight.servico.PessoaServicoEJB;
 import br.com.odontofight.util.MensagemUtil;
 import br.com.odontofight.vo.CepServiceVO;
 import br.com.odontofight.webservices.CepService;
 
-@ManagedBean(name = "clienteMB")
+@ManagedBean(name = "pessoaMB")
 @ViewScoped
-public class ClienteMB extends GenericMB {
+public class PessoaMB extends GenericMB {
     private static final long serialVersionUID = -6556028968452915346L;
 
     @EJB
-    private ClienteServicoEJB ejb;
+    private PessoaServicoEJB ejb;
 
     private Long idSelecionado;
 
-    private Cliente cliente;
+    private Pessoa pessoa;
+
+    private List<Pessoa> listaPessoas;
 
     private PessoaEndereco endereco;
 
@@ -47,51 +43,26 @@ public class ClienteMB extends GenericMB {
 
     private PessoaTelefone celular;
 
-    private List<Cliente> listaClientes;
-
     private List<UF> listaUfs;
 
-    private List<PlanoAssinatura> listaPlanoAssinatura;
-
-    private List<PessoaIndicacao> listaPessoasIndicacao;
-
-    private List<PessoaAcademia> listaPessoasAcademia;
-
-    private List<ModalidadeLuta> listaModalidadeLuta;
-
-    private List<OrigemPagamento> listaOrigemPagamento;
-
-    public ClienteMB() {
+    public PessoaMB() {
     }
 
     @PostConstruct
     @SuppressWarnings("unchecked")
     public void init() {
         listaUfs = ejb.findAll(UF.class);
-        listaModalidadeLuta = ejb.findAll(ModalidadeLuta.class);
     }
 
     public void incluir() {
         if (!isPostBack()) {
             idSelecionado = null;
-            initListaPessoasIndicacao();
-            initListaPessoasAcademia();
 
-            cliente = new Cliente();
-            cliente.setTipoPessoa(TipoPessoa.F);
-            cliente.setClienteSituacao(new ClienteSituacao(ClienteSituacao.CADASTRADO));
-            cliente.setClienteLuta(new ClienteLuta());
+            pessoa = new Cliente();
+            pessoa.setTipoPessoa(TipoPessoa.F);
             setTelefonePessoa();
             setEnderecoPessoa();
         }
-    }
-
-    private void initListaPessoasIndicacao() {
-        listaPessoasIndicacao = ejb.listarPessoasIndicacao();
-    }
-
-    private void initListaPessoasAcademia() {
-        listaPessoasAcademia = ejb.listarPessoasAcademia();
     }
 
     public void editar() {
@@ -104,66 +75,55 @@ public class ClienteMB extends GenericMB {
     }
 
     private void iniciarClienteEditar(Long idCliente) {
-        cliente = ejb.obterPessoa(idCliente);
-        endereco = cliente.getListaEndereco().get(0);
-        telefone = cliente.getTelefoneResidencial();
-        celular = cliente.getTelefoneCelular();
+        pessoa = ejb.obterPessoa(idCliente);
+        endereco = pessoa.getListaEndereco().get(0);
+        telefone = pessoa.getTelefoneResidencial();
+        celular = pessoa.getTelefoneCelular();
 
     }
 
     private void setEnderecoPessoa() {
-        endereco = new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), cliente);
-        cliente.addPessoaEndereco(endereco);
+        endereco = new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), pessoa);
+        pessoa.addPessoaEndereco(endereco);
     }
 
     private void setTelefonePessoa() {
-        telefone = new PessoaTelefone(new TipoTelefone(TipoTelefone.RESIDENCIAL), cliente);
-        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), cliente);
-        cliente.addPessoaTelefone(telefone);
-        cliente.addPessoaTelefone(celular);
+        telefone = new PessoaTelefone(new TipoTelefone(TipoTelefone.RESIDENCIAL), pessoa);
+        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), pessoa);
+        pessoa.addPessoaTelefone(telefone);
+        pessoa.addPessoaTelefone(celular);
     }
 
     public String salvar() {
         try {
-            if (cliente.getId() == null || cliente.getId() == 0) {
-                cliente.setDataCadastro(new Date());
-                cliente.setDataAtualizacao(new Date());
-            } else {
-                cliente.setDataAtualizacao(new Date());
+            if (pessoa.getId() == null || pessoa.getId() == 0) {
+                pessoa.setDataCadastro(new Date());
+                // TODO: rafael - pedir para Anderson incluir na pessoa
+                // pessoa.setDataAtualizacao(new Date());
             }
+            // else {
+            // pessoa.setDataAtualizacao(new Date());
+            // }
 
-            if (!salvarClienteLuta()) {
-                cliente.setClienteLuta(null);
-            }
-
-            ejb.save(cliente);
+            ejb.save(pessoa);
         } catch (Exception ex) {
             ex.printStackTrace();
-            MensagemUtil.addMensagemErro("msg.erro.salvar.cliente", ex.getMessage());
+            MensagemUtil.addMensagemErro("msg.erro.salvar.pessoa", ex.getMessage());
             return "";
         }
-        MensagemUtil.addMensagemSucesso("msg.sucesso.salvar.cliente");
-        return "lista_cliente?faces-redirect=true";
-    }
-
-    private Boolean salvarClienteLuta() {
-        if (cliente.getClienteLuta() != null
-                && (cliente.getClienteLuta().getId() != null || cliente.getClienteLuta().getPessoaAcademia() != null || cliente.getClienteLuta().getModalidadeLuta() != null
-                        || !cliente.getClienteLuta().getDescGraduacao().isEmpty() || cliente.getClienteLuta().getDataInicioAcademia() != null)) {
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
+        MensagemUtil.addMensagemSucesso("msg.sucesso.salvar.pessoa");
+        return "lista_pessoa?faces-redirect=true";
     }
 
     public String remover() {
         try {
-            ejb.remove(cliente);
+            ejb.remove(pessoa);
         } catch (Exception ex) {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.remover.cliente", ex.getMessage());
             return "";
         }
-        return "lista_cliente?faces-redirect=true";
+        return "lista_pessoa?faces-redirect=true";
     }
 
     /**
@@ -188,7 +148,7 @@ public class ClienteMB extends GenericMB {
                 populaEndereco(cep, cepServiceVO);
             }
         }
-        return "lista_cliente?faces-redirect=true";
+        return "lista_pessoa?faces-redirect=true";
     }
 
     private CepServiceVO buscarCEPWebService(String cep, CepService cepService, CepServiceVO cepServiceVO) {
@@ -233,22 +193,14 @@ public class ClienteMB extends GenericMB {
         return null;
     }
 
-    public void iniciarListarClientes() {
+    public void iniciarListarPessoas() {
         if (!isPostBack()) {
-            listaClientes = ejb.listarClientesSimples();
+            listaPessoas = ejb.listarPessoasSimples();
         }
-    }
-
-    public List<Cliente> getListaClientes() {
-        return listaClientes;
     }
 
     public List<UF> getListaUfs() {
         return listaUfs;
-    }
-
-    public List<PlanoAssinatura> getListaPlanoAssinatura() {
-        return listaPlanoAssinatura;
     }
 
     public Long getIdSelecionado() {
@@ -257,10 +209,6 @@ public class ClienteMB extends GenericMB {
 
     public void setIdSelecionado(Long idSelecionado) {
         this.idSelecionado = idSelecionado;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
     }
 
     public PessoaEndereco getEndereco() {
@@ -275,19 +223,16 @@ public class ClienteMB extends GenericMB {
         return celular;
     }
 
-    public List<OrigemPagamento> getListaOrigemPagamento() {
-        return listaOrigemPagamento;
+    public Pessoa getPessoa() {
+        return pessoa;
     }
 
-    public List<PessoaIndicacao> getListaPessoasIndicacao() {
-        return listaPessoasIndicacao;
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 
-    public List<PessoaAcademia> getListaPessoasAcademia() {
-        return listaPessoasAcademia;
+    public List<Pessoa> getListaPessoas() {
+        return listaPessoas;
     }
 
-    public List<ModalidadeLuta> getListaModalidadeLuta() {
-        return listaModalidadeLuta;
-    }
 }

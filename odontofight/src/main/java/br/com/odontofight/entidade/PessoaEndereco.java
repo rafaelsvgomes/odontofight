@@ -28,9 +28,9 @@ public class PessoaEndereco extends EntidadeGenerica {
         this.numCep = numCep;
     }
 
-    public PessoaEndereco(TipoEndereco tipoEndereco2, Cliente cliente) {
+    public PessoaEndereco(TipoEndereco tipoEndereco2, Pessoa pessoa) {
         this.tipoEndereco = tipoEndereco2;
-        this.pessoa = cliente;
+        this.pessoa = pessoa;
     }
 
     @Id

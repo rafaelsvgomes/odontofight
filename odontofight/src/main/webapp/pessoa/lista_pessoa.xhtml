@@ -1,0 +1,62 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../layout/template.xhtml">
+	<ui:define name="pageTitle">
+		<h:outputText value="#{msg['page.title.lista.cliente']}" />
+	</ui:define>
+	
+	<f:metadata>
+		<f:event type="preRenderView" listener="#{pessoaMB.iniciarListarPessoas()}" />
+	</f:metadata>
+	
+	<ui:define name="content">
+		<div style="border-bottom: 1px solid #E5E5E5;">
+			<h3>
+				<h:outputText value="#{msg['label.pessoas']}" />
+				<small> <h:outputText value="#{msg['label.listagem']}" /></small>
+			</h3>
+		</div>
+		<h:form>
+			<p:dataTable id="dataTable" var="pessoa"
+				value="#{pessoaMB.listaPessoas}" paginator="true" rows="10" paginatorPosition="bottom"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				currentPageReportTemplate="{currentPage} de {totalPages}" rowsPerPageTemplate="10,20,50" emptyMessage="#{msg['alerta.nenhuma.pessoa.encontrada']}" >
+				<p:column style="text-align: center; width: 20px">
+					<f:facet name="header">
+						<h:outputText value="#" />
+					</f:facet>
+					<h:outputText value="#{pessoa.id}"/>
+				</p:column>
+	
+				<p:column sortBy="#{pessoa.nomePessoa}">
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.pessoa.nome']}" />
+					</f:facet>
+					<h:link outcome="editar_pessoa" value="#{pessoa.nomePessoa}"
+						title="#{msg['label.editar']} #{pessoa.nomePessoa}">
+						<f:param name="id" value="#{pessoa.id}" />
+					</h:link>
+				</p:column>
+				
+				<p:column sortBy="#{pessoa.tipoPessoa.descTipoPessoa}" style="text-align: center;">
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.pessoa.tppessoa']}" />
+					</f:facet>
+					<h:outputText value="#{pessoa.tipoPessoa.descTipoPessoa}" />
+				</p:column>
+	
+				<p:column sortBy="#{pessoa.numCpfCnpj}">
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.pessoa.cpf.cnpj']}" />
+					</f:facet>
+					<h:outputText value="#{pessoa.numCpfCnpj}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
