@@ -55,7 +55,7 @@ insert into modalidadeluta values (5, 'MMA');
 insert into modalidadeluta values (6, 'Karate');
 insert into modalidadeluta values (7, 'Wrestling');
 insert into modalidadeluta values (8, 'Kickboxing');
-insert into modalidadeluta values (8, 'Capoeira');
+insert into modalidadeluta values (9, 'Capoeira');
 
 --SituacaoParcela
 insert into situacaoparcela values (1,'Aberto');
