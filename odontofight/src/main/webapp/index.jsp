@@ -5,6 +5,7 @@
 </head>
 
 <body>
-	<% response.sendRedirect("./layout/home.xhtml"); %>
+<%-- 	<% response.sendRedirect("./layout/home.xhtml"); %> --%>
+	<% response.sendRedirect("./site/index.html"); %>
 </body>
 </html>
