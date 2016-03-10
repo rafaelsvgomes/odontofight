@@ -11,7 +11,7 @@ import javax.faces.event.ValueChangeEvent;
 
 import br.com.odontofight.entidade.Cliente;
 import br.com.odontofight.entidade.ClienteLuta;
-import br.com.odontofight.entidade.ClienteSituacao;
+import br.com.odontofight.entidade.Situacao;
 import br.com.odontofight.entidade.ModalidadeLuta;
 import br.com.odontofight.entidade.OrigemPagamento;
 import br.com.odontofight.entidade.PessoaAcademia;
@@ -76,7 +76,7 @@ public class ClienteMB extends GenericMB {
 
             cliente = new Cliente();
             cliente.setTipoPessoa(TipoPessoa.F);
-            cliente.setClienteSituacao(new ClienteSituacao(ClienteSituacao.CADASTRADO));
+            cliente.setSituacao(new Situacao(Situacao.CADASTRADO));
             cliente.setClienteLuta(new ClienteLuta());
             setTelefonePessoa();
             setEnderecoPessoa();

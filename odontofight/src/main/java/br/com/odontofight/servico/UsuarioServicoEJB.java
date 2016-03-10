@@ -34,7 +34,7 @@ public class UsuarioServicoEJB extends GenericPersistencia<Usuario, Long> {
 
     // TODO: rafalel - Se o usuario estiver em mais de um grupo vai retornar mais de um registro.
     public UsuarioLogado obterUsuario(String userName) {
-        String sql = "SELECT up.idpessoa, u.dsusuario, c.idclientesituacao, ug.cdgrupo, u.idusuario, p.nomepessoa FROM usuario u, usuariopessoa up, usuariogrupo ug, cliente c, pessoa p "
+        String sql = "SELECT up.idpessoa, u.dsusuario, c.idsituacao, ug.cdgrupo, u.idusuario, p.nomepessoa FROM usuario u, usuariopessoa up, usuariogrupo ug, cliente c, pessoa p "
                 + "WHERE u.idusuario = up.idusuario and up.idpessoa = c.idcliente and u.idusuario = ug.idusuario and c.idcliente = p.idpessoa and u.dsusuario = :userName";
 
         Object[] usuario = (Object[]) em.createNativeQuery(sql).setParameter("userName", userName).getSingleResult();
@@ -43,7 +43,7 @@ public class UsuarioServicoEJB extends GenericPersistencia<Usuario, Long> {
     }
 
     public UsuarioLogado obterUsuario(Long idUser) {
-        String sql = "SELECT up.idpessoa, u.dsusuario, c.idclientesituacao, ug.cdgrupo, u.idusuario, p.nomepessoa FROM usuario u, usuariopessoa up, usuariogrupo ug, cliente c, pessoa p "
+        String sql = "SELECT up.idpessoa, u.dsusuario, c.idsituacao, ug.cdgrupo, u.idusuario, p.nomepessoa FROM usuario u, usuariopessoa up, usuariogrupo ug, cliente c, pessoa p "
                 + "WHERE u.idusuario = up.idusuario and up.idpessoa = c.idcliente and u.idusuario = ug.idusuario and c.idcliente = p.idpessoa and u.idusuario = :idUser";
 
         Object[] usuario = (Object[]) em.createNativeQuery(sql).setParameter("idUser", idUser).getSingleResult();
@@ -55,7 +55,7 @@ public class UsuarioServicoEJB extends GenericPersistencia<Usuario, Long> {
         UsuarioLogado usuarioLogado = new UsuarioLogado();
         usuarioLogado.setIdCliente(((BigInteger) usuario[0]).longValue());
         usuarioLogado.setDescUsuario((String) usuario[1]);
-        usuarioLogado.setIdClienteSituacao(((BigInteger) usuario[2]).longValue());
+        usuarioLogado.setIdSituacao(((BigInteger) usuario[2]).longValue());
         usuarioLogado.setCodGrupo((String) usuario[3]);
         usuarioLogado.setIdUsuario(((BigInteger) usuario[4]).longValue());
         usuarioLogado.setNomePessoa((String) usuario[5]);

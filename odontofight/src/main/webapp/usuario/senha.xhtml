@@ -24,38 +24,30 @@
 					</legend>
 					
 					<div class="control-group">
-						<label class="control-label">
-							<h:outputText value="#{msg['label.usuario.login']} *" />
-						</label>
 						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.usuario.login']} *" />
 							<p:inputText value="#{usuarioLogado.descUsuario}" label="#{msg['label.usuario.login']}" required="true" immediate="true" styleClass="input-large" disabled="true" />
 						</div>
 					</div>
 					
 					<div class="control-group">
-						<label class="control-label">
-							<h:outputText value="#{msg['label.usuario.senha.atual']} *" />
-						</label>
 						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.usuario.senha.atual']} *" />
 							<p:password id="senhaAtual" value="#{usuarioMB.senhaAtual}" label="#{msg['label.usuario.senha.atual']}" required="true" styleClass="input-large"/>
 						</div>
 					</div>
 					
 					<div class="control-group">
-						<label class="control-label">
-							<h:outputText value="#{msg['label.usuario.nova.senha']} *" />
-						</label>
 						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.usuario.nova.senha']} *" />
 							<p:password id="pwd1" value="#{usuarioMB.novaSenha}" match="pwd2" label="#{msg['label.usuario.nova.senha']}" required="true" styleClass="input-large"
 							validatorMessage="Senhas não conferem" feedback="true" promptLabel="Digite a senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte" />
 						</div>
 					</div>
 					
 					<div class="control-group">
-						<label class="control-label">
-							<h:outputText value="#{msg['label.usuario.confirmar.nova.senha']} *" />
-						</label>
 						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.usuario.confirmar.nova.senha']} *" />
 							<p:password id="pwd2" value="#{usuarioMB.novaSenha}" label="#{msg['label.usuario.confirmar.nova.senha']}" required="true" styleClass="input-large" 
 							validatorMessage="Senhas não conferem" feedback="true" promptLabel="Confirme a senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte" />
 						</div>

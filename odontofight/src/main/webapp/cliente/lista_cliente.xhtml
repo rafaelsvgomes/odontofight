@@ -56,11 +56,11 @@
 					<h:outputText value="#{cliente.numCpfCnpj}" />
 				</p:column>
 				
-				<p:column sortBy="#{cliente.clienteSituacao.descClienteSituacao}">
+				<p:column sortBy="#{cliente.situacao.descSituacao}">
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.cliente.situacao']}" />
 					</f:facet>
-					<h:outputText value="#{cliente.clienteSituacao.descClienteSituacao}" />
+					<h:outputText value="#{cliente.situacao.descSituacao}" />
 				</p:column>
 			</p:dataTable>
 		</h:form>

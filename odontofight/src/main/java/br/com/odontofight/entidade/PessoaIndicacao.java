@@ -1,6 +1,10 @@
 package br.com.odontofight.entidade;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -30,12 +34,34 @@ public class PessoaIndicacao extends Pessoa {
         super(id, nomePessoa);
     }
 
+    @ManyToOne
+    @JoinColumn(name = "idSituacao", nullable = true)
+    private Situacao situacao;
+
+    private Date dataAtualizacao;
+
     /**
      * LISTAR_PESSOAS_SIMPLES
      */
     public PessoaIndicacao(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj) {
         super(id, nomePessoa, tipoPessoa, numCpfCnpj);
 
+    }
+
+    public Situacao getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(Situacao situacao) {
+        this.situacao = situacao;
+    }
+
+    public Date getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public void setDataAtualizacao(Date dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
     }
 
     @Override

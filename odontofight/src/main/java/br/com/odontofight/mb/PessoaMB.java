@@ -9,11 +9,15 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 
+import br.com.odontofight.entidade.Banco;
 import br.com.odontofight.entidade.Pessoa;
 import br.com.odontofight.entidade.PessoaAcademia;
+import br.com.odontofight.entidade.PessoaConta;
 import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
+import br.com.odontofight.entidade.Situacao;
+import br.com.odontofight.entidade.TipoConta;
 import br.com.odontofight.entidade.TipoEndereco;
 import br.com.odontofight.entidade.TipoTelefone;
 import br.com.odontofight.entidade.UF;
@@ -44,7 +48,15 @@ public class PessoaMB extends GenericMB {
 
     private PessoaTelefone celular;
 
+    private PessoaConta pessoaConta;
+
+    private Boolean exibirFieldInfBancarias = Boolean.FALSE;
+
     private List<UF> listaUfs;
+
+    private List<Banco> listaBancos;
+
+    private List<TipoConta> listaTipoConta;
 
     public PessoaMB() {
     }
@@ -58,15 +70,22 @@ public class PessoaMB extends GenericMB {
     private void iniciarIncuir() {
         idSelecionado = null;
         pessoa.setTipoPessoa(TipoPessoa.F);
+        pessoa.setSituacao(new Situacao(Situacao.CADASTRADO));
         setTelefonePessoa();
         setEnderecoPessoa();
 
     }
 
+    @SuppressWarnings("unchecked")
     public void iniciarIncluirIndicacao() {
         if (!isPostBack()) {
             pessoa = new PessoaIndicacao();
             iniciarIncuir();
+            setPessoaConta();
+
+            listaBancos = ejb.findAll(Banco.class);
+            listaTipoConta = ejb.findAll(TipoConta.class);
+            exibirFieldInfBancarias = Boolean.TRUE;
         }
     }
 
@@ -87,14 +106,19 @@ public class PessoaMB extends GenericMB {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void iniciarEditarIndicacao() {
         if (!isPostBack()) {
             if (idSelecionado == null) {
                 return;
             }
-
             pessoa = ejb.obterPessoaIndicacao(idSelecionado);
+            pessoaConta = pessoa.getListaPessoaConta().get(0);
             iniciarPessoaEditar(idSelecionado);
+
+            listaBancos = ejb.findAll(Banco.class);
+            listaTipoConta = ejb.findAll(TipoConta.class);
+            exibirFieldInfBancarias = Boolean.TRUE;
         }
     }
 
@@ -117,16 +141,19 @@ public class PessoaMB extends GenericMB {
         pessoa.addPessoaTelefone(celular);
     }
 
+    private void setPessoaConta() {
+        pessoaConta = new PessoaConta(pessoa, new Banco(), new TipoConta(), Boolean.TRUE);
+        pessoa.addPessoaConta(pessoaConta);
+    }
+
     public String salvar() {
         try {
             if (pessoa.getId() == null || pessoa.getId() == 0) {
                 pessoa.setDataCadastro(new Date());
-                // TODO: rafael - pedir para Anderson incluir na pessoa
-                // pessoa.setDataAtualizacao(new Date());
+                pessoa.setDataAtualizacao(new Date());
+            } else {
+                pessoa.setDataAtualizacao(new Date());
             }
-            // else {
-            // pessoa.setDataAtualizacao(new Date());
-            // }
 
             ejb.save(pessoa);
         } catch (Exception ex) {
@@ -266,6 +293,22 @@ public class PessoaMB extends GenericMB {
 
     public List<Pessoa> getListaPessoas() {
         return listaPessoas;
+    }
+
+    public PessoaConta getPessoaConta() {
+        return pessoaConta;
+    }
+
+    public List<Banco> getListaBancos() {
+        return listaBancos;
+    }
+
+    public List<TipoConta> getListaTipoConta() {
+        return listaTipoConta;
+    }
+
+    public Boolean getExibirFieldInfBancarias() {
+        return exibirFieldInfBancarias;
     }
 
 }

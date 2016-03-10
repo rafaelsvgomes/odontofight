@@ -24,10 +24,10 @@ import br.com.odontofight.enums.TipoSexo;
         @NamedQuery(name = Cliente.OBTER_POR_NUM_CPF_CNPJ, query = "SELECT c.id FROM Cliente c WHERE c.numCpfCnpj = :numCpfCnpj"),
         @NamedQuery(name = Cliente.OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO, query = "SELECT c.id FROM Cliente c WHERE c.numCpfCnpj = :numCpfCnpj and c.id not in (:idSelecionado)"),
         @NamedQuery(name = Cliente.OBTER_CLIENTE_EDITAR, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.descRazaoSocial, c.tipoPessoa, c.numCpfCnpj, "
-                + "c.tipoSexo, c.dataNascimento, c.descEmail, c.dataCadastro, c.clienteSituacao.id, c.clienteSituacao.descClienteSituacao, c.pessoaIndicacao.id, c.pessoaIndicacao.nomePessoa) "
+                + "c.tipoSexo, c.dataNascimento, c.descEmail, c.dataCadastro, c.situacao.id, c.situacao.descSituacao, c.pessoaIndicacao.id, c.pessoaIndicacao.nomePessoa) "
                 + "FROM Cliente c WHERE c.id = :idCliente"),
-        @NamedQuery(name = Cliente.LISTAR_CLIENTES_SIMPLES, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.tipoPessoa, c.numCpfCnpj, c.clienteSituacao.id, "
-                + "c.clienteSituacao.descClienteSituacao) FROM Cliente c") })
+        @NamedQuery(name = Cliente.LISTAR_CLIENTES_SIMPLES, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.tipoPessoa, c.numCpfCnpj, c.situacao.id, "
+                + "c.situacao.descSituacao) FROM Cliente c") })
 public class Cliente extends Pessoa {
     private static final long serialVersionUID = 1L;
 
@@ -47,9 +47,9 @@ public class Cliente extends Pessoa {
     /**
      * LISTAR_CLIENTES_SIMPLES
      */
-    public Cliente(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, Long idClienteSituacao, String descClienteSituacao) {
+    public Cliente(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, Long idSituacao, String descSituacao) {
         super(id, nomePessoa, tipoPessoa, numCpfCnpj);
-        this.clienteSituacao = new ClienteSituacao(idClienteSituacao, descClienteSituacao);
+        this.situacao = new Situacao(idSituacao, descSituacao);
 
     }
 
@@ -57,17 +57,17 @@ public class Cliente extends Pessoa {
      * OBTER_CLIENTE_EDITAR
      */
     public Cliente(Long id, String nomePessoa, String descRazaoSocial, TipoPessoa tipoPessoa, String numCpfCnpj, TipoSexo tipoSexo, Date dataNascimento, String descEmail,
-            Date dataCadastro, Long idClienteSituacao, String descClienteSituacao, Long idPessoaIndicacao, String nomePessoaIndicao) {
+            Date dataCadastro, Long idSituacao, String descSituacao, Long idPessoaIndicacao, String nomePessoaIndicao) {
         super(id, nomePessoa, descRazaoSocial, tipoPessoa, numCpfCnpj, tipoSexo, dataNascimento, descEmail, dataCadastro);
-        this.clienteSituacao = new ClienteSituacao(idClienteSituacao, descClienteSituacao);
+        this.situacao = new Situacao(idSituacao, descSituacao);
     }
 
     public Cliente() {
     }
 
     @ManyToOne
-    @JoinColumn(name = "idClienteSituacao", nullable = true)
-    private ClienteSituacao clienteSituacao;
+    @JoinColumn(name = "idSituacao", nullable = true)
+    private Situacao situacao;
 
     @ManyToOne
     @JoinColumn(name = "idPessoaIndicacao", nullable = true)
@@ -104,12 +104,12 @@ public class Cliente extends Pessoa {
         return true;
     }
 
-    public ClienteSituacao getClienteSituacao() {
-        return clienteSituacao;
+    public Situacao getSituacao() {
+        return situacao;
     }
 
-    public void setClienteSituacao(ClienteSituacao clienteSituacao) {
-        this.clienteSituacao = clienteSituacao;
+    public void setSituacao(Situacao situacao) {
+        this.situacao = situacao;
     }
 
     public ClienteLuta getClienteLuta() {

@@ -19,6 +19,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -110,7 +111,16 @@ public abstract class Pessoa extends EntidadeGenerica {
     private List<PessoaTelefone> listaTelefone;
 
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
+    private List<PessoaConta> listaPessoaConta;
+
+    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
     private List<UsuarioPessoa> listaUsuarioPessoa;
+
+    @Transient
+    private Situacao situacao;
+
+    @Transient
+    private Date dataAtualizacao;
 
     public Long getId() {
         return id;
@@ -176,7 +186,18 @@ public abstract class Pessoa extends EntidadeGenerica {
         this.dataCadastro = dataCadastro;
     }
 
+    public String getDescEmail() {
+        return descEmail;
+    }
+
+    public void setDescEmail(String descEmail) {
+        this.descEmail = descEmail;
+    }
+
     public List<PessoaEndereco> getListaEndereco() {
+        if (listaEndereco == null) {
+            listaEndereco = new ArrayList<PessoaEndereco>();
+        }
         return listaEndereco;
     }
 
@@ -185,6 +206,9 @@ public abstract class Pessoa extends EntidadeGenerica {
     }
 
     public List<PessoaTelefone> getListaTelefone() {
+        if (listaTelefone == null) {
+            listaTelefone = new ArrayList<PessoaTelefone>();
+        }
         return listaTelefone;
     }
 
@@ -192,12 +216,15 @@ public abstract class Pessoa extends EntidadeGenerica {
         this.listaTelefone = listaTelefone;
     }
 
-    public String getDescEmail() {
-        return descEmail;
+    public List<PessoaConta> getListaPessoaConta() {
+        if (listaPessoaConta == null) {
+            listaPessoaConta = new ArrayList<PessoaConta>();
+        }
+        return listaPessoaConta;
     }
 
-    public void setDescEmail(String descEmail) {
-        this.descEmail = descEmail;
+    public void setListaPessoaConta(List<PessoaConta> listaPessoaConta) {
+        this.listaPessoaConta = listaPessoaConta;
     }
 
     public List<UsuarioPessoa> getListaUsuarioPessoa() {
@@ -209,6 +236,22 @@ public abstract class Pessoa extends EntidadeGenerica {
 
     public void setListaUsuarioPessoa(List<UsuarioPessoa> listaUsuarioPessoa) {
         this.listaUsuarioPessoa = listaUsuarioPessoa;
+    }
+
+    public Situacao getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(Situacao situacao) {
+        this.situacao = situacao;
+    }
+
+    public Date getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public void setDataAtualizacao(Date dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
     }
 
     public PessoaTelefone getTelefoneCelular() {
@@ -230,9 +273,6 @@ public abstract class Pessoa extends EntidadeGenerica {
     }
 
     public void addPessoaTelefone(PessoaTelefone telefone) {
-        if (getListaTelefone() == null) {
-            setListaTelefone(new ArrayList<PessoaTelefone>());
-        }
         getListaTelefone().add(telefone);
         telefone.setPessoa(this);
     }
@@ -243,10 +283,13 @@ public abstract class Pessoa extends EntidadeGenerica {
     }
 
     public void addPessoaEndereco(PessoaEndereco endereco) {
-        if (getListaEndereco() == null) {
-            setListaEndereco(new ArrayList<PessoaEndereco>());
-        }
         getListaEndereco().add(endereco);
         endereco.setPessoa(this);
     }
+
+    public void addPessoaConta(PessoaConta conta) {
+        getListaPessoaConta().add(conta);
+        conta.setPessoa(this);
+    }
+
 }

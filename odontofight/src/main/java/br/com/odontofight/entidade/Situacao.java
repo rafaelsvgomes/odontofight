@@ -10,8 +10,8 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "ClienteSituacao")
-public class ClienteSituacao extends EntidadeGenerica {
+@Table(name = "Situacao")
+public class Situacao extends EntidadeGenerica {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,26 +21,26 @@ public class ClienteSituacao extends EntidadeGenerica {
     public static final long BLOQUEADO = 4L;
 
     @Id
-    @Column(name = "idClienteSituacao", nullable = false, unique = true)
+    @Column(name = "idSituacao", nullable = false, unique = true)
     private Long id;
 
-    @Column(name = "dsClienteSituacao", nullable = false)
-    private String descClienteSituacao;
+    @Column(name = "dsSituacao", nullable = false)
+    private String descSituacao;
 
-    public ClienteSituacao(Long id) {
+    public Situacao(Long id) {
         this.id = id;
     }
 
-    public ClienteSituacao() {
+    public Situacao() {
     }
 
     /**
      * @param idClienteSituacao
-     * @param descClienteSituacao2
+     * @param descSituacao2
      */
-    public ClienteSituacao(Long idClienteSituacao, String descClienteSituacao) {
+    public Situacao(Long idClienteSituacao, String descSituacao) {
         this.id = idClienteSituacao;
-        this.descClienteSituacao = descClienteSituacao;
+        this.descSituacao = descSituacao;
     }
 
     public Long getId() {
@@ -51,12 +51,12 @@ public class ClienteSituacao extends EntidadeGenerica {
         this.id = id;
     }
 
-    public String getDescClienteSituacao() {
-        return descClienteSituacao;
+    public String getDescSituacao() {
+        return descSituacao;
     }
 
-    public void setDescClienteSituacao(String descClienteSituacao) {
-        this.descClienteSituacao = descClienteSituacao;
+    public void setDescSituacao(String descSituacao) {
+        this.descSituacao = descSituacao;
     }
 
 }

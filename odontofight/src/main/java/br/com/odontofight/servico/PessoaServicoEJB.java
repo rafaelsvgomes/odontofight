@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import br.com.odontofight.entidade.Cliente;
 import br.com.odontofight.entidade.Pessoa;
 import br.com.odontofight.entidade.PessoaAcademia;
+import br.com.odontofight.entidade.PessoaConta;
 import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
@@ -53,17 +54,14 @@ public class PessoaServicoEJB extends GenericPersistencia<Pessoa, Long> {
      */
     public PessoaIndicacao obterPessoaIndicacao(Long id) {
         PessoaIndicacao pessoa = em.find(PessoaIndicacao.class, id);
-        // PessoaIndicacao pessoa = (PessoaIndicacao) em.createNamedQuery(PessoaIndicacao.OBTER_CLIENTE_EDITAR).setParameter("idCliente", id).getSingleResult();
-
         pessoa.setListaEndereco(em.createNamedQuery(PessoaEndereco.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
         pessoa.setListaTelefone(em.createNamedQuery(PessoaTelefone.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
+        pessoa.setListaPessoaConta(em.createNamedQuery(PessoaConta.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
         return pessoa;
     }
 
     public PessoaAcademia obterPessoaAcademia(Long id) {
         PessoaAcademia pessoa = em.find(PessoaAcademia.class, id);
-        // PessoaAcademia pessoa = (PessoaAcademia) em.createNamedQuery(PessoaAcademia.OBTER_CLIENTE_EDITAR).setParameter("idCliente", id).getSingleResult();
-
         pessoa.setListaEndereco(em.createNamedQuery(PessoaEndereco.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
         pessoa.setListaTelefone(em.createNamedQuery(PessoaTelefone.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
         return pessoa;

@@ -103,6 +103,46 @@
 				</div>
 			</div>
 		</fieldset>
+		<ui:fragment rendered="#{pessoaMB.exibirFieldInfBancarias}">
+			<fieldset>
+				<legend>
+					<small> <h:outputText value="Informações Bancárias" /></small>
+				</legend>
+				<div class="control-group">
+					<div class="controls">
+						<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.banco']} *" />
+						<p:selectOneMenu value="#{pessoaMB.pessoaConta.banco}" converter="bancoConverter" label="#{msg['label.pessoa.banco']}" required="true">
+			                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
+			                <f:selectItems value="#{pessoaMB.listaBancos}" var="bc" itemLabel="#{bc.descBanco}" />
+		    	        </p:selectOneMenu>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<div class="controls">
+						<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.tpconta']} *" />
+						<p:selectOneMenu value="#{pessoaMB.pessoaConta.tipoConta}" converter="entityConverter" label="#{msg['label.pessoa.tpconta']}" required="true">
+			                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
+			                <f:selectItems value="#{pessoaMB.listaTipoConta}" var="tpConta" itemLabel="#{tpConta.descTipoConta}" />
+		    	        </p:selectOneMenu>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<div class="controls">
+						<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.agencia']} *" />
+				        <p:inputText value="#{pessoaMB.pessoaConta.numAgencia}" label="#{msg['label.pessoa.agencia']}" required="true" styleClass="input-small"/>
+					</div>
+				</div>
+				
+				<div class="control-group">
+					<div class="controls">
+						<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.conta']} *" />
+				        <p:inputText value="#{pessoaMB.pessoaConta.numConta}" label="#{msg['label.pessoa.conta']}" required="true" styleClass="input-small"/>
+					</div>
+				</div>
+			</fieldset>
+		</ui:fragment>
 		
 		<fieldset>
 			<legend>
