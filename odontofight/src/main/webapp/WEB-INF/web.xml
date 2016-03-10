@@ -62,8 +62,8 @@
 	<login-config>
 		<auth-method>FORM</auth-method>
 		<form-login-config>
-			<form-login-page>/layout/login.xhtml</form-login-page>
-			<form-error-page>/layout/login_error.xhtml</form-error-page>
+			<form-login-page>/login.html</form-login-page>
+			<form-error-page>/erro404.html</form-error-page>
 		</form-login-config>
 	</login-config>
 	<security-role>

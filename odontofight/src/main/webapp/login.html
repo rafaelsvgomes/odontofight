@@ -10,17 +10,17 @@
         <meta name="description" content="Seu sorriso é nossa luta">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/icomoon-social.css">
+        <link rel="stylesheet" href="../resources/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../resources/css/icomoon-social.css">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,600,800' rel='stylesheet' type='text/css'>
 
-        <link rel="stylesheet" href="css/leaflet.css" />
+        <link rel="stylesheet" href="../resources/css/leaflet.css" />
 		<!--[if lte IE 8]>
-		    <link rel="stylesheet" href="css/leaflet.ie.css" />
+		    <link rel="stylesheet" href="../resources/css/leaflet.ie.css" />
 		<![endif]-->
-		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="../resources/css/main.css">
 
-        <script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <script src="../resources/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -40,12 +40,12 @@
 		        </div>
 		        <nav id="mainmenu" class="mainmenu">
 					<ul>
-						<li class="logo-wrapper"><a href="index.html"><img src="img/ODONTOfight-LogoSite.png" alt="Seguro ODONTOfight"></a></li>
+						<li class="logo-wrapper"><a href="index.html"><img src="../resources/img/ODONTOfight-LogoSite.png" alt="Seguro ODONTOfight"></a></li>
 						<li class="active">
-							<a href="index.html">Principal</a>
+							<a href="../index.html">Principal</a>
 						</li>
 						<li>
-							<a href="faq.html">Perguntas Frequentes</a>
+							<a href="../faq.html">Perguntas Frequentes</a>
 						</li>
 					</ul>
 				</nav>
@@ -57,7 +57,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
-						<h1>Página não localizada...</h1>
+						<h1>Login</h1>
 					</div>
 				</div>
 			</div>
@@ -66,10 +66,23 @@
         <div class="section">
 	    	<div class="container">
 				<div class="row">
-					<div class="col-sm-12">
-						<div class="error-page-wrapper">
-							<p>Desculpe, mas a página que você está tentando acessar não está aqui ou nunca esteve...</p>
-							<p>Porque você não tenta acessar a página <a href="index.html">Principal</a>?</p>
+					<div class="col-sm-5">
+						<div class="basic-login">
+							<form role="form" role="form" action="j_security_check">
+								<div class="form-group">
+		        				 	<label for="login-username"><i class="icon-user"></i> <b>Email</b></label>
+									<input class="form-control" id="login-username" name="j_username" type="text" placeholder="">
+								</div>
+								<div class="form-group">
+		        				 	<label for="login-password"><i class="icon-lock"></i> <b>Senha</b></label>
+									<input class="form-control" id="login-password" name="j_password" type="password" placeholder="">
+								</div>
+								<div class="form-group">
+									<a href="resetsenha.html" class="forgot-password">Esqueceu sua senha?</a>
+									<button type="submit" class="btn pull-right">Login</button>
+									<div class="clearfix"></div>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -101,7 +114,7 @@
 		    		</div>
 		    		<div class="col-footer col-md-4 col-xs-6">
 		    			<h3>Uma Empresa</h3>
-		    			<a href="http://www.maxdente.com.br" target="_blank"><img src="img/logos/logoMaxDente.png" alt="Clínica MAXdente"></a>
+		    			<a href="http://www.maxdente.com.br" target="_blank"><img src="../resources/img/logos/logoMaxDente.png" alt="Clínica MAXdente"></a>
 		    		</div>
 		    		
 		    	</div>
@@ -115,14 +128,14 @@
 
         <!-- Javascripts -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/jquery-1.9.1.min.js"><\/script>')</script>
-        <script src="js/bootstrap.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../resources/js/jquery-1.9.1.min.js"><\/script>')</script>
+        <script src="../resources/js/bootstrap.min.js"></script>
         <script src="http://cdn.leafletjs.com/leaflet-0.5.1/leaflet.js"></script>
-        <script src="js/jquery.fitvids.js"></script>
-        <script src="js/jquery.sequence-min.js"></script>
-        <script src="js/jquery.bxslider.js"></script>
-        <script src="js/main-menu.js"></script>
-        <script src="js/template.js"></script>
+        <script src="../resources/js/jquery.fitvids.js"></script>
+        <script src="../resources/js/jquery.sequence-min.js"></script>
+        <script src="../resources/js/jquery.bxslider.js"></script>
+        <script src="../resources/js/main-menu.js"></script>
+        <script src="../resources/js/template.js"></script>
 
     </body>
 </html>

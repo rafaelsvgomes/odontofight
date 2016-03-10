@@ -6,6 +6,6 @@
 
 <body>
 <%-- 	<% response.sendRedirect("./layout/home.xhtml"); %> --%>
-	<% response.sendRedirect("./site/index.html"); %>
+	<% response.sendRedirect("index.html"); %>
 </body>
 </html>
