@@ -1,36 +1,19 @@
 @CHARSET "ISO-8859-1";
 
-.sacola {
-  background: url(../img/pessoa.png) no-repeat top right;
-
-  font-size: 14px;
-  padding-right: 35px;
+.usuario_logado {
+  background: url(ui-icon ui-icon-person) no-repeat top right;
+  font-size: 12px;
   text-align: right;
-  width: 140px;
-}
-
-.menu-opcoes ul {
-  font-size: 15px;
-}
-
-.menu-opcoes a {
-   color: #003366;
+  position: absolute;
+  top: 50px;
+  right: 210px;
+  color: #333333;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 body {
   color: #333333;
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-}
-
-.menu-opcoes ul li {
-  display: inline;
-  margin-left: 20px;
-}
-
-.sacola {
-  position: absolute;
-  top: 0;
-  right: 0;
 }
 
 .container {
@@ -40,10 +23,4 @@ body {
 
 header {
   position: relative;
-}
-
-.menu-opcoes {
-  position: absolute;
-  bottom: 0;
-  right: 0;
 }
