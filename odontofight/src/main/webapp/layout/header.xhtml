@@ -8,6 +8,7 @@
 			<h:link outcome="/layout/home">
 				<img src="../resources/img/logo_odontofight.png" alt="#{msg['label.logo.odontofight']}" title="#{msg['label.logo.odontofight']}"  />
 			</h:link>
+			<h:outputLabel value="#{usuarioLogado.getDescUsuario()}" styleClass="usuario_logado" />
 		</h1>
   	</ui:composition>
 </ui:fragment>

@@ -1,5 +1,6 @@
 package br.com.odontofight.mb;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,13 +12,13 @@ import javax.faces.event.ValueChangeEvent;
 
 import br.com.odontofight.entidade.Cliente;
 import br.com.odontofight.entidade.ClienteLuta;
-import br.com.odontofight.entidade.Situacao;
 import br.com.odontofight.entidade.ModalidadeLuta;
 import br.com.odontofight.entidade.OrigemPagamento;
 import br.com.odontofight.entidade.PessoaAcademia;
 import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
+import br.com.odontofight.entidade.Situacao;
 import br.com.odontofight.entidade.TipoEndereco;
 import br.com.odontofight.entidade.TipoTelefone;
 import br.com.odontofight.entidade.UF;
@@ -89,9 +90,17 @@ public class ClienteMB extends GenericMB {
     }
 
     private void setTelefonePessoa() {
+        setTelefoneResidencial();
+        setTelefoneCelular();
+    }
+
+    private void setTelefoneResidencial() {
         telefone = new PessoaTelefone(new TipoTelefone(TipoTelefone.RESIDENCIAL), cliente);
-        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), cliente);
         cliente.addPessoaTelefone(telefone);
+    }
+
+    private void setTelefoneCelular() {
+        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), cliente);
         cliente.addPessoaTelefone(celular);
     }
 
@@ -113,8 +122,17 @@ public class ClienteMB extends GenericMB {
 
             cliente = ejb.obterPessoa(idSelecionado);
             endereco = cliente.getListaEndereco().get(0);
-            telefone = cliente.getTelefoneResidencial();
-            celular = cliente.getTelefoneCelular();
+
+            if (cliente.getTelefoneResidencial() == null) {
+                setTelefoneResidencial();
+            } else {
+                telefone = cliente.getTelefoneResidencial();
+            }
+            if (cliente.getTelefoneCelular() == null) {
+                setTelefoneCelular();
+            } else {
+                celular = cliente.getTelefoneCelular();
+            }
         }
     }
 
@@ -131,9 +149,7 @@ public class ClienteMB extends GenericMB {
                 cliente.setClienteLuta(null);
             }
 
-            verificarTelefone();
-
-            ejb.save(cliente);
+            ejb.salvarCliente(cliente, verificarTelefone());
         } catch (Exception ex) {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.salvar.cliente", ex.getMessage());
@@ -143,16 +159,15 @@ public class ClienteMB extends GenericMB {
         return "lista_cliente?faces-redirect=true";
     }
 
-    private void verificarTelefone() {
+    private List<PessoaTelefone> verificarTelefone() {
+        List<PessoaTelefone> listaTelefonesExcluir = new ArrayList<PessoaTelefone>();
         if (telefone.getDescTelefone().isEmpty()) {
-            cliente.removePessoaTelefone(telefone);
-            telefone = null;
+            listaTelefonesExcluir.add(telefone);
         }
         if (celular.getDescTelefone().isEmpty()) {
-            cliente.removePessoaTelefone(celular);
-            celular = null;
+            listaTelefonesExcluir.add(telefone);
         }
-
+        return listaTelefonesExcluir;
     }
 
     private Boolean salvarClienteLuta() {

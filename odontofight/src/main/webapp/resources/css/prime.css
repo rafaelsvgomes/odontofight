@@ -25,34 +25,6 @@
     font-size: 14px;
 }
 
-<!-- Cabeçalho -->
-.menu-opcoes ul {
-  font-size: 15px;
-}
-
-.menu-opcoes a {
-   color: #003366;
-}
-
-.centro {
-	margin-left:35%;
-	height: 300px;
-}
-
-.menu-opcoes ul li {
-  display: inline;
-  margin-left: 20px;
-}
-
-.menu-opcoes {
-  float: right;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  color: #333333;
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-}
-
 .form-horizontal .controls { 
  width:100%;
  display: block;

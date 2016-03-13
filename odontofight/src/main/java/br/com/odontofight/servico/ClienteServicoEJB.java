@@ -48,8 +48,6 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
      */
     public Cliente obterPessoa(Long id) {
         Cliente cliente = em.find(Cliente.class, id);
-        // Cliente cliente = (Cliente) em.createNamedQuery(Cliente.OBTER_CLIENTE_EDITAR).setParameter("idCliente", id).getSingleResult();
-
         cliente.setListaEndereco(em.createNamedQuery(PessoaEndereco.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
         cliente.setListaTelefone(em.createNamedQuery(PessoaTelefone.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
         return cliente;
@@ -90,6 +88,25 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
      */
     public List<PessoaAcademia> listarPessoasAcademia() {
         return em.createNamedQuery(PessoaAcademia.LISTAR_PESSOAS_ACADEMIA).getResultList();
+    }
+
+    /**
+     * @param cliente
+     * @param listaTelefoneExcluir void
+     * 
+     */
+    public void salvarCliente(Cliente cliente, List<PessoaTelefone> listaTelefoneExcluir) {
+        for (PessoaTelefone telefone : listaTelefoneExcluir) {
+            if (cliente.getId() != null && cliente.getId() != 0) {
+                removerTelefone(em.find(PessoaTelefone.class, telefone.getId()));
+            }
+            cliente.removePessoaTelefone(telefone);
+        }
+        save(cliente);
+    }
+
+    public void removerTelefone(PessoaTelefone pessoaTelefone) {
+        em.remove(em.find(PessoaTelefone.class, pessoaTelefone.getId()));
     }
 
 }

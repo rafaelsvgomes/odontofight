@@ -8,21 +8,22 @@
 	 
 	    <p:menubar>
 	        <p:submenu label="Cliente" icon="ui-icon-document">
-	            <p:menuitem value="Listar" outcome="/cliente/lista_cliente" icon="ui-icon-list" />
-	            <p:menuitem value="Incluir" outcome="/cliente/incluir_cliente" icon="ui-icon-pencil"/>
-	            <p:menuitem value="Listar Indicação" outcome="/pessoa/lista_pessoa_indicacao" />
+	            <p:menuitem value="Listar Cliente" outcome="/cliente/lista_cliente" icon="ui-icon-contact" />
+	            <p:menuitem value="Incluir Cliente" outcome="/cliente/incluir_cliente" icon="ui-icon-pencil"/>
+	            <p:separator />
+	            <p:menuitem value="Listar Indicação" outcome="/pessoa/lista_pessoa_indicacao" icon="ui-icon-contact"/>
 	            <p:menuitem value="Incluir Indicação" outcome="/pessoa/incluir_pessoa_indicacao" icon="ui-icon-pencil"/>
-	            <p:menuitem value="Listar Academia" outcome="/pessoa/lista_pessoa_academia" />
+	            <p:separator />
+	            <p:menuitem value="Listar Academia" outcome="/pessoa/lista_pessoa_academia" icon="ui-icon-contact"/>
 	            <p:menuitem value="Incluir Academia" outcome="/pessoa/incluir_pessoa_academia" icon="ui-icon-pencil" />
 	        </p:submenu>
 	 
-	         <p:submenu label="Usuário" icon="ui-icon-pencil">
-	            <p:menuitem value="Aterar Senha" outcome="/usuario/senha" icon="ui-icon-arrowreturnthick-1-w" />
+	         <p:submenu label="Usuário" icon="ui-icon-person">
+	            <p:menuitem value="Aterar Senha" outcome="/usuario/senha" icon="ui-icon-key" />
 	        </p:submenu>
 	 
 	        <f:facet name="options">
-	        	<small><h:outputText value="#{usuarioLogado.getDescUsuario()}" /></small>
-	            <p:commandButton immediate="true" action="#{usuarioMB.efetuarLogout}" value="Logout" icon="ui-icon-extlink" />
+	            <p:commandButton immediate="true" action="#{usuarioMB.efetuarLogout}" value="Sair" icon="ui-icon-extlink" />
 	        </f:facet>
 	    </p:menubar>
 	</h:form>

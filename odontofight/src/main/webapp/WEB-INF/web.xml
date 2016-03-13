@@ -37,21 +37,28 @@
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
-	
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>Apenas admins</web-resource-name>
-			<url-pattern>/fornecedor/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>ADMIN</role-name>
-		</auth-constraint>
-	</security-constraint>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/erro404.html</location>
+	</error-page>
+
+	<!-- <security-constraint> -->
+	<!-- <web-resource-collection> -->
+	<!-- <web-resource-name>Apenas admins</web-resource-name> -->
+	<!-- <url-pattern>/fornecedor/*</url-pattern> -->
+	<!-- </web-resource-collection> -->
+	<!-- <auth-constraint> -->
+	<!-- <role-name>ADMIN</role-name> -->
+	<!-- </auth-constraint> -->
+	<!-- </security-constraint> -->
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Users and admins</web-resource-name>
 			<url-pattern>/cliente/*</url-pattern>
 			<url-pattern>/layout/*</url-pattern>
+			<url-pattern>/pessoa/*</url-pattern>
+			<url-pattern>/usuario/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>ADMIN</role-name>
@@ -62,8 +69,8 @@
 	<login-config>
 		<auth-method>FORM</auth-method>
 		<form-login-config>
-			<form-login-page>/login.html</form-login-page>
-			<form-error-page>/erro404.html</form-error-page>
+			<form-login-page>/layout/login.html</form-login-page>
+			<form-error-page>/layout/login_error.html</form-error-page>
 		</form-login-config>
 	</login-config>
 	<security-role>
