@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     09/03/2016 08:39:05                          */
+/* Created on:     14/03/2016 11:31:38                          */
 /*==============================================================*/
 
 
@@ -367,6 +367,8 @@ create table PESSOA (
    CODTIPOPESSOA        CHAR(1)              not null
       constraint CKC_CODTIPOPESSOA_PESSOA check (CODTIPOPESSOA in ('F','J')),
    NUMCPFCNPJ           VARCHAR(14)          not null,
+   NUMRG                VARCHAR(30)          null,
+   DSORGAOEMISSOR       VARCHAR(15)          null,
    CODSEXO              CHAR(1)              null
       constraint CKC_CODSEXO_PESSOA check (CODSEXO is null or (CODSEXO in ('M','F'))),
    DATANASCIMENTO       DATE                 null,
