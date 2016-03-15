@@ -1,5 +1,38 @@
 @CHARSET "ISO-8859-1";
 
+body {
+  color: #333333;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.header {
+	margin-top: 20px;
+	padding-bottom: 20px;
+	position: relative;
+}
+
+.container {
+  margin: 0 auto;
+  width: 940px;
+}
+
+.logo {
+	float: left;
+	width: 158px;
+	height: 71px;
+	padding-right: 20px;
+}
+
+.title {
+	font-size: 26px;
+	line-height: 38px;
+	padding-bottom: 40px;
+	margin: 0;
+	padding: 0;
+	padding-top: 20px;
+	color: #D16727;
+}
+
 .usuario_logado {
   background: url(ui-icon ui-icon-person) no-repeat top right;
   font-size: 12px;
@@ -11,16 +44,21 @@
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
-body {
-  color: #333333;
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+.form-horizontal .controls { 
+ width:100%;
+ display: block;
+ padding:10px 0 2px 0;
 }
 
-.container {
-  margin: 0 auto;
-  width: 940px;
+.form-horizontal .controls .control-label { 
+ display: block;
+ float:left;
+ width:170px;
+ text-align:right;
+ padding:5px 20px 0 0;
 }
+.form-horizontal .controls input { 
+ padding:5px 10px;
+ width:200px;
+ }
 
-header {
-  position: relative;
-}

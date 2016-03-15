@@ -2,7 +2,9 @@ package br.com.odontofight.entidade;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -54,10 +57,16 @@ public class ClienteContrato extends EntidadeGenerica {
     private Integer qtdParcela;
 
     @Column(nullable = false)
+    private Integer diaVencimentoParcela;
+
+    @Column(nullable = false)
     private Date dataInicioContrato;
 
     @Column(nullable = false)
     private Date dataFimContrato;
+
+    @OneToMany(mappedBy = "clienteContrato", cascade = CascadeType.ALL)
+    private List<ContratoRateio> listaContratoRateio;
 
     public Long getId() {
         return id;
@@ -129,6 +138,22 @@ public class ClienteContrato extends EntidadeGenerica {
 
     public void setDataFimContrato(Date dataFimContrato) {
         this.dataFimContrato = dataFimContrato;
+    }
+
+    public Integer getDiaVencimentoParcela() {
+        return diaVencimentoParcela;
+    }
+
+    public void setDiaVencimentoParcela(Integer diaVencimentoParcela) {
+        this.diaVencimentoParcela = diaVencimentoParcela;
+    }
+
+    public List<ContratoRateio> getListaContratoRateio() {
+        return listaContratoRateio;
+    }
+
+    public void setListaContratoRateio(List<ContratoRateio> listaContratoRateio) {
+        this.listaContratoRateio = listaContratoRateio;
     }
 
 }

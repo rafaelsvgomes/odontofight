@@ -8,19 +8,18 @@ public class UsuarioLogado implements Serializable {
     public UsuarioLogado() {
     }
 
-    private Long idCliente;
+    private Long idPessoa;
     private String descUsuario;
-    private Long idSituacao;
     private String codGrupo;
     private Long idUsuario;
     private String nomePessoa;
 
-    public Long getIdCliente() {
-        return idCliente;
+    public Long getIdPessoa() {
+        return idPessoa;
     }
 
-    public void setIdCliente(Long idCliente) {
-        this.idCliente = idCliente;
+    public void setIdPessoa(Long idPessoa) {
+        this.idPessoa = idPessoa;
     }
 
     public String getDescUsuario() {
@@ -29,14 +28,6 @@ public class UsuarioLogado implements Serializable {
 
     public void setDescUsuario(String descUsuario) {
         this.descUsuario = descUsuario;
-    }
-
-    public Long getIdSituacao() {
-        return idSituacao;
-    }
-
-    public void setIdSituacao(Long idClienteSituacao) {
-        this.idSituacao = idClienteSituacao;
     }
 
     public String getCodGrupo() {

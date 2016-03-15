@@ -1,5 +1,7 @@
 package br.com.odontofight.mb;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,14 +12,19 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 
+import org.primefaces.event.RowEditEvent;
+
 import br.com.odontofight.entidade.Cliente;
+import br.com.odontofight.entidade.ClienteContrato;
 import br.com.odontofight.entidade.ClienteLuta;
+import br.com.odontofight.entidade.ContratoRateio;
 import br.com.odontofight.entidade.ModalidadeLuta;
 import br.com.odontofight.entidade.OrigemPagamento;
 import br.com.odontofight.entidade.PessoaAcademia;
 import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
+import br.com.odontofight.entidade.PlanoAssinatura;
 import br.com.odontofight.entidade.Situacao;
 import br.com.odontofight.entidade.TipoEndereco;
 import br.com.odontofight.entidade.TipoTelefone;
@@ -84,6 +91,14 @@ public class ClienteMB extends GenericMB {
         }
     }
 
+    private void initListaPessoasIndicacao() {
+        listaPessoasIndicacao = ejb.listarPessoasIndicacao();
+    }
+
+    private void initListaPessoasAcademia() {
+        listaPessoasAcademia = ejb.listarPessoasAcademia();
+    }
+
     private void setEnderecoPessoa() {
         endereco = new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), cliente);
         cliente.addPessoaEndereco(endereco);
@@ -102,14 +117,6 @@ public class ClienteMB extends GenericMB {
     private void setTelefoneCelular() {
         celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), cliente);
         cliente.addPessoaTelefone(celular);
-    }
-
-    private void initListaPessoasIndicacao() {
-        listaPessoasIndicacao = ejb.listarPessoasIndicacao();
-    }
-
-    private void initListaPessoasAcademia() {
-        listaPessoasAcademia = ejb.listarPessoasAcademia();
     }
 
     public void editar() {
@@ -189,6 +196,44 @@ public class ClienteMB extends GenericMB {
         }
         return "lista_cliente?faces-redirect=true";
     }
+
+    // Contrato
+
+    private ClienteContrato clienteContrato;
+    private List<PlanoAssinatura> listaPlanoAssinatura;
+
+    @SuppressWarnings("unchecked")
+    public void iniciarIncluirContratoCliente() {
+        if (!isPostBack()) {
+            listaPlanoAssinatura = ejb.findAll(PlanoAssinatura.class);
+            cliente = ejb.obterPessoa(idSelecionado);
+            clienteContrato = new ClienteContrato();
+            clienteContrato.setListaContratoRateio(new ArrayList<ContratoRateio>());
+        }
+    }
+
+    public void atualizarClienteContratoTela() {
+        clienteContrato.setValorContrato(clienteContrato.getPlanoAssinatura().getValorPlanoAssinatura());
+        clienteContrato.setQtdParcela(clienteContrato.getPlanoAssinatura().getQtdParcela());
+        clienteContrato.setValorParcela(clienteContrato.getValorContrato().divide(new BigDecimal(clienteContrato.getQtdParcela()), RoundingMode.CEILING));
+        clienteContrato.setDiaVencimentoParcela(clienteContrato.getPlanoAssinatura().getDiaVencimentoParcela());
+        clienteContrato.setDataInicioContrato(new Date());
+        clienteContrato.setDataFimContrato(new Date());
+    }
+
+    public void onRowEdit(RowEditEvent event) {
+        // FacesMessage msg = new FacesMessage("ContratoRateio Edited", ((ContratoRateio) event.getObject()).getId());
+        // FacesContext.getCurrentInstance().addMessage(null, msg);
+        System.out.println("Row Edit");
+    }
+
+    public void onRowCancel(RowEditEvent event) {
+        // FacesMessage msg = new FacesMessage("Edit Cancelled", ((Car) event.getObject()).getId());
+        // FacesContext.getCurrentInstance().addMessage(null, msg);
+        System.out.println("Row Cancela");
+    }
+
+    // Fim Contrato
 
     /**
      * Metodo responsavel por buscar o cep no webService
@@ -309,5 +354,13 @@ public class ClienteMB extends GenericMB {
 
     public List<ModalidadeLuta> getListaModalidadeLuta() {
         return listaModalidadeLuta;
+    }
+
+    public ClienteContrato getClienteContrato() {
+        return clienteContrato;
+    }
+
+    public List<PlanoAssinatura> getListaPlanoAssinatura() {
+        return listaPlanoAssinatura;
     }
 }

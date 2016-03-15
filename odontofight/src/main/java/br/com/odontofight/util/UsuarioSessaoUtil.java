@@ -29,7 +29,7 @@ public class UsuarioSessaoUtil {
     public void atualizarUsuarioSessao() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
-        UsuarioLogado usuario = usuarioServico.obterUsuario(getUsuarioLogado().getIdCliente());
+        UsuarioLogado usuario = usuarioServico.obterUsuario(getUsuarioLogado().getIdPessoa());
         session.setAttribute(USUARIO_LOGADO, usuario);
     }
 

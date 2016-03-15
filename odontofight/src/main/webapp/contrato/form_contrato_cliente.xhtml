@@ -1,0 +1,145 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<div>
+		<h3>
+			<h:outputText value="#{msg['label.cliente']}" />
+			<small> <h:outputText value="#{subtitle}" /></small>
+		</h3>
+	</div>
+	
+	<h:form id="contrato" styleClass="form-horizontal">
+		<fieldset>
+			<legend>
+				<small> <h:outputText value="Cliente" /></small>
+			</legend>
+			<div class="control-group">
+				<div class="controls">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.nome']}" />
+					<p:inputText id="nome" value="#{clienteMB.cliente.nomePessoa}" label="#{msg['label.pessoa.nome']}" disabled="true" styleClass="input-large" />
+				</div>
+			</div>
+		</fieldset>
+		
+		<fieldset>
+				<legend>
+					<small> <h:outputText value="Contrato" /></small>
+				</legend>
+				<div class="control-group">
+					<div class="controls">
+						<p:outputLabel styleClass="control-label" value="#{msg['label.planoassinatura']} *" /> 
+						<p:selectOneMenu id="selectPlano" value="#{clienteMB.clienteContrato.planoAssinatura}" label="#{msg['label.pessoa.indicacao']}" required="true"
+							converter="entityConverter">
+			                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
+			                <f:selectItems value="#{clienteMB.listaPlanoAssinatura}" var="plano" itemLabel="#{plano.id} - #{plano.nomePlanoAssinatura}" itemValue="#{plano}"/>
+			                <p:ajax update="painelCpfCnpj" listener="#{clienteMB.atualizarClienteContratoTela()}" event="change" onstart="PF('dlgExec').show();" oncomplete="PF('dlgExec').hide();"/>
+		    	        </p:selectOneMenu>
+					</div>
+				</div>
+				<p:outputPanel id="painelCpfCnpj">
+					<div class="control-group">
+						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.valorcontrato']} *" />
+					        <pe:inputNumber emptyValue="0" id="valorContrato" minValue="0" symbol="R$ " label="#{msg['label.contrato.valorcontrato']}" disabled="true"
+					        	  value="#{clienteMB.clienteContrato.valorContrato}" styleClass="input-large" decimalSeparator="," thousandSeparator="."/>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.qtdparcelas']} *" />
+							<p:inputText id="qtdParcela" value="#{clienteMB.clienteContrato.qtdParcela}" label="#{msg['label.contrato.qtdparcelas']}" disabled="true" required="true"  styleClass="input-large"/>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.valorparcela']} *" />
+					        <pe:inputNumber emptyValue="0" id="valorParcela" minValue="0" symbol="R$ " label="#{msg['label.contrato.valorparcela']}" disabled="true"
+					        	  value="#{clienteMB.clienteContrato.valorParcela}" styleClass="input-large" decimalSeparator="," thousandSeparator="."/>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.diavencimento']} *" />
+							<p:inputText id="diaVenc" value="#{clienteMB.clienteContrato.diaVencimentoParcela}" label="#{msg['label.contrato.diavencimento']}" required="true"  styleClass="input-large"/>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.dtinicio']} *" />
+							<p:inputMask id="dataIni" value="#{clienteMB.clienteContrato.dataInicioContrato}" mask="99/99/9999"  label="#{msg['label.dtinicio']}" required="true">
+								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+							</p:inputMask>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.dtfim']} *" />
+							<p:inputMask id="dataFim" value="#{clienteMB.clienteContrato.dataFimContrato}" mask="99/99/9999" label="#{msg['label.dtfim']}" required="true">
+								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+							</p:inputMask>
+						</div>
+					</div>
+				</p:outputPanel>
+		</fieldset>
+		
+		<fieldset>
+			<legend>
+				<small> <h:outputText value="Rateio" /></small>
+			</legend>
+			
+			<h:form id="formRateio">
+				<p:dataTable id="dTableRateio" var="contratoRateio" value="#{clienteMB.clienteContrato.listaContratoRateio}" editable="true" style="margin-bottom:20px">
+					<f:facet name="header">
+           				Row Editing
+       				</f:facet>
+
+<!-- 					<p:ajax event="rowEdit" listener="#{clienteMB.onRowEdit}" update=":formRateio" /> -->
+<!-- 					<p:ajax event="rowEditCancel" listener="#{clienteMB.onRowCancel}" update=":formRateio" /> -->
+
+					<p:column headerText="Id">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contratoRateio.id}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="modelInput" value="#{contratoRateio.id}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Valor Pago">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contratoRateio.valorPago}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{contratoRateio.valorPago}" style="width:100%" label="Year" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column style="width:32px">
+						<p:rowEditor />
+					</p:column>
+				</p:dataTable>
+			</h:form>   
+		</fieldset>
+		
+		<div class="controls">
+			<p:commandButton value="#{msg['button.salvar']}" action="#{clienteMB.salvar}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
+				oncomplete="PF('dlgExec').hide();" rendered="#{clienteMB.cliente != null}" />
+		</div>
+		<p:confirmDialog id="confirmDialog" message="#{msg['excluir.cliente.confirma']}" header="#{msg['excluir.cliente']}" severity="alert" widgetVar="confirmation">  
+	        <p:commandButton id="confirm" value="#{msg['confirma.sim']}" update="messages" oncomplete="PF('confirmation').hide()" action="#{clienteMB.remover}" />  
+	        <p:commandButton id="decline" value="#{msg['confirma.nao']}" update="messages" onclick="PF('confirmation').hide()" type="button" />
+	    </p:confirmDialog>
+	    
+	    <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
+		
+		<h:inputHidden value="#{clienteMB.cliente.id}" />
+	</h:form>
+</ui:fragment>

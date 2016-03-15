@@ -46,6 +46,13 @@ public class PlanoAssinatura extends EntidadeGenerica {
     @Column(name = "vlPlanoAssinatura")
     private BigDecimal valorPlanoAssinatura;
 
+    @Column(nullable = false)
+    private Integer qtdParcela;
+
+    @Column(nullable = false)
+    private Integer diaVencimentoParcela;
+
+    @Column(nullable = false)
     private Boolean bolAtivo;
 
     @Override
@@ -111,6 +118,22 @@ public class PlanoAssinatura extends EntidadeGenerica {
 
     public void setBolAtivo(Boolean bolAtivo) {
         this.bolAtivo = bolAtivo;
+    }
+
+    public Integer getQtdParcela() {
+        return qtdParcela;
+    }
+
+    public void setQtdParcela(Integer qtdParcela) {
+        this.qtdParcela = qtdParcela;
+    }
+
+    public Integer getDiaVencimentoParcela() {
+        return diaVencimentoParcela;
+    }
+
+    public void setDiaVencimentoParcela(Integer diaVencimentoParcela) {
+        this.diaVencimentoParcela = diaVencimentoParcela;
     }
 
 }

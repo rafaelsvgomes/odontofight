@@ -15,7 +15,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import br.com.odontofight.entidade.Situacao;
 import br.com.odontofight.entidade.Grupo;
 import br.com.odontofight.entidade.Usuario;
 import br.com.odontofight.servico.UsuarioServicoEJB;
@@ -75,16 +74,12 @@ public class UsuarioMB extends GenericMB {
         return getUsuarioLogado().getCodGrupo().equals(Grupo.GESTOR);
     }
 
-    public boolean isUser() {
-        return getUsuarioLogado().getCodGrupo().equals(Grupo.USER);
-    }
-
     public boolean exibeParaTodos() {
-        return isAdmin() || isCliente() || isGestor() || isUser();
+        return isAdmin() || isCliente() || isGestor();
     }
 
     public boolean exibeEfetuarPagamento() {
-        return exibeParaTodos() && getUsuarioLogado().getIdSituacao() == Situacao.CADASTRADO;
+        return exibeParaTodos();
     }
 
     public String getSenhaAtual() {
