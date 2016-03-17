@@ -18,7 +18,7 @@ import br.com.odontofight.enums.TipoPessoa;
 @Entity
 @PrimaryKeyJoinColumn(name = "idPessoaIndicacao", referencedColumnName = "idPessoa")
 @NamedQueries({
-        @NamedQuery(name = PessoaIndicacao.LISTAR_PESSOAS_INDICACAO, query = "SELECT new br.com.odontofight.entidade.PessoaIndicacao(p.id, p.nomePessoa) FROM PessoaIndicacao p"),
+        @NamedQuery(name = PessoaIndicacao.LISTAR_PESSOAS_INDICACAO, query = "SELECT new br.com.odontofight.entidade.PessoaIndicacao(p.id, p.numCpfCnpj, p.nomePessoa) FROM PessoaIndicacao p"),
         @NamedQuery(name = PessoaIndicacao.LISTAR_PESSOAS_SIMPLES, query = "SELECT new br.com.odontofight.entidade.PessoaIndicacao(p.id, p.nomePessoa, p.tipoPessoa, p.numCpfCnpj) "
                 + " FROM PessoaIndicacao p") })
 public class PessoaIndicacao extends Pessoa {
@@ -30,8 +30,8 @@ public class PessoaIndicacao extends Pessoa {
     public PessoaIndicacao() {
     }
 
-    public PessoaIndicacao(Long id, String nomePessoa) {
-        super(id, nomePessoa);
+    public PessoaIndicacao(Long id, String numCpfCnpj, String nomePessoa) {
+        super(id, numCpfCnpj, nomePessoa);
     }
 
     @ManyToOne

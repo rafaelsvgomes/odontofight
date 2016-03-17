@@ -22,16 +22,16 @@ public final class MensagemUtil {
         getCurrentInstance().addMessage(null, new FacesMessage(severity, titulo, detalhe));
     }
 
-    /**
-     * @param resumo
-     * @param detalhe
-     */
     public static void addMensagemSucesso(String detalhe) {
         addMessage(FacesMessage.SEVERITY_INFO, SUCESSO, getMessageFromMessagesLabels(detalhe));
     }
 
     public static void addMensagemErro(String titulo, String detalhe) {
         addMessage(FacesMessage.SEVERITY_ERROR, getMessageFromValidationMessages(titulo), detalhe);
+    }
+
+    public static void addMensagemAlerta(String titulo) {
+        addMessage(FacesMessage.SEVERITY_WARN, getMessageFromValidationMessages(titulo), "Alerta");
     }
 
     public static void addMensagemInfo(String titulo) {

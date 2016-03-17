@@ -45,6 +45,12 @@ public abstract class Pessoa extends EntidadeGenerica {
         this.nomePessoa = nomePessoa;
     }
 
+    public Pessoa(Long id, String numCpfCnpj, String nomePessoa) {
+        this.id = id;
+        this.numCpfCnpj = numCpfCnpj;
+        this.nomePessoa = nomePessoa;
+    }
+
     /**
      * OBTER_CLIENTE_EDITAR
      */

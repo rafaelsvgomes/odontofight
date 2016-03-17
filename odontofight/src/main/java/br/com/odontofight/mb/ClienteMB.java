@@ -209,6 +209,7 @@ public class ClienteMB extends GenericMB {
     public void iniciarIncluirContratoCliente() {
         if (!isPostBack()) {
             listaPlanoAssinatura = ejb.findAll(PlanoAssinatura.class);
+            initListaPessoasIndicacao();
             cliente = ejb.obterPessoa(idSelecionado);
 
             clienteContrato = new ClienteContrato();
@@ -230,7 +231,9 @@ public class ClienteMB extends GenericMB {
         clienteContrato.setValorParcela(clienteContrato.getValorContrato().divide(new BigDecimal(clienteContrato.getQtdParcela()), RoundingMode.CEILING));
         clienteContrato.setDiaVencimentoParcela(clienteContrato.getPlanoAssinatura().getDiaVencimentoParcela());
         clienteContrato.setDataInicioContrato(new Date());
-        clienteContrato.setDataFimContrato(DataUtil.incrementarData(new Date(), Calendar.MONTH, clienteContrato.getPlanoAssinatura().getQtdParcela()));
+        Date dataFim = DataUtil.incrementarData(new Date(), Calendar.MONTH, 12);
+        dataFim = DataUtil.decrementarData(dataFim, Calendar.DAY_OF_MONTH, 1);
+        clienteContrato.setDataFimContrato(dataFim);
     }
 
     public void onRowEdit(RowEditEvent event) {
@@ -239,19 +242,29 @@ public class ClienteMB extends GenericMB {
 
     public void onRowCancel(RowEditEvent event) {
         ContratoRateio c = ((ContratoRateio) event.getObject());
-        c.setValorPago(new BigDecimal("111.11"));
-        System.out.println("Row Cancela " + ((ContratoRateio) event.getObject()).getId());
+        clienteContrato.getListaContratoRateio().remove(c);
 
     }
 
     public String salvarContratoCliente() {
         try {
             System.out.println("salvarContratoCliente");
+            BigDecimal valorTotalRateio = BigDecimal.ZERO;
+            for (ContratoRateio c : clienteContrato.getListaContratoRateio()) {
+                if (c.getValorPercentualRateio() != null) {
+                    System.out.println(c.getPessoaIndicacao().getNumCpfCnpj() + " " + c.getValorPercentualRateio());
+                    valorTotalRateio = valorTotalRateio.add(c.getValorPercentualRateio());
+                }
+            }
+            if (valorTotalRateio.compareTo(new BigDecimal("100")) != 0) {
+                MensagemUtil.addMensagemAlerta("msg.erro.rateio.diferente.100");
+                return "";
+            }
 
             // ejb.salvarCliente(cliente, verificarTelefone());
         } catch (Exception ex) {
             ex.printStackTrace();
-            MensagemUtil.addMensagemErro("msg.erro.salvar.cliente", ex.getMessage());
+            MensagemUtil.addMensagemErro("msg.erro.salvar.contrato", ex.getMessage());
             return "";
         }
         MensagemUtil.addMensagemSucesso("msg.sucesso.salvar.cliente");
@@ -259,7 +272,6 @@ public class ClienteMB extends GenericMB {
     }
 
     public void addRow() {
-        System.out.println("addRow ");
         clienteContrato.getListaContratoRateio().add(new ContratoRateio());
     }
 

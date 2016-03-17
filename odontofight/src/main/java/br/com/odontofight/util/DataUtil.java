@@ -74,4 +74,21 @@ public class DataUtil {
 
         return calendario.getTime();
     }
+
+    /**
+     * Decrementa uma data a partir da sua escala, definida pelas constantes de Calendar.
+     * 
+     * @param data a data a ser decrementada.
+     * @param escala a escala.
+     * @param valor o valor a ser decrementado.
+     * @return uma nova data, decrementada.
+     */
+    public static Date decrementarData(Date data, int escala, int valor) {
+        Calendar calendario = Calendar.getInstance();
+
+        calendario.setTime(data);
+        calendario.add(escala, -valor);
+
+        return calendario.getTime();
+    }
 }

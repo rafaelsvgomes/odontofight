@@ -85,34 +85,27 @@
 					</div>
 				</p:outputPanel>
 		</fieldset>
-		<h:form id="rateio">
 		<fieldset>
 			<legend>
 				<small> <h:outputText value="Rateio" /></small>
 			</legend>
 			<p:dataTable id="dTableRateio" var="contratoRateio" value="#{clienteMB.clienteContrato.listaContratoRateio}" editable="true" style="margin-bottom:20px">
 
-<!-- 					<p:ajax event="rowEdit" listener="#{clienteMB.onRowEdit}" update=":formRateio" /> -->
-				<p:ajax event="rowEditCancel" listener="#{clienteMB.onRowCancel}" update="contrato:rateio:dTableRateio" />
+				<p:ajax event="rowEdit" listener="#{clienteMB.onRowEdit}" update="contrato:dTableRateio" />
+				<p:ajax event="rowEditCancel" listener="#{clienteMB.onRowCancel}" update="contrato:dTableRateio" />
 				
-				<p:column headerText="#{msg['label.pessoa.cpf.cnpj']}" style="width:200px; text-align: center">
+				<p:column  headerText="#{msg['label.pessoa.indicacao']}">
 					<p:cellEditor>
 						<f:facet name="output">
-							<h:outputText value="#{contratoRateio.pessoaIndicacao.numCpfCnpj}" />
+							<h:outputText value="#{contratoRateio.pessoaIndicacao.numCpfCnpj} - #{contratoRateio.pessoaIndicacao.nomePessoa}" />
 						</f:facet>
 						<f:facet name="input">
-							<h:outputText value="#{contratoRateio.pessoaIndicacao.numCpfCnpj}" style="width:100%" label="#{msg['label.pessoa.nome']}" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
-
-				<p:column headerText="#{msg['label.pessoa.nome']}">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{contratoRateio.pessoaIndicacao.nomePessoa}" />
-						</f:facet>
-						<f:facet name="input">
-							<h:outputText value="#{contratoRateio.pessoaIndicacao.nomePessoa}" style="width:100%" label="#{msg['label.pessoa.nome']}" />
+							<p:selectOneMenu id="selectPessoaIndicacao" value="#{contratoRateio.pessoaIndicacao}" label="#{msg['label.pessoa.indicacao']}" required="true"
+								converter="entityConverter" filter="true" filterMatchMode="contains" style="width:100%">
+								<f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
+								<f:selectItems value="#{clienteMB.listaPessoasIndicacao}" var="pessoaIndica"  
+									itemLabel="#{pessoaIndica.numCpfCnpj} - #{pessoaIndica.nomePessoa}" itemValue="#{pessoaIndica}" />
+							</p:selectOneMenu>
 						</f:facet>
 					</p:cellEditor>
 				</p:column>
@@ -132,11 +125,8 @@
 					<p:rowEditor />
 				</p:column>
 			</p:dataTable>
-			<h:form>
-				<h:commandButton value="Add" action="#{clienteMB.addRow}"  />
-			</h:form>
+			<h:commandButton value="Add" action="#{clienteMB.addRow}" immediate="true"/>
 		</fieldset>
-		</h:form>
 		
 		<div class="controls">
 			<p:commandButton value="#{msg['button.salvar']}" action="#{clienteMB.salvarContratoCliente}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
