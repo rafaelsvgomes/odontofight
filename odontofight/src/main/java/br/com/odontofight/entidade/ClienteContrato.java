@@ -1,6 +1,7 @@
 package br.com.odontofight.entidade;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -149,6 +150,9 @@ public class ClienteContrato extends EntidadeGenerica {
     }
 
     public List<ContratoRateio> getListaContratoRateio() {
+        if (listaContratoRateio == null) {
+            listaContratoRateio = new ArrayList<ContratoRateio>();
+        }
         return listaContratoRateio;
     }
 

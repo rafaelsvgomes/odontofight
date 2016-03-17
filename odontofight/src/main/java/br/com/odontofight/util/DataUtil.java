@@ -57,4 +57,21 @@ public class DataUtil {
         dataFormatada.setTime(formatador.parse(data));
         return dataFormatada;
     }
+
+    /**
+     * Incrementa uma data a partir da sua escala, definida pelas constantes de Calendar.
+     * 
+     * @param data a data a ser incrementada.
+     * @param escala a escala.
+     * @param valor o valor a ser incrementado.
+     * @return uma nova data, incrementada.
+     */
+    public static Date incrementarData(Date data, int escala, int valor) {
+        Calendar calendario = Calendar.getInstance();
+
+        calendario.setTime(data);
+        calendario.add(escala, valor);
+
+        return calendario.getTime();
+    }
 }

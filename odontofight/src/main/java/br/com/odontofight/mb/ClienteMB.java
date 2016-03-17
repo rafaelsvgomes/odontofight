@@ -3,6 +3,7 @@ package br.com.odontofight.mb;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import br.com.odontofight.entidade.Cliente;
 import br.com.odontofight.entidade.ClienteContrato;
 import br.com.odontofight.entidade.ClienteLuta;
 import br.com.odontofight.entidade.ContratoRateio;
+import br.com.odontofight.entidade.ContratoSituacao;
 import br.com.odontofight.entidade.ModalidadeLuta;
 import br.com.odontofight.entidade.OrigemPagamento;
 import br.com.odontofight.entidade.PessoaAcademia;
@@ -32,6 +34,7 @@ import br.com.odontofight.entidade.UF;
 import br.com.odontofight.enums.TipoPessoa;
 import br.com.odontofight.exception.CEPProxyException;
 import br.com.odontofight.servico.ClienteServicoEJB;
+import br.com.odontofight.util.DataUtil;
 import br.com.odontofight.util.MensagemUtil;
 import br.com.odontofight.vo.CepServiceVO;
 import br.com.odontofight.webservices.CepService;
@@ -207,8 +210,17 @@ public class ClienteMB extends GenericMB {
         if (!isPostBack()) {
             listaPlanoAssinatura = ejb.findAll(PlanoAssinatura.class);
             cliente = ejb.obterPessoa(idSelecionado);
+
             clienteContrato = new ClienteContrato();
-            clienteContrato.setListaContratoRateio(new ArrayList<ContratoRateio>());
+            clienteContrato.setCliente(cliente);
+            clienteContrato.setContratoSituacao(new ContratoSituacao(ContratoSituacao.CADASTRADO));
+
+            ContratoRateio rateio = new ContratoRateio();
+            rateio.setClienteContrato(clienteContrato);
+            rateio.setPessoaIndicacao(cliente.getPessoaIndicacao());
+            rateio.setValorPercentualRateio(new BigDecimal("100"));
+
+            clienteContrato.getListaContratoRateio().add(rateio);
         }
     }
 
@@ -218,19 +230,37 @@ public class ClienteMB extends GenericMB {
         clienteContrato.setValorParcela(clienteContrato.getValorContrato().divide(new BigDecimal(clienteContrato.getQtdParcela()), RoundingMode.CEILING));
         clienteContrato.setDiaVencimentoParcela(clienteContrato.getPlanoAssinatura().getDiaVencimentoParcela());
         clienteContrato.setDataInicioContrato(new Date());
-        clienteContrato.setDataFimContrato(new Date());
+        clienteContrato.setDataFimContrato(DataUtil.incrementarData(new Date(), Calendar.MONTH, clienteContrato.getPlanoAssinatura().getQtdParcela()));
     }
 
     public void onRowEdit(RowEditEvent event) {
-        // FacesMessage msg = new FacesMessage("ContratoRateio Edited", ((ContratoRateio) event.getObject()).getId());
-        // FacesContext.getCurrentInstance().addMessage(null, msg);
         System.out.println("Row Edit");
     }
 
     public void onRowCancel(RowEditEvent event) {
-        // FacesMessage msg = new FacesMessage("Edit Cancelled", ((Car) event.getObject()).getId());
-        // FacesContext.getCurrentInstance().addMessage(null, msg);
-        System.out.println("Row Cancela");
+        ContratoRateio c = ((ContratoRateio) event.getObject());
+        c.setValorPago(new BigDecimal("111.11"));
+        System.out.println("Row Cancela " + ((ContratoRateio) event.getObject()).getId());
+
+    }
+
+    public String salvarContratoCliente() {
+        try {
+            System.out.println("salvarContratoCliente");
+
+            // ejb.salvarCliente(cliente, verificarTelefone());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MensagemUtil.addMensagemErro("msg.erro.salvar.cliente", ex.getMessage());
+            return "";
+        }
+        MensagemUtil.addMensagemSucesso("msg.sucesso.salvar.cliente");
+        return "../cliente/lista_cliente.xhtml?faces-redirect=true";
+    }
+
+    public void addRow() {
+        System.out.println("addRow ");
+        clienteContrato.getListaContratoRateio().add(new ContratoRateio());
     }
 
     // Fim Contrato
