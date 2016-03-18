@@ -79,6 +79,12 @@ insert into situacao values (3,'Inativo');
 insert into situacao values (4,'Bloqueado');
 insert into situacao values (5,'Aguardando Pagamento');
 
+--ContratoSituacao
+insert into contratosituacao values (1,'Vigente');
+insert into contratosituacao values (2,'Finalizado');
+insert into contratosituacao values (3,'Cancelado');
+insert into contratosituacao values (4,'Bloqueado');
+
 --GRUPO
 insert into grupo values ('ADMIN');
 insert into grupo values ('CLIENTE');

@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     14/03/2016 13:49:10                          */
+/* Created on:     18/03/2016 12:53:01                          */
 /*==============================================================*/
 
 
@@ -226,13 +226,14 @@ IDCLIENTE
 /*==============================================================*/
 create table CLIENTECONTRATO (
    IDCLIENTECONTRATO    BIGINT               not null,
-   IDCLIENTE            BIGINT               null,
-   IDCONTRATOSITUACAO   BIGINT               null,
-   IDPLANOASSINATURA    BIGINT               null,
+   IDCLIENTE            BIGINT               not null,
+   IDCONTRATOSITUACAO   BIGINT               not null,
+   IDPLANOASSINATURA    BIGINT               not null,
    DIAVENCIMENTOPARCELA BIGINT               null,
    VLCONTRATO           NUMERIC(12,2)        null,
    VLPARCELA            NUMERIC(12,2)        null,
    QTDPARCELA           BIGINT               null,
+   VLCOMISSAOCONTRATO   NUMERIC(12,2)        null,
    DATAINICIOCONTRATO   TIMESTAMP            null,
    DATAFIMCONTRATO      TIMESTAMP            null,
    constraint PK_CLIENTECONTRATO primary key (IDCLIENTECONTRATO)
