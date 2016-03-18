@@ -211,6 +211,7 @@ public class ClienteMB extends GenericMB {
             listaPlanoAssinatura = ejb.findAll(PlanoAssinatura.class);
             initListaPessoasIndicacao();
             cliente = ejb.obterPessoa(idSelecionado);
+            listaPessoasIndicacao.remove(cliente.getPessoaIndicacao());
 
             clienteContrato = new ClienteContrato();
             clienteContrato.setCliente(cliente);
@@ -237,12 +238,16 @@ public class ClienteMB extends GenericMB {
     }
 
     public void onRowEdit(RowEditEvent event) {
-        System.out.println("Row Edit");
+        ContratoRateio contratoRateio = ((ContratoRateio) event.getObject());
+        listaPessoasIndicacao.remove(contratoRateio.getPessoaIndicacao());
     }
 
     public void onRowCancel(RowEditEvent event) {
-        ContratoRateio c = ((ContratoRateio) event.getObject());
-        clienteContrato.getListaContratoRateio().remove(c);
+        ContratoRateio contratoRateio = ((ContratoRateio) event.getObject());
+        if (!listaPessoasIndicacao.contains(contratoRateio.getPessoaIndicacao())) {
+            listaPessoasIndicacao.add(contratoRateio.getPessoaIndicacao());
+        }
+        clienteContrato.getListaContratoRateio().remove(contratoRateio);
 
     }
 
@@ -261,7 +266,7 @@ public class ClienteMB extends GenericMB {
                 return "";
             }
 
-            // ejb.salvarCliente(cliente, verificarTelefone());
+            ejb.salvarClienteContrato(clienteContrato);
         } catch (Exception ex) {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.salvar.contrato", ex.getMessage());

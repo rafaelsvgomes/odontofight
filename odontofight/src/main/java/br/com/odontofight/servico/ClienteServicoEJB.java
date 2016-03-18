@@ -9,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import br.com.odontofight.entidade.Cliente;
+import br.com.odontofight.entidade.ClienteContrato;
 import br.com.odontofight.entidade.PessoaAcademia;
 import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaIndicacao;
@@ -107,6 +108,10 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
 
     public void removerTelefone(PessoaTelefone pessoaTelefone) {
         em.remove(em.find(PessoaTelefone.class, pessoaTelefone.getId()));
+    }
+
+    public void salvarClienteContrato(ClienteContrato clienteContrato) {
+        em.persist(clienteContrato);
     }
 
 }
