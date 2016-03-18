@@ -44,20 +44,20 @@
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.valorcontrato']} *" />
-					        <pe:inputNumber emptyValue="0" id="valorContrato" minValue="0" symbol="R$ " label="#{msg['label.contrato.valorcontrato']}" required="true" 
+					        <pe:inputNumber emptyValue="0" id="valorContrato" minValue="0" symbol="R$ " label="#{msg['label.contrato.valorcontrato']}" required="true" disabled="true"
 					        	  value="#{clienteMB.clienteContrato.valorContrato}" decimalSeparator="," thousandSeparator="."/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.qtdparcelas']} *" />
-							<p:inputText id="qtdParcela" value="#{clienteMB.clienteContrato.qtdParcela}" label="#{msg['label.contrato.qtdparcelas']}" required="true" />
+							<p:inputText id="qtdParcela" value="#{clienteMB.clienteContrato.qtdParcela}" label="#{msg['label.contrato.qtdparcelas']}" required="true" disabled="true"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.valorparcela']} *" />
-					        <pe:inputNumber emptyValue="0" id="valorParcela" minValue="0" symbol="R$ " label="#{msg['label.contrato.valorparcela']}" required="true"
+					        <pe:inputNumber emptyValue="0" id="valorParcela" minValue="0" symbol="R$ " label="#{msg['label.contrato.valorparcela']}" required="true" disabled="true"
 					        	  value="#{clienteMB.clienteContrato.valorParcela}" decimalSeparator="," thousandSeparator="."/>
 						</div>
 					</div>
@@ -110,7 +110,7 @@
 					</p:cellEditor>
 				</p:column>
 
-				<p:column headerText="#{msg['label.percent.ratio']}"  style="width:60px; text-align: center">
+				<p:column headerText="#{msg['label.percent.ratio']}" style="width:60px; text-align: center">
 					<p:cellEditor>
 						<f:facet name="output">
 							<h:outputText value="#{contratoRateio.valorPercentualRateio}" />
@@ -125,16 +125,18 @@
 					<p:rowEditor />
 				</p:column>
 			</p:dataTable>
-			<h:commandButton value="Add" action="#{clienteMB.addRow}" immediate="true"/>
+			<h:commandButton id="AddAjax" value="Add" action="#{clienteMB.addRow}">
+				<p:ajax process="@this" update="contrato:dTableRateio" />
+			</h:commandButton>
 		</fieldset>
 		
+	    <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
 		<div class="controls">
 			<p:commandButton value="#{msg['button.salvar']}" action="#{clienteMB.salvarContratoCliente}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
 				oncomplete="PF('dlgExec').hide();" rendered="#{clienteMB.cliente != null}" />
 			<p:button value="#{msg['button.cancelar']}" outcome="../cliente/lista_cliente.xhtml" styleClass="btn" />
 		</div>
 	    
-	    <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
 		
 		<h:inputHidden value="#{clienteMB.cliente.id}" />
 	</h:form>

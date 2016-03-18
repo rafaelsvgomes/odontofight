@@ -211,7 +211,7 @@ public class ClienteMB extends GenericMB {
             listaPlanoAssinatura = ejb.findAll(PlanoAssinatura.class);
             initListaPessoasIndicacao();
             cliente = ejb.obterPessoa(idSelecionado);
-            listaPessoasIndicacao.remove(cliente.getPessoaIndicacao());
+            // listaPessoasIndicacao.remove(cliente.getPessoaIndicacao());
 
             clienteContrato = new ClienteContrato();
             clienteContrato.setCliente(cliente);
@@ -238,27 +238,26 @@ public class ClienteMB extends GenericMB {
     }
 
     public void onRowEdit(RowEditEvent event) {
-        ContratoRateio contratoRateio = ((ContratoRateio) event.getObject());
-        listaPessoasIndicacao.remove(contratoRateio.getPessoaIndicacao());
     }
 
     public void onRowCancel(RowEditEvent event) {
-        ContratoRateio contratoRateio = ((ContratoRateio) event.getObject());
-        if (!listaPessoasIndicacao.contains(contratoRateio.getPessoaIndicacao())) {
-            listaPessoasIndicacao.add(contratoRateio.getPessoaIndicacao());
-        }
-        clienteContrato.getListaContratoRateio().remove(contratoRateio);
-
+        clienteContrato.getListaContratoRateio().remove(((ContratoRateio) event.getObject()));
     }
 
     public String salvarContratoCliente() {
         try {
-            System.out.println("salvarContratoCliente");
+
+            List<ContratoRateio> listaContratoRateioSalvar = new ArrayList<ContratoRateio>();
+
             BigDecimal valorTotalRateio = BigDecimal.ZERO;
-            for (ContratoRateio c : clienteContrato.getListaContratoRateio()) {
-                if (c.getValorPercentualRateio() != null) {
-                    System.out.println(c.getPessoaIndicacao().getNumCpfCnpj() + " " + c.getValorPercentualRateio());
-                    valorTotalRateio = valorTotalRateio.add(c.getValorPercentualRateio());
+            for (ContratoRateio contratoRateio : clienteContrato.getListaContratoRateio()) {
+                if (rateioRepetido(listaContratoRateioSalvar, contratoRateio)) {
+                    MensagemUtil.addMensagemAlerta("msg.erro.rateio.repetido");
+                    return "";
+                }
+                if (contratoRateio.getValorPercentualRateio() != null) {
+                    valorTotalRateio = valorTotalRateio.add(contratoRateio.getValorPercentualRateio());
+                    listaContratoRateioSalvar.add(contratoRateio);
                 }
             }
             if (valorTotalRateio.compareTo(new BigDecimal("100")) != 0) {
@@ -272,12 +271,20 @@ public class ClienteMB extends GenericMB {
             MensagemUtil.addMensagemErro("msg.erro.salvar.contrato", ex.getMessage());
             return "";
         }
-        MensagemUtil.addMensagemSucesso("msg.sucesso.salvar.cliente");
         return "../cliente/lista_cliente.xhtml?faces-redirect=true";
     }
 
     public void addRow() {
         clienteContrato.getListaContratoRateio().add(new ContratoRateio());
+    }
+
+    private Boolean rateioRepetido(List<ContratoRateio> listaclienteSalvar, ContratoRateio rateioAtual) {
+        for (ContratoRateio contratoRateio : listaclienteSalvar) {
+            if (contratoRateio.getPessoaIndicacao().equals(rateioAtual.getPessoaIndicacao())) {
+                return Boolean.TRUE;
+            }
+        }
+        return Boolean.FALSE;
     }
 
     // Fim Contrato
