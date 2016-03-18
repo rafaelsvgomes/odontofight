@@ -54,6 +54,9 @@ public class ClienteContrato extends EntidadeGenerica {
     @Column(name = "vlParcela", nullable = false)
     private BigDecimal valorParcela;
 
+    @Column(name = "vlComissaoContrato", nullable = false)
+    private BigDecimal valorComissaoContrato;
+
     @Column(nullable = false)
     private Integer qtdParcela;
 
@@ -158,6 +161,14 @@ public class ClienteContrato extends EntidadeGenerica {
 
     public void setListaContratoRateio(List<ContratoRateio> listaContratoRateio) {
         this.listaContratoRateio = listaContratoRateio;
+    }
+
+    public BigDecimal getValorComissaoContrato() {
+        return valorComissaoContrato;
+    }
+
+    public void setValorComissaoContrato(BigDecimal valorComissaoContrato) {
+        this.valorComissaoContrato = valorComissaoContrato;
     }
 
 }

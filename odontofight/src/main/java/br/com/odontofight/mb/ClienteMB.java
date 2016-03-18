@@ -211,7 +211,6 @@ public class ClienteMB extends GenericMB {
             listaPlanoAssinatura = ejb.findAll(PlanoAssinatura.class);
             initListaPessoasIndicacao();
             cliente = ejb.obterPessoa(idSelecionado);
-            // listaPessoasIndicacao.remove(cliente.getPessoaIndicacao());
 
             clienteContrato = new ClienteContrato();
             clienteContrato.setCliente(cliente);
@@ -235,12 +234,10 @@ public class ClienteMB extends GenericMB {
         Date dataFim = DataUtil.incrementarData(new Date(), Calendar.MONTH, 12);
         dataFim = DataUtil.decrementarData(dataFim, Calendar.DAY_OF_MONTH, 1);
         clienteContrato.setDataFimContrato(dataFim);
+        clienteContrato.setValorComissaoContrato(clienteContrato.getValorContrato().divide(new BigDecimal("12"), RoundingMode.CEILING));
     }
 
-    public void onRowEdit(RowEditEvent event) {
-    }
-
-    public void onRowCancel(RowEditEvent event) {
+    public void onRowDelete(RowEditEvent event) {
         clienteContrato.getListaContratoRateio().remove(((ContratoRateio) event.getObject()));
     }
 

@@ -94,6 +94,6 @@ insert into grupo values ('GESTOR');
 INSERT INTO pessoa values (nextval('seqpessoa'), null, 'Gestor Odontofight', null, 'F', '00000000000', '0000', 'SSPDF', 'M', '2000-01-01', '2000-01-01', 'gestor@odontofight.com.br');
 INSERT INTO USUARIO values (nextval('sequsuario'), 'gestor@odontofight.com.br', '39dce46dfe47195cc172948533d2e2d3');--gestorodonto123
 INSERT INTO usuariopessoa select nextval('sequsuariopessoa'), p.idpessoa, u.idusuario from pessoa p, usuario u where p.nomepessoa = 'Gestor Odontofight' and u.dsusuario = 'gestor@odontofight.com.br';
-INSERT INTO USUARIOGRUPO select nextval('sequsuariogrupo'), 'ADMIN', u.idusuario from usuario u where u.dsusuario = 'gestor@odontofight.com.br';
+INSERT INTO USUARIOGRUPO select nextval('sequsuariogrupo'), 'GESTOR', u.idusuario from usuario u where u.dsusuario = 'gestor@odontofight.com.br';
 
 

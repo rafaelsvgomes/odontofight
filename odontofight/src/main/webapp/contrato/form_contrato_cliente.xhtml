@@ -69,6 +69,13 @@
 					</div>
 					<div class="control-group">
 						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.valorcomissao']} *" />
+					        <pe:inputNumber emptyValue="0" id="valorComissao" minValue="0" symbol="R$ " label="#{msg['label.contrato.valorcomissao']}" required="true"
+					        	  value="#{clienteMB.clienteContrato.valorComissaoContrato}" decimalSeparator="," thousandSeparator="."/>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.dtinicio']} *" />
 							<p:inputMask id="dataIni" value="#{clienteMB.clienteContrato.dataInicioContrato}" mask="99/99/9999" label="#{msg['label.dtinicio']}" required="true">
 								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
@@ -91,8 +98,8 @@
 			</legend>
 			<p:dataTable id="dTableRateio" var="contratoRateio" value="#{clienteMB.clienteContrato.listaContratoRateio}" editable="true" style="margin-bottom:20px">
 
-				<p:ajax event="rowEdit" listener="#{clienteMB.onRowEdit}" update="contrato:dTableRateio" />
-				<p:ajax event="rowEditCancel" listener="#{clienteMB.onRowCancel}" update="contrato:dTableRateio" />
+<!-- 				<p:ajax event="rowEdit" listener="#{clienteMB.onRowEdit}" update="contrato:dTableRateio" /> -->
+				<p:ajax event="rowEditCancel" listener="#{clienteMB.onRowDelete}" update="contrato:dTableRateio" />
 				
 				<p:column  headerText="#{msg['label.pessoa.indicacao']}">
 					<p:cellEditor>

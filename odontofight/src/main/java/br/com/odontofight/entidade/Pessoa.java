@@ -92,18 +92,25 @@ public abstract class Pessoa extends EntidadeGenerica {
     @Column(name = "codTipoPessoa")
     private TipoPessoa tipoPessoa;
 
+    @Column(nullable = false)
     private String numCpfCnpj;
 
+    @Column(nullable = false)
+    private String numRg;
+
+    @Column(name = "dsorgaoEmissor", nullable = false)
+    private String descOrgaoEmissorRg;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "codSexo")
+    @Column(name = "codSexo", nullable = false)
     private TipoSexo tipoSexo;
 
-    @Column(name = "dataNascimento")
+    @Column(name = "dataNascimento", nullable = false)
     private Date dataNascimento;
 
     @NotEmpty
     @Pattern(regexp = ".+@.+\\.[a-z]+", message = "{email.invalido}")
-    @Column(name = "dsEmail")
+    @Column(name = "dsEmail", nullable = false)
     private String descEmail;
 
     @Column(name = "dataCadastro")
@@ -296,6 +303,22 @@ public abstract class Pessoa extends EntidadeGenerica {
     public void addPessoaConta(PessoaConta conta) {
         getListaPessoaConta().add(conta);
         conta.setPessoa(this);
+    }
+
+    public String getNumRg() {
+        return numRg;
+    }
+
+    public void setNumRg(String numRg) {
+        this.numRg = numRg;
+    }
+
+    public String getDescOrgaoEmissorRg() {
+        return descOrgaoEmissorRg;
+    }
+
+    public void setDescOrgaoEmissorRg(String descOrgaoEmissorRg) {
+        this.descOrgaoEmissorRg = descOrgaoEmissorRg;
     }
 
 }
