@@ -150,47 +150,47 @@
 			</legend>
 			<div class="control-group">
 				<div class="controls">
-					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.cep']} *" />
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.cep']}" />
 			        <p:inputMask id="cliente_cep" mask="99999-999" valueChangeListener="#{pessoaMB.buscarCep}" value="#{pessoaMB.endereco.numCep}" label="#{msg['label.pessoa.endereco.cep']}" 
-			        	required="true" styleClass="input-small"  >
-						<p:ajax event="blur" process="@this" update="cliente_descendereco, cliente_bairro, cliente_cidade, select_uf" onstart="PF('dlgExec').show();" oncomplete="PF('dlgExec').hide();"/>
+			        	styleClass="input-small"  >
+						<p:ajax event="blur" process="@this" update="descendereco, end_num, desc_compl, bairro, cidade, select_uf" onstart="PF('dlgExec').show();" oncomplete="PF('dlgExec').hide();"/>
 					</p:inputMask>
 				</div>
 			</div>
 			<div class="control-group">
 				<div class="controls">
-					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco']} *" />
-			        <p:inputText id="cliente_descendereco" value="#{pessoaMB.endereco.descEndereco}" label="#{msg['label.pessoa.endereco']}" required="true" styleClass="input-large"/>
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco']}" />
+			        <p:inputText id="descendereco" value="#{pessoaMB.endereco.descEndereco}" label="#{msg['label.pessoa.endereco']}" styleClass="input-large"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<div class="controls">
-					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.num']} *" />
-			        <p:inputText id="end_num" value="#{pessoaMB.endereco.descNumero}" label="#{msg['label.pessoa.endereco.num']}" required="true" styleClass="input-small"/>
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.num']}" />
+			        <p:inputText id="end_num" value="#{pessoaMB.endereco.descNumero}" label="#{msg['label.pessoa.endereco.num']}" styleClass="input-small"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.compl']}" />
-			        <p:inputText value="#{pessoaMB.endereco.descComplemento}" label="#{msg['label.pessoa.endereco.compl']}" styleClass="input-large"/>
+			        <p:inputText id="desc_compl" value="#{pessoaMB.endereco.descComplemento}" label="#{msg['label.pessoa.endereco.compl']}" styleClass="input-large"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<div class="controls">
-					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.bairro']} *" />
-			        <p:inputText id="cliente_bairro" value="#{pessoaMB.endereco.descBairro}" label="#{msg['label.pessoa.endereco.bairro']}" required="true" styleClass="input-large"/>
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.bairro']}" />
+			        <p:inputText id="bairro" value="#{pessoaMB.endereco.descBairro}" label="#{msg['label.pessoa.endereco.bairro']}" styleClass="input-large"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<div class="controls">
-					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.cidade']} *" />
-			        <p:inputText id="cliente_cidade" value="#{pessoaMB.endereco.descCidade}" label="#{msg['label.pessoa.endereco.cidade']}" required="true" styleClass="input-large"/>
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.cidade']}" />
+			        <p:inputText id="cidade" value="#{pessoaMB.endereco.descCidade}" label="#{msg['label.pessoa.endereco.cidade']}" styleClass="input-large"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<div class="controls">
-					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.estado']} *" />
-					<p:selectOneMenu id="select_uf" value="#{pessoaMB.endereco.uf}" converter="ufConverter" label="#{msg['label.pessoa.endereco.estado']}" required="true">
+					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.estado']}" />
+					<p:selectOneMenu id="select_uf" value="#{pessoaMB.endereco.uf}" converter="ufConverter" label="#{msg['label.pessoa.endereco.estado']}">
 		                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
 		                <f:selectItems value="#{pessoaMB.listaUfs}" var="uf" itemLabel="#{uf.descUf}" />
 	    	        </p:selectOneMenu>

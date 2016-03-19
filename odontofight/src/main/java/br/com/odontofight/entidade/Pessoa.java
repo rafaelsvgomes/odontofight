@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -31,8 +33,14 @@ import br.com.odontofight.enums.TipoSexo;
 @Table(name = "PESSOA")
 @Inheritance(strategy = InheritanceType.JOINED)
 @SequenceGenerator(name = "seqpessoa", sequenceName = "seqpessoa", allocationSize = 1)
+@NamedQueries({
+        @NamedQuery(name = Cliente.OBTER_POR_NUM_CPF_CNPJ, query = "SELECT p.id FROM Pessoa p WHERE p.numCpfCnpj = :numCpfCnpj"),
+        @NamedQuery(name = Cliente.OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO, query = "SELECT p.id FROM Pessoa p WHERE p.numCpfCnpj = :numCpfCnpj and p.id not in (:idSelecionado)"), })
 public abstract class Pessoa extends EntidadeGenerica {
     private static final long serialVersionUID = -8922414503953244338L;
+
+    public static final String OBTER_POR_NUM_CPF_CNPJ = "obterPorNumCpfCnpj";
+    public static final String OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO = "obterPorNumCpfCnpjIgnoraSelecionado";
 
     public Pessoa() {
     }
@@ -298,6 +306,11 @@ public abstract class Pessoa extends EntidadeGenerica {
     public void addPessoaEndereco(PessoaEndereco endereco) {
         getListaEndereco().add(endereco);
         endereco.setPessoa(this);
+    }
+
+    public void removePessoaEndereco(PessoaEndereco endereco) {
+        this.getListaEndereco().remove(endereco);
+        endereco.setPessoa(null);
     }
 
     public void addPessoaConta(PessoaConta conta) {

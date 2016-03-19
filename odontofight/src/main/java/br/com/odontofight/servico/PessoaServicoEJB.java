@@ -1,5 +1,6 @@
 package br.com.odontofight.servico;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -90,4 +91,32 @@ public class PessoaServicoEJB extends GenericPersistencia<Pessoa, Long> {
         }
     }
 
+    public void salvarPessoa(Pessoa pessoa) {
+        removerTelefone(pessoa);
+        removerEndereco(pessoa);
+        save(pessoa);
+    }
+
+    public void removerTelefone(Pessoa cliente) {
+        List<PessoaTelefone> listaTelefoneRemover = new ArrayList<PessoaTelefone>();
+        for (PessoaTelefone telefone : cliente.getListaTelefone()) {
+            if (telefone.getDescTelefone().isEmpty()) {
+                if (telefone.getId() != null && telefone.getId() != 0) {
+                    em.remove(em.find(PessoaTelefone.class, telefone.getId()));
+                }
+                listaTelefoneRemover.add(telefone);
+            }
+        }
+        cliente.getListaTelefone().removeAll(listaTelefoneRemover);
+    }
+
+    public void removerEndereco(Pessoa pessoa) {
+        PessoaEndereco endereco = pessoa.getListaEndereco().get(0);
+        if (endereco.getNumCep().isEmpty()) {
+            if (endereco.getId() != null && endereco.getId() != 0) {
+                em.remove(em.find(PessoaEndereco.class, endereco.getId()));
+            }
+            pessoa.removePessoaEndereco(endereco);
+        }
+    }
 }

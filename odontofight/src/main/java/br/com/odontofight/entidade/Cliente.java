@@ -1,6 +1,7 @@
 package br.com.odontofight.entidade;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 import br.com.odontofight.enums.TipoPessoa;
@@ -21,8 +23,6 @@ import br.com.odontofight.enums.TipoSexo;
 @PrimaryKeyJoinColumn(name = "idCliente", referencedColumnName = "idPessoa")
 @NamedQueries({
         @NamedQuery(name = Cliente.OBTER_POR_DESC_USUARIO, query = "SELECT c.id FROM Cliente c WHERE c.descEmail = :descUsuario"),
-        @NamedQuery(name = Cliente.OBTER_POR_NUM_CPF_CNPJ, query = "SELECT c.id FROM Cliente c WHERE c.numCpfCnpj = :numCpfCnpj"),
-        @NamedQuery(name = Cliente.OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO, query = "SELECT c.id FROM Cliente c WHERE c.numCpfCnpj = :numCpfCnpj and c.id not in (:idSelecionado)"),
         @NamedQuery(name = Cliente.OBTER_CLIENTE_EDITAR, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.descRazaoSocial, c.tipoPessoa, c.numCpfCnpj, "
                 + "c.tipoSexo, c.dataNascimento, c.descEmail, c.dataCadastro, c.situacao.id, c.situacao.descSituacao, c.pessoaIndicacao.id, c.pessoaIndicacao.nomePessoa) "
                 + "FROM Cliente c WHERE c.id = :idCliente"),
@@ -32,8 +32,6 @@ public class Cliente extends Pessoa {
     private static final long serialVersionUID = 1L;
 
     public static final String OBTER_POR_DESC_USUARIO = "obterPorDescUsuario";
-    public static final String OBTER_POR_NUM_CPF_CNPJ = "obterPorNumCpfCnpj";
-    public static final String OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO = "obterPorNumCpfCnpjIgnoraSelecionado";
     public static final String OBTER_CLIENTE_EDITAR = "obterClienteEditar";
     public static final String LISTAR_CLIENTES_SIMPLES = "listarClientesSimples";
 
@@ -78,6 +76,9 @@ public class Cliente extends Pessoa {
     private ClienteLuta clienteLuta;
 
     private Date dataAtualizacao;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<ClienteContrato> listaClienteContrato;
 
     @Override
     public int hashCode() {
@@ -134,6 +135,14 @@ public class Cliente extends Pessoa {
 
     public void setPessoaIndicacao(PessoaIndicacao pessoaIndicacao) {
         this.pessoaIndicacao = pessoaIndicacao;
+    }
+
+    public List<ClienteContrato> getListaClienteContrato() {
+        return listaClienteContrato;
+    }
+
+    public void setListaClienteContrato(List<ClienteContrato> listaClienteContrato) {
+        this.listaClienteContrato = listaClienteContrato;
     }
 
 }

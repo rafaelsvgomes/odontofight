@@ -55,7 +55,7 @@ public class ContratoMB extends GenericMB {
             // initListaPessoasIndicacao();
             // initListaPessoasAcademia();
 
-            cliente = ejb.obterPessoa(idSelecionado);
+            cliente = ejb.obterCliente(idSelecionado);
 
         }
     }

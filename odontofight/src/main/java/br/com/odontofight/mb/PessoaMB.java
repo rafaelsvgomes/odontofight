@@ -71,8 +71,8 @@ public class PessoaMB extends GenericMB {
         idSelecionado = null;
         pessoa.setTipoPessoa(TipoPessoa.F);
         pessoa.setSituacao(new Situacao(Situacao.CADASTRADO));
-        setTelefonePessoa();
-        setEnderecoPessoa();
+        iniciarTelefonePessoa();
+        iniciarEnderecoPessoa();
 
     }
 
@@ -81,7 +81,7 @@ public class PessoaMB extends GenericMB {
         if (!isPostBack()) {
             pessoa = new PessoaIndicacao();
             iniciarIncuir();
-            setPessoaConta();
+            iniciarPessoaConta();
 
             listaBancos = ejb.findAll(Banco.class);
             listaTipoConta = ejb.findAll(TipoConta.class);
@@ -123,25 +123,46 @@ public class PessoaMB extends GenericMB {
     }
 
     private void iniciarPessoaEditar(Long idPessoa) {
-        endereco = pessoa.getListaEndereco().get(0);
-        telefone = pessoa.getTelefoneResidencial();
-        celular = pessoa.getTelefoneCelular();
+        if (!pessoa.getListaEndereco().isEmpty()) {
+            endereco = pessoa.getListaEndereco().get(0);
+        } else {
+            iniciarEnderecoPessoa();
+        }
+
+        if (pessoa.getTelefoneResidencial() == null) {
+            iniciarTelefoneResidencial();
+        } else {
+            telefone = pessoa.getTelefoneResidencial();
+        }
+        if (pessoa.getTelefoneCelular() == null) {
+            iniciarTelefoneCelular();
+        } else {
+            celular = pessoa.getTelefoneCelular();
+        }
 
     }
 
-    private void setEnderecoPessoa() {
+    private void iniciarEnderecoPessoa() {
         endereco = new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), pessoa);
         pessoa.addPessoaEndereco(endereco);
     }
 
-    private void setTelefonePessoa() {
+    private void iniciarTelefonePessoa() {
+        iniciarTelefoneResidencial();
+        iniciarTelefoneCelular();
+    }
+
+    private void iniciarTelefoneResidencial() {
         telefone = new PessoaTelefone(new TipoTelefone(TipoTelefone.RESIDENCIAL), pessoa);
-        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), pessoa);
         pessoa.addPessoaTelefone(telefone);
+    }
+
+    private void iniciarTelefoneCelular() {
+        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), pessoa);
         pessoa.addPessoaTelefone(celular);
     }
 
-    private void setPessoaConta() {
+    private void iniciarPessoaConta() {
         pessoaConta = new PessoaConta(pessoa, new Banco(), new TipoConta(), Boolean.TRUE);
         pessoa.addPessoaConta(pessoaConta);
     }
@@ -155,7 +176,7 @@ public class PessoaMB extends GenericMB {
                 pessoa.setDataAtualizacao(new Date());
             }
 
-            ejb.save(pessoa);
+            ejb.salvarPessoa(pessoa);
         } catch (Exception ex) {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.salvar.pessoa", ex.getMessage());
@@ -201,6 +222,8 @@ public class PessoaMB extends GenericMB {
                 }
                 populaEndereco(cep, cepServiceVO);
             }
+        } else {
+            limpaEndereco(cep);
         }
         return "lista_pessoa?faces-redirect=true";
     }
@@ -220,6 +243,8 @@ public class PessoaMB extends GenericMB {
         this.endereco.setDescCidade("");
         this.endereco.setDescEndereco("");
         this.endereco.setNumCep(cep);
+        this.endereco.setDescNumero("");
+        this.endereco.setDescComplemento("");
         this.endereco.setUf(new UF());
     }
 

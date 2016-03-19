@@ -67,7 +67,7 @@
 						<h:outputText value="#" />
 					</f:facet>
 					<i class="glyphicon glyphicon-user"></i>
-		            <h:link outcome="../contrato/incluir_contrato_cliente.xhtml" >
+		            <h:link outcome="../contrato/incluir_contrato_cliente.xhtml" rendered="#{cliente.listaClienteContrato.get(0).contratoSituacao.id != 1}" >
 						<h:outputText value="Incluir Contrato" escape="false" />
 						<f:param name="id" value="#{cliente.id}" />
 					</h:link>

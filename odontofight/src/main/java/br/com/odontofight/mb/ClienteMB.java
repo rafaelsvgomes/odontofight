@@ -79,7 +79,7 @@ public class ClienteMB extends GenericMB {
         listaModalidadeLuta = ejb.findAll(ModalidadeLuta.class);
     }
 
-    public void incluir() {
+    public void iniciarIncluir() {
         if (!isPostBack()) {
             idSelecionado = null;
             initListaPessoasIndicacao();
@@ -89,40 +89,12 @@ public class ClienteMB extends GenericMB {
             cliente.setTipoPessoa(TipoPessoa.F);
             cliente.setSituacao(new Situacao(Situacao.CADASTRADO));
             cliente.setClienteLuta(new ClienteLuta());
-            setTelefonePessoa();
-            setEnderecoPessoa();
+            iniciarTelefonePessoa();
+            iniciarEnderecoPessoa();
         }
     }
 
-    private void initListaPessoasIndicacao() {
-        listaPessoasIndicacao = ejb.listarPessoasIndicacao();
-    }
-
-    private void initListaPessoasAcademia() {
-        listaPessoasAcademia = ejb.listarPessoasAcademia();
-    }
-
-    private void setEnderecoPessoa() {
-        endereco = new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), cliente);
-        cliente.addPessoaEndereco(endereco);
-    }
-
-    private void setTelefonePessoa() {
-        setTelefoneResidencial();
-        setTelefoneCelular();
-    }
-
-    private void setTelefoneResidencial() {
-        telefone = new PessoaTelefone(new TipoTelefone(TipoTelefone.RESIDENCIAL), cliente);
-        cliente.addPessoaTelefone(telefone);
-    }
-
-    private void setTelefoneCelular() {
-        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), cliente);
-        cliente.addPessoaTelefone(celular);
-    }
-
-    public void editar() {
+    public void iniciarEditar() {
         if (!isPostBack()) {
             if (idSelecionado == null) {
                 return;
@@ -130,18 +102,27 @@ public class ClienteMB extends GenericMB {
             initListaPessoasIndicacao();
             initListaPessoasAcademia();
 
-            cliente = ejb.obterPessoa(idSelecionado);
-            endereco = cliente.getListaEndereco().get(0);
+            cliente = ejb.obterCliente(idSelecionado);
+
+            if (!cliente.getListaEndereco().isEmpty()) {
+                endereco = cliente.getListaEndereco().get(0);
+            } else {
+                iniciarEnderecoPessoa();
+            }
 
             if (cliente.getTelefoneResidencial() == null) {
-                setTelefoneResidencial();
+                iniciarTelefoneResidencial();
             } else {
                 telefone = cliente.getTelefoneResidencial();
             }
             if (cliente.getTelefoneCelular() == null) {
-                setTelefoneCelular();
+                iniciarTelefoneCelular();
             } else {
                 celular = cliente.getTelefoneCelular();
+            }
+
+            if (cliente.getClienteLuta() == null) {
+                cliente.setClienteLuta(new ClienteLuta());
             }
         }
     }
@@ -159,7 +140,7 @@ public class ClienteMB extends GenericMB {
                 cliente.setClienteLuta(null);
             }
 
-            ejb.salvarCliente(cliente, verificarTelefone());
+            ejb.salvarCliente(cliente);
         } catch (Exception ex) {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.salvar.cliente", ex.getMessage());
@@ -169,15 +150,32 @@ public class ClienteMB extends GenericMB {
         return "lista_cliente?faces-redirect=true";
     }
 
-    private List<PessoaTelefone> verificarTelefone() {
-        List<PessoaTelefone> listaTelefonesExcluir = new ArrayList<PessoaTelefone>();
-        if (telefone.getDescTelefone().isEmpty()) {
-            listaTelefonesExcluir.add(telefone);
-        }
-        if (celular.getDescTelefone().isEmpty()) {
-            listaTelefonesExcluir.add(telefone);
-        }
-        return listaTelefonesExcluir;
+    private void initListaPessoasIndicacao() {
+        listaPessoasIndicacao = ejb.listarPessoasIndicacao();
+    }
+
+    private void initListaPessoasAcademia() {
+        listaPessoasAcademia = ejb.listarPessoasAcademia();
+    }
+
+    private void iniciarEnderecoPessoa() {
+        endereco = new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), cliente);
+        cliente.addPessoaEndereco(endereco);
+    }
+
+    private void iniciarTelefonePessoa() {
+        iniciarTelefoneResidencial();
+        iniciarTelefoneCelular();
+    }
+
+    private void iniciarTelefoneResidencial() {
+        telefone = new PessoaTelefone(new TipoTelefone(TipoTelefone.RESIDENCIAL), cliente);
+        cliente.addPessoaTelefone(telefone);
+    }
+
+    private void iniciarTelefoneCelular() {
+        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), cliente);
+        cliente.addPessoaTelefone(celular);
     }
 
     private Boolean salvarClienteLuta() {
@@ -200,8 +198,6 @@ public class ClienteMB extends GenericMB {
         return "lista_cliente?faces-redirect=true";
     }
 
-    // Contrato
-
     private ClienteContrato clienteContrato;
     private List<PlanoAssinatura> listaPlanoAssinatura;
 
@@ -210,7 +206,7 @@ public class ClienteMB extends GenericMB {
         if (!isPostBack()) {
             listaPlanoAssinatura = ejb.findAll(PlanoAssinatura.class);
             initListaPessoasIndicacao();
-            cliente = ejb.obterPessoa(idSelecionado);
+            cliente = ejb.obterCliente(idSelecionado);
 
             clienteContrato = new ClienteContrato();
             clienteContrato.setCliente(cliente);
@@ -243,7 +239,6 @@ public class ClienteMB extends GenericMB {
 
     public String salvarContratoCliente() {
         try {
-
             List<ContratoRateio> listaContratoRateioSalvar = new ArrayList<ContratoRateio>();
 
             BigDecimal valorTotalRateio = BigDecimal.ZERO;
@@ -284,8 +279,6 @@ public class ClienteMB extends GenericMB {
         return Boolean.FALSE;
     }
 
-    // Fim Contrato
-
     /**
      * Metodo responsavel por buscar o cep no webService
      * 
@@ -307,6 +300,8 @@ public class ClienteMB extends GenericMB {
                 }
                 populaEndereco(cep, cepServiceVO);
             }
+        } else {
+            limpaEndereco(cep);
         }
         return "lista_cliente?faces-redirect=true";
     }
@@ -325,6 +320,8 @@ public class ClienteMB extends GenericMB {
         this.endereco.setDescBairro("");
         this.endereco.setDescCidade("");
         this.endereco.setDescEndereco("");
+        this.endereco.setDescNumero("");
+        this.endereco.setDescComplemento("");
         this.endereco.setNumCep(cep);
         this.endereco.setUf(new UF());
     }
