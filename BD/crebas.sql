@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     18/03/2016 12:53:01                          */
+/* Created on:     21/03/2016 13:16:30                          */
 /*==============================================================*/
 
 
@@ -15,6 +15,10 @@ drop table CLIENTE;
 drop index IDX_IDCLIENTECONTRATO;
 
 drop table CLIENTECONTRATO;
+
+drop index IDX_IDCLIENTEDEPENDENTE;
+
+drop table CLIENTEDEPENDENTE;
 
 drop index IDX_IDCLIENTELUTA;
 
@@ -39,6 +43,10 @@ drop table LOGPEDIDOSITUACAO;
 drop index IDX_IDMODALIDADELUTA;
 
 drop table MODALIDADELUTA;
+
+drop index IDX_IDPARENTESCO;
+
+drop table PARENTESCO;
 
 drop index IDX_NUMCPFCNPJ;
 
@@ -118,6 +126,8 @@ drop table USUARIOPESSOA;
 
 drop sequence SEQCLIENTECONTRATO;
 
+drop sequence SEQCLIENTEDEPENDENTE;
+
 drop sequence SEQCLIENTELUTA;
 
 drop sequence SEQCONTRATORATEIO;
@@ -145,6 +155,9 @@ drop sequence SEQUSUARIOGRUPO;
 drop sequence SEQUSUARIOPESSOA;
 
 create sequence SEQCLIENTECONTRATO
+increment 1;
+
+create sequence SEQCLIENTEDEPENDENTE
 increment 1;
 
 create sequence SEQCLIENTELUTA
@@ -244,6 +257,25 @@ create table CLIENTECONTRATO (
 /*==============================================================*/
 create  index IDX_IDCLIENTECONTRATO on CLIENTECONTRATO (
 IDCLIENTECONTRATO
+);
+
+/*==============================================================*/
+/* Table: CLIENTEDEPENDENTE                                     */
+/*==============================================================*/
+create table CLIENTEDEPENDENTE (
+   IDCLIENTEDEPENDENTE  SERIAL               not null,
+   IDCLIENTE            BIGINT               null,
+   IDPARENTESCO         BIGINT               null,
+   NOMEDEPENDENTE       VARCHAR(50)          null,
+   DATANASCIMENTO       DATE                 null,
+   constraint PK_CLIENTEDEPENDENTE primary key (IDCLIENTEDEPENDENTE)
+);
+
+/*==============================================================*/
+/* Index: IDX_IDCLIENTEDEPENDENTE                               */
+/*==============================================================*/
+create  index IDX_IDCLIENTEDEPENDENTE on CLIENTEDEPENDENTE (
+IDCLIENTEDEPENDENTE
 );
 
 /*==============================================================*/
@@ -355,6 +387,22 @@ create table MODALIDADELUTA (
 /*==============================================================*/
 create unique index IDX_IDMODALIDADELUTA on MODALIDADELUTA (
 IDMODALIDADELUTA
+);
+
+/*==============================================================*/
+/* Table: PARENTESCO                                            */
+/*==============================================================*/
+create table PARENTESCO (
+   IDPARENTESCO         BIGINT               not null,
+   DSPARENTESCO         VARCHAR(50)          not null,
+   constraint PK_PARENTESCO primary key (IDPARENTESCO)
+);
+
+/*==============================================================*/
+/* Index: IDX_IDPARENTESCO                                      */
+/*==============================================================*/
+create  index IDX_IDPARENTESCO on PARENTESCO (
+IDPARENTESCO
 );
 
 /*==============================================================*/
@@ -740,6 +788,16 @@ alter table CLIENTECONTRATO
 alter table CLIENTECONTRATO
    add constraint FK_CLIENTEC_FK_CLIENT_PLANOASS foreign key (IDPLANOASSINATURA)
       references PLANOASSINATURA (IDPLANOASSINATURA)
+      on delete restrict on update restrict;
+
+alter table CLIENTEDEPENDENTE
+   add constraint FK_CLIENTED_FK_CLIENT_CLIENTE foreign key (IDCLIENTE)
+      references CLIENTE (IDCLIENTE)
+      on delete restrict on update restrict;
+
+alter table CLIENTEDEPENDENTE
+   add constraint FK_CLIENTED_FK_CLIENT_PARENTES foreign key (IDPARENTESCO)
+      references PARENTESCO (IDPARENTESCO)
       on delete restrict on update restrict;
 
 alter table CLIENTELUTA
