@@ -29,6 +29,9 @@ public class CepServiceVO {
     @XStreamAlias("ibge")
     private String ibge;
 
+    @XStreamAlias("unidade")
+    private String unidade;
+
     @XStreamAlias("gia")
     private String gia;
 
@@ -102,6 +105,14 @@ public class CepServiceVO {
 
     public void setGia(String gia) {
         this.gia = gia;
+    }
+
+    public String getUnidade() {
+        return unidade;
+    }
+
+    public void setUnidade(String unidade) {
+        this.unidade = unidade;
     }
 
 }

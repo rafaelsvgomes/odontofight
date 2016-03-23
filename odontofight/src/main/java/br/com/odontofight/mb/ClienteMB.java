@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.event.ValueChangeEvent;
 
 import org.primefaces.event.RowEditEvent;
 
@@ -32,16 +31,13 @@ import br.com.odontofight.entidade.TipoEndereco;
 import br.com.odontofight.entidade.TipoTelefone;
 import br.com.odontofight.entidade.UF;
 import br.com.odontofight.enums.TipoPessoa;
-import br.com.odontofight.exception.CEPProxyException;
 import br.com.odontofight.servico.ClienteServicoEJB;
 import br.com.odontofight.util.DataUtil;
 import br.com.odontofight.util.MensagemUtil;
-import br.com.odontofight.vo.CepServiceVO;
-import br.com.odontofight.webservices.CepService;
 
 @ManagedBean(name = "clienteMB")
 @ViewScoped
-public class ClienteMB extends GenericMB {
+public class ClienteMB extends GenericPessoaMB {
     private static final long serialVersionUID = -6556028968452915346L;
 
     @EJB
@@ -51,15 +47,11 @@ public class ClienteMB extends GenericMB {
 
     private Cliente cliente;
 
-    private PessoaEndereco endereco;
-
     private PessoaTelefone telefone;
 
     private PessoaTelefone celular;
 
     private List<Cliente> listaClientes;
-
-    private List<UF> listaUfs;
 
     private List<PessoaIndicacao> listaPessoasIndicacao;
 
@@ -75,7 +67,7 @@ public class ClienteMB extends GenericMB {
     @PostConstruct
     @SuppressWarnings("unchecked")
     public void init() {
-        listaUfs = ejb.findAll(UF.class);
+        setListaUfs(ejb.findAll(UF.class));
         listaModalidadeLuta = ejb.findAll(ModalidadeLuta.class);
     }
 
@@ -105,7 +97,7 @@ public class ClienteMB extends GenericMB {
             cliente = ejb.obterCliente(idSelecionado);
 
             if (!cliente.getListaEndereco().isEmpty()) {
-                endereco = cliente.getListaEndereco().get(0);
+                setEndereco(cliente.getListaEndereco().get(0));
             } else {
                 iniciarEnderecoPessoa();
             }
@@ -159,8 +151,8 @@ public class ClienteMB extends GenericMB {
     }
 
     private void iniciarEnderecoPessoa() {
-        endereco = new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), cliente);
-        cliente.addPessoaEndereco(endereco);
+        setEndereco(new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), cliente));
+        cliente.addPessoaEndereco(getEndereco());
     }
 
     private void iniciarTelefonePessoa() {
@@ -279,77 +271,6 @@ public class ClienteMB extends GenericMB {
         return Boolean.FALSE;
     }
 
-    /**
-     * Metodo responsavel por buscar o cep no webService
-     * 
-     * @param e
-     * @return String
-     * 
-     */
-    public String buscarCep(ValueChangeEvent e) {
-        String cep = e.getNewValue().toString();
-        if (cep != null && !cep.isEmpty() && cep.trim().replaceAll("_", "").replace("-", "").length() == 8) {
-            CepService cepService = new CepService();
-            CepServiceVO cepServiceVO = null;
-
-            cepServiceVO = buscarCEPWebService(cep, cepService, cepServiceVO);
-            if (cepServiceVO != null) {
-                if (cepServiceVO.getErro() != null && !cepServiceVO.getErro().isEmpty()) {
-                    MensagemUtil.addMensagemInfo("webservice.cep.nao.encontrado");
-                    limpaEndereco(cep);
-                }
-                populaEndereco(cep, cepServiceVO);
-            }
-        } else {
-            limpaEndereco(cep);
-        }
-        return "lista_cliente?faces-redirect=true";
-    }
-
-    private CepServiceVO buscarCEPWebService(String cep, CepService cepService, CepServiceVO cepServiceVO) {
-        try {
-            cepServiceVO = cepService.buscarCepWebService(cep);
-        } catch (CEPProxyException e) {
-            MensagemUtil.addMensagemInfo("webservice.cep.erro");
-            limpaEndereco(cep);
-        }
-        return cepServiceVO;
-    }
-
-    private void limpaEndereco(String cep) {
-        this.endereco.setDescBairro("");
-        this.endereco.setDescCidade("");
-        this.endereco.setDescEndereco("");
-        this.endereco.setDescNumero("");
-        this.endereco.setDescComplemento("");
-        this.endereco.setNumCep(cep);
-        this.endereco.setUf(new UF());
-    }
-
-    /**
-     * Metodo responsavel por popular os enderecos trago pelo web service
-     * 
-     * @param cep
-     * @param cepServiceVO void
-     * 
-     */
-    private void populaEndereco(String cep, CepServiceVO cepServiceVO) {
-        this.endereco.setDescBairro(cepServiceVO.getBairro());
-        this.endereco.setDescCidade(cepServiceVO.getLocalidade());
-        this.endereco.setDescEndereco(cepServiceVO.getLogradouro());
-        this.endereco.setNumCep(cep);
-        this.endereco.setUf(getUF(cepServiceVO.getUf()));
-    }
-
-    private UF getUF(String codUf) {
-        for (UF uf : listaUfs) {
-            if (codUf.equals(uf.getCodUf())) {
-                return uf;
-            }
-        }
-        return null;
-    }
-
     public void iniciarListarClientes() {
         if (!isPostBack()) {
             listaClientes = ejb.listarClientesSimples();
@@ -358,10 +279,6 @@ public class ClienteMB extends GenericMB {
 
     public List<Cliente> getListaClientes() {
         return listaClientes;
-    }
-
-    public List<UF> getListaUfs() {
-        return listaUfs;
     }
 
     public Long getIdSelecionado() {
@@ -374,10 +291,6 @@ public class ClienteMB extends GenericMB {
 
     public Cliente getCliente() {
         return cliente;
-    }
-
-    public PessoaEndereco getEndereco() {
-        return endereco;
     }
 
     public PessoaTelefone getTelefone() {
