@@ -85,11 +85,11 @@ insert into contratosituacao values (2,'Finalizado');
 insert into contratosituacao values (3,'Cancelado');
 insert into contratosituacao values (4,'Bloqueado');
 
---ClienteDependente
-insert into clientedependente values (1,'Esposo(a)');
-insert into clientedependente values (2,'Filho(a)');
-insert into clientedependente values (3,'Pai');
-insert into clientedependente values (4,'Mãe');
+--Parentesco
+insert into parentesco values (1,'Esposo(a)');
+insert into parentesco values (2,'Filho(a)');
+insert into parentesco values (3,'Pai');
+insert into parentesco values (4,'Mãe');
 
 --GRUPO
 insert into grupo values ('ADMIN');

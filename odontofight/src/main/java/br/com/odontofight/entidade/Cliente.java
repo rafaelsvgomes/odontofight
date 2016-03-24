@@ -108,6 +108,9 @@ public class Cliente extends Pessoa {
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<ClienteContrato> listaClienteContrato;
 
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<ClienteDependente> listaClienteDependente;
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -174,6 +177,17 @@ public class Cliente extends Pessoa {
 
     public void setListaClienteContrato(List<ClienteContrato> listaClienteContrato) {
         this.listaClienteContrato = listaClienteContrato;
+    }
+
+    public List<ClienteDependente> getListaClienteDependente() {
+        if (listaClienteDependente == null) {
+            listaClienteDependente = new ArrayList<ClienteDependente>();
+        }
+        return listaClienteDependente;
+    }
+
+    public void setListaClienteDependente(List<ClienteDependente> listaClienteDependente) {
+        this.listaClienteDependente = listaClienteDependente;
     }
 
 }
