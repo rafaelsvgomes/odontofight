@@ -19,4 +19,8 @@ public class SenhaUtil {
     public static String criptografarSenha(String senha) {
         return CriptografiaUtil.toMD5(senha);
     }
+
+    public static void main(String[] args) {
+        System.out.println(SenhaUtil.criptografarSenha("123456"));
+    }
 }

@@ -1,5 +1,6 @@
 package br.com.odontofight.entidade;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,13 +28,16 @@ import br.com.odontofight.enums.TipoSexo;
                 + "c.tipoSexo, c.dataNascimento, c.descEmail, c.dataCadastro, c.situacao.id, c.situacao.descSituacao, c.pessoaIndicacao.id, c.pessoaIndicacao.nomePessoa) "
                 + "FROM Cliente c WHERE c.id = :idCliente"),
         @NamedQuery(name = Cliente.LISTAR_CLIENTES_SIMPLES, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.tipoPessoa, c.numCpfCnpj, c.situacao.id, "
-                + "c.situacao.descSituacao) FROM Cliente c") })
+                + "c.situacao.descSituacao) FROM Cliente c"),
+        @NamedQuery(name = Cliente.LISTAR_CLIENTES_SIMPLES_COM_CONTRATO, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.tipoPessoa, c.numCpfCnpj, c.situacao.id, "
+                + "c.situacao.descSituacao, cc.id) FROM Cliente c LEFT JOIN c.listaClienteContrato cc") })
 public class Cliente extends Pessoa {
     private static final long serialVersionUID = 1L;
 
-    public static final String OBTER_POR_DESC_USUARIO = "obterPorDescUsuario";
-    public static final String OBTER_CLIENTE_EDITAR = "obterClienteEditar";
-    public static final String LISTAR_CLIENTES_SIMPLES = "listarClientesSimples";
+    public static final String OBTER_POR_DESC_USUARIO = "Cliente.obterPorDescUsuario";
+    public static final String OBTER_CLIENTE_EDITAR = "Cliente.obterClienteEditar";
+    public static final String LISTAR_CLIENTES_SIMPLES = "Cliente.listarClientesSimples";
+    public static final String LISTAR_CLIENTES_SIMPLES_COM_CONTRATO = "Cliente.listarClientesSimplesComContrato";
 
     /**
      * LISTAR_CLIENTES_INDICADORES
@@ -48,6 +52,30 @@ public class Cliente extends Pessoa {
     public Cliente(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, Long idSituacao, String descSituacao) {
         super(id, nomePessoa, tipoPessoa, numCpfCnpj);
         this.situacao = new Situacao(idSituacao, descSituacao);
+
+    }
+
+    /**
+     * LISTAR_CLIENTES_SIMPLES_COM_CONTRATO
+     */
+    public Cliente(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, Long idSituacao, String descSituacao, Long idClienteContrato) {
+        super(id, nomePessoa, tipoPessoa, numCpfCnpj);
+        this.situacao = new Situacao(idSituacao, descSituacao);
+        if (idClienteContrato != null) {
+            this.getListaClienteContrato().add(new ClienteContrato(idClienteContrato));
+        }
+
+    }
+
+    /**
+     * LISTAR_CLIENTES_SIMPLES_COM_CONTRATO
+     */
+    public Cliente(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, Long idSituacao, String descSituacao, ClienteContrato clienteContrato) {
+        super(id, nomePessoa, tipoPessoa, numCpfCnpj);
+        this.situacao = new Situacao(idSituacao, descSituacao);
+        if (clienteContrato != null) {
+            this.getListaClienteContrato().add(clienteContrato);
+        }
 
     }
 
@@ -138,6 +166,9 @@ public class Cliente extends Pessoa {
     }
 
     public List<ClienteContrato> getListaClienteContrato() {
+        if (listaClienteContrato == null) {
+            listaClienteContrato = new ArrayList<ClienteContrato>();
+        }
         return listaClienteContrato;
     }
 

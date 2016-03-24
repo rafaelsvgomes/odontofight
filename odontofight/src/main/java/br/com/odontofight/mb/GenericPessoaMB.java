@@ -4,7 +4,11 @@ import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
 
+import br.com.odontofight.entidade.Pessoa;
 import br.com.odontofight.entidade.PessoaEndereco;
+import br.com.odontofight.entidade.PessoaTelefone;
+import br.com.odontofight.entidade.TipoEndereco;
+import br.com.odontofight.entidade.TipoTelefone;
 import br.com.odontofight.entidade.UF;
 import br.com.odontofight.exception.CEPProxyException;
 import br.com.odontofight.util.MensagemUtil;
@@ -17,7 +21,44 @@ abstract class GenericPessoaMB extends GenericMB {
 
     private PessoaEndereco endereco;
 
+    private PessoaTelefone telefone;
+
+    private PessoaTelefone celular;
+
     private List<UF> listaUfs;
+
+    public void iniciarEnderecoPessoa(Pessoa pessoa) {
+        if (!pessoa.getListaEndereco().isEmpty()) {
+            setEndereco(pessoa.getListaEndereco().get(0));
+        } else {
+            setEndereco(new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), pessoa));
+            pessoa.addPessoaEndereco(getEndereco());
+        }
+    }
+
+    public void iniciarTelefonePessoa(Pessoa pessoa) {
+        if (pessoa.getTelefoneResidencial() == null) {
+            iniciarTelefoneResidencial(pessoa);
+        } else {
+            telefone = pessoa.getTelefoneResidencial();
+        }
+
+        if (pessoa.getTelefoneCelular() == null) {
+            iniciarTelefoneCelular(pessoa);
+        } else {
+            celular = pessoa.getTelefoneCelular();
+        }
+    }
+
+    private void iniciarTelefoneResidencial(Pessoa pessoa) {
+        telefone = new PessoaTelefone(new TipoTelefone(TipoTelefone.RESIDENCIAL), pessoa);
+        pessoa.addPessoaTelefone(telefone);
+    }
+
+    private void iniciarTelefoneCelular(Pessoa pessoa) {
+        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), pessoa);
+        pessoa.addPessoaTelefone(celular);
+    }
 
     /**
      * Metodo responsavel por buscar o cep no webService
@@ -104,6 +145,22 @@ abstract class GenericPessoaMB extends GenericMB {
 
     public void setListaUfs(List<UF> listaUfs) {
         this.listaUfs = listaUfs;
+    }
+
+    public PessoaTelefone getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(PessoaTelefone telefone) {
+        this.telefone = telefone;
+    }
+
+    public PessoaTelefone getCelular() {
+        return celular;
+    }
+
+    public void setCelular(PessoaTelefone celular) {
+        this.celular = celular;
     }
 
 }

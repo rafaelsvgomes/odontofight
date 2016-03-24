@@ -42,7 +42,7 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
     }
 
     public List<Cliente> listarClientesSimples() {
-        return em.createNamedQuery(Cliente.LISTAR_CLIENTES_SIMPLES).getResultList();
+        return em.createNamedQuery(Cliente.LISTAR_CLIENTES_SIMPLES_COM_CONTRATO).getResultList();
     }
 
     /**
@@ -53,6 +53,10 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
         Cliente cliente = em.find(Cliente.class, id);
         cliente.setListaEndereco(em.createNamedQuery(PessoaEndereco.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
         cliente.setListaTelefone(em.createNamedQuery(PessoaTelefone.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
+        if (!cliente.getListaClienteContrato().isEmpty() && !cliente.getListaClienteContrato().get(0).getListaContratoRateio().isEmpty()) {
+            cliente.getListaClienteContrato().get(0).getListaContratoRateio().get(0);
+
+        }
         return cliente;
     }
 

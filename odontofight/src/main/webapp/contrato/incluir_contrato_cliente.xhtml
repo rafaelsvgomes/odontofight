@@ -2,14 +2,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-
 <ui:composition template="../layout/template.xhtml">
 	<ui:define name="pageTitle">
 		<h:outputText value="#{msg['page.title.incluir.cliente']}" />
 	</ui:define>
 	
 	<f:metadata>
-		<f:viewParam name="id" value="#{clienteMB.idSelecionado}" />
+		<f:viewParam id="cli" name="cli" value="#{clienteMB.idSelecionado}" />
+		<f:viewParam id="operacao" name="operacao" value="#{clienteMB.operacao}" />
 		<f:event type="preRenderView" listener="#{clienteMB.iniciarIncluirContratoCliente}" />
 	</f:metadata>
 

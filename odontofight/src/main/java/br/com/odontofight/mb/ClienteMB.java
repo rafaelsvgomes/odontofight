@@ -22,13 +22,9 @@ import br.com.odontofight.entidade.ContratoSituacao;
 import br.com.odontofight.entidade.ModalidadeLuta;
 import br.com.odontofight.entidade.OrigemPagamento;
 import br.com.odontofight.entidade.PessoaAcademia;
-import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaIndicacao;
-import br.com.odontofight.entidade.PessoaTelefone;
 import br.com.odontofight.entidade.PlanoAssinatura;
 import br.com.odontofight.entidade.Situacao;
-import br.com.odontofight.entidade.TipoEndereco;
-import br.com.odontofight.entidade.TipoTelefone;
 import br.com.odontofight.entidade.UF;
 import br.com.odontofight.enums.TipoPessoa;
 import br.com.odontofight.servico.ClienteServicoEJB;
@@ -47,10 +43,6 @@ public class ClienteMB extends GenericPessoaMB {
 
     private Cliente cliente;
 
-    private PessoaTelefone telefone;
-
-    private PessoaTelefone celular;
-
     private List<Cliente> listaClientes;
 
     private List<PessoaIndicacao> listaPessoasIndicacao;
@@ -60,6 +52,10 @@ public class ClienteMB extends GenericPessoaMB {
     private List<ModalidadeLuta> listaModalidadeLuta;
 
     private List<OrigemPagamento> listaOrigemPagamento;
+
+    private ClienteContrato clienteContrato;
+
+    private List<PlanoAssinatura> listaPlanoAssinatura;
 
     public ClienteMB() {
     }
@@ -81,8 +77,8 @@ public class ClienteMB extends GenericPessoaMB {
             cliente.setTipoPessoa(TipoPessoa.F);
             cliente.setSituacao(new Situacao(Situacao.CADASTRADO));
             cliente.setClienteLuta(new ClienteLuta());
-            iniciarTelefonePessoa();
-            iniciarEnderecoPessoa();
+            iniciarTelefonePessoa(cliente);
+            iniciarEnderecoPessoa(cliente);
         }
     }
 
@@ -96,22 +92,8 @@ public class ClienteMB extends GenericPessoaMB {
 
             cliente = ejb.obterCliente(idSelecionado);
 
-            if (!cliente.getListaEndereco().isEmpty()) {
-                setEndereco(cliente.getListaEndereco().get(0));
-            } else {
-                iniciarEnderecoPessoa();
-            }
-
-            if (cliente.getTelefoneResidencial() == null) {
-                iniciarTelefoneResidencial();
-            } else {
-                telefone = cliente.getTelefoneResidencial();
-            }
-            if (cliente.getTelefoneCelular() == null) {
-                iniciarTelefoneCelular();
-            } else {
-                celular = cliente.getTelefoneCelular();
-            }
+            iniciarEnderecoPessoa(cliente);
+            iniciarTelefonePessoa(cliente);
 
             if (cliente.getClienteLuta() == null) {
                 cliente.setClienteLuta(new ClienteLuta());
@@ -150,26 +132,6 @@ public class ClienteMB extends GenericPessoaMB {
         listaPessoasAcademia = ejb.listarPessoasAcademia();
     }
 
-    private void iniciarEnderecoPessoa() {
-        setEndereco(new PessoaEndereco(new TipoEndereco(TipoEndereco.RESIDENCIAL), cliente));
-        cliente.addPessoaEndereco(getEndereco());
-    }
-
-    private void iniciarTelefonePessoa() {
-        iniciarTelefoneResidencial();
-        iniciarTelefoneCelular();
-    }
-
-    private void iniciarTelefoneResidencial() {
-        telefone = new PessoaTelefone(new TipoTelefone(TipoTelefone.RESIDENCIAL), cliente);
-        cliente.addPessoaTelefone(telefone);
-    }
-
-    private void iniciarTelefoneCelular() {
-        celular = new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), cliente);
-        cliente.addPessoaTelefone(celular);
-    }
-
     private Boolean salvarClienteLuta() {
         if (cliente.getClienteLuta() != null
                 && (cliente.getClienteLuta().getId() != null || cliente.getClienteLuta().getPessoaAcademia() != null || cliente.getClienteLuta().getModalidadeLuta() != null
@@ -190,9 +152,6 @@ public class ClienteMB extends GenericPessoaMB {
         return "lista_cliente?faces-redirect=true";
     }
 
-    private ClienteContrato clienteContrato;
-    private List<PlanoAssinatura> listaPlanoAssinatura;
-
     @SuppressWarnings("unchecked")
     public void iniciarIncluirContratoCliente() {
         if (!isPostBack()) {
@@ -200,16 +159,20 @@ public class ClienteMB extends GenericPessoaMB {
             initListaPessoasIndicacao();
             cliente = ejb.obterCliente(idSelecionado);
 
-            clienteContrato = new ClienteContrato();
-            clienteContrato.setCliente(cliente);
-            clienteContrato.setContratoSituacao(new ContratoSituacao(ContratoSituacao.CADASTRADO));
+            if (cliente.getListaClienteContrato().size() > 0) {
+                clienteContrato = cliente.getListaClienteContrato().get(0);
+            } else {
+                clienteContrato = new ClienteContrato();
+                clienteContrato.setCliente(cliente);
+                clienteContrato.setContratoSituacao(new ContratoSituacao(ContratoSituacao.CADASTRADO));
 
-            ContratoRateio rateio = new ContratoRateio();
-            rateio.setClienteContrato(clienteContrato);
-            rateio.setPessoaIndicacao(cliente.getPessoaIndicacao());
-            rateio.setValorPercentualRateio(new BigDecimal("100"));
+                ContratoRateio rateio = new ContratoRateio();
+                rateio.setClienteContrato(clienteContrato);
+                rateio.setPessoaIndicacao(cliente.getPessoaIndicacao());
+                rateio.setValorPercentualRateio(new BigDecimal("100"));
 
-            clienteContrato.getListaContratoRateio().add(rateio);
+                clienteContrato.getListaContratoRateio().add(rateio);
+            }
         }
     }
 
@@ -259,7 +222,10 @@ public class ClienteMB extends GenericPessoaMB {
     }
 
     public void addRow() {
-        clienteContrato.getListaContratoRateio().add(new ContratoRateio());
+        ContratoRateio rateio = new ContratoRateio();
+        rateio.setClienteContrato(clienteContrato);
+        rateio.setValorPercentualRateio(new BigDecimal("0"));
+        clienteContrato.getListaContratoRateio().add(rateio);
     }
 
     private Boolean rateioRepetido(List<ContratoRateio> listaclienteSalvar, ContratoRateio rateioAtual) {
@@ -291,14 +257,6 @@ public class ClienteMB extends GenericPessoaMB {
 
     public Cliente getCliente() {
         return cliente;
-    }
-
-    public PessoaTelefone getTelefone() {
-        return telefone;
-    }
-
-    public PessoaTelefone getCelular() {
-        return celular;
     }
 
     public List<OrigemPagamento> getListaOrigemPagamento() {

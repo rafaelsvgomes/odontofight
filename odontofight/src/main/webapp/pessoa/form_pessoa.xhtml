@@ -60,6 +60,18 @@
 				<ui:fragment rendered="#{pessoaMB.pessoa.tipoPessoa == 'F'}" >
 					<div class="control-group">
 						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.rg']} *" />
+							<p:inputText id="rg" value="#{pessoaMB.pessoa.numRg}" label="#{msg['label.pessoa.rg']}" required="true" />
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.orgao.emissor']} *" />
+							<p:inputText id="orgaoEmiss" value="#{pessoaMB.pessoa.descOrgaoEmissorRg}" label="#{msg['label.pessoa.orgao.emissor']}" required="true" style="text-transform: uppercase;" />
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.dtnascimento']} *" />
 							<p:inputMask id="date" value="#{pessoaMB.pessoa.dataNascimento}" mask="99/99/9999" label="#{msg['label.pessoa.dtnascimento']}" required="true">
 								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>

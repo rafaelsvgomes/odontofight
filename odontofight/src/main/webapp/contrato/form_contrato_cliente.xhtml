@@ -4,7 +4,6 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
-
 	<div>
 		<h3>
 			<h:outputText value="#{msg['label.cliente']}" />
@@ -12,7 +11,7 @@
 		</h3>
 	</div>
 	
-	<h:form id="contrato" styleClass="form-horizontal">
+	<h:form id="form_contrato" styleClass="form-horizontal" >
 		<fieldset>
 			<legend>
 				<small> <h:outputText value="Cliente" /></small>
@@ -32,7 +31,7 @@
 				<div class="control-group">
 					<div class="controls">
 						<p:outputLabel styleClass="control-label" value="#{msg['label.planoassinatura']} *" /> 
-						<p:selectOneMenu id="selectPlano" value="#{clienteMB.clienteContrato.planoAssinatura}" label="#{msg['label.pessoa.indicacao']}" required="true"
+						<p:selectOneMenu id="selectPlano" value="#{clienteMB.clienteContrato.planoAssinatura}" label="#{msg['label.pessoa.indicacao']}" required="true" disabled="#{clienteMB.operacao == 'V'}"
 							converter="entityConverter">
 			                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
 			                <f:selectItems value="#{clienteMB.listaPlanoAssinatura}" var="plano" itemLabel="#{plano.id} - #{plano.nomePlanoAssinatura}" itemValue="#{plano}"/>
@@ -64,20 +63,20 @@
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.diavencimento']} *" />
-							<p:inputText id="diaVenc" value="#{clienteMB.clienteContrato.diaVencimentoParcela}" label="#{msg['label.contrato.diavencimento']}" required="true"/>
+							<p:inputText id="diaVenc" value="#{clienteMB.clienteContrato.diaVencimentoParcela}" label="#{msg['label.contrato.diavencimento']}" required="true" disabled="#{clienteMB.operacao == 'V'}"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.valorcomissao']} *" />
-					        <pe:inputNumber emptyValue="0" id="valorComissao" minValue="0" symbol="R$ " label="#{msg['label.contrato.valorcomissao']}" required="true"
+					        <pe:inputNumber emptyValue="0" id="valorComissao" minValue="0" symbol="R$ " label="#{msg['label.contrato.valorcomissao']}" required="true" disabled="#{clienteMB.operacao == 'V'}"
 					        	  value="#{clienteMB.clienteContrato.valorComissaoContrato}" decimalSeparator="," thousandSeparator="."/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.dtinicio']} *" />
-							<p:inputMask id="dataIni" value="#{clienteMB.clienteContrato.dataInicioContrato}" mask="99/99/9999" label="#{msg['label.dtinicio']}" required="true">
+							<p:inputMask id="dataIni" value="#{clienteMB.clienteContrato.dataInicioContrato}" mask="99/99/9999" label="#{msg['label.dtinicio']}" required="true" disabled="#{clienteMB.operacao == 'V'}">
 								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
 							</p:inputMask>
 						</div>
@@ -85,7 +84,7 @@
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.dtfim']} *" />
-							<p:inputMask id="dataFim" value="#{clienteMB.clienteContrato.dataFimContrato}" mask="99/99/9999" label="#{msg['label.dtfim']}" required="true">
+							<p:inputMask id="dataFim" value="#{clienteMB.clienteContrato.dataFimContrato}" mask="99/99/9999" label="#{msg['label.dtfim']}" required="true" disabled="#{clienteMB.operacao == 'V'}">
 								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
 							</p:inputMask>
 						</div>
@@ -96,10 +95,10 @@
 			<legend>
 				<small> <h:outputText value="Rateio" /></small>
 			</legend>
-			<p:dataTable id="dTableRateio" var="contratoRateio" value="#{clienteMB.clienteContrato.listaContratoRateio}" editable="true" style="margin-bottom:20px">
+			<p:dataTable id="dTableRateio" var="contratoRateio" value="#{clienteMB.clienteContrato.listaContratoRateio}" editable="true" style="margin-bottom:20px" disabled="#{clienteMB.operacao == 'V'}">
 
 <!-- 				<p:ajax event="rowEdit" listener="#{clienteMB.onRowEdit}" update="contrato:dTableRateio" /> -->
-				<p:ajax event="rowEditCancel" listener="#{clienteMB.onRowDelete}" update="contrato:dTableRateio" />
+				<p:ajax event="rowEditCancel" listener="#{clienteMB.onRowDelete}" update=":form_contrato:dTableRateio" />
 				
 				<p:column  headerText="#{msg['label.pessoa.indicacao']}">
 					<p:cellEditor>
@@ -128,20 +127,23 @@
 					</p:cellEditor>
 				</p:column>
 
-				<p:column style="width:32px">
-					<p:rowEditor />
+				<p:column style="width:32px; text-align: center">
+					<p:rowEditor rendered="#{clienteMB.operacao != 'V'}" />
 				</p:column>
 			</p:dataTable>
-			<h:commandButton id="AddAjax" value="Add" action="#{clienteMB.addRow}">
-				<p:ajax process="@this" update="contrato:dTableRateio" />
+<!-- 			<h:commandButton id="botao_row_delete" value="Rem" action="#"  style="display:none;" > -->
+<!-- 				<p:ajax process="@this" update="form_contrato:dTableRateio" /> -->
+<!-- 			</h:commandButton> -->
+			<h:commandButton id="AddAjax" value="Add" action="#{clienteMB.addRow}" disabled="#{clienteMB.operacao == 'V'}">
+				<p:ajax process="@this" update="form_contrato:dTableRateio" />
 			</h:commandButton>
 		</fieldset>
 		
 	    <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
 		<div class="controls">
 			<p:commandButton value="#{msg['button.salvar']}" action="#{clienteMB.salvarContratoCliente}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
-				oncomplete="PF('dlgExec').hide();" rendered="#{clienteMB.cliente != null}" />
-			<p:button value="#{msg['button.cancelar']}" outcome="../cliente/lista_cliente.xhtml" styleClass="btn" />
+				oncomplete="PF('dlgExec').hide();" rendered="#{clienteMB.cliente != null}" disabled="#{clienteMB.operacao == 'V'}"/>
+			<p:button value="#{msg['button.cancelar']}" outcome="../cliente/lista_cliente.xhtml" styleClass="btn" disabled="#{clienteMB.operacao == 'V'}"/>
 		</div>
 	    
 		

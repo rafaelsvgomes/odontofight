@@ -64,12 +64,19 @@
 				</p:column>
 				<p:column style="text-align: center">
 					<f:facet name="header">
-						<h:outputText value="#" />
+						<h:outputText value="#{msg['label.contrato']}" />
 					</f:facet>
 					<i class="glyphicon glyphicon-user"></i>
-		            <h:link outcome="../contrato/incluir_contrato_cliente.xhtml" rendered="#{cliente.listaClienteContrato.get(0).contratoSituacao.id != 1}" >
+		            <h:link outcome="../contrato/incluir_contrato_cliente.xhtml" rendered="#{cliente.listaClienteContrato.size() == 0}" >
 						<h:outputText value="Incluir Contrato" escape="false" />
-						<f:param name="id" value="#{cliente.id}" />
+						<f:param name="cli" value="#{cliente.id}" />
+						<f:param name="operacao" value="I" />
+					</h:link>
+					
+					<h:link outcome="../contrato/incluir_contrato_cliente.xhtml" rendered="#{cliente.listaClienteContrato.size() != 0}" >
+						<h:outputText value="Ver Contrato" escape="false" />
+						<f:param name="cli" value="#{cliente.id}" />
+						<f:param name="operacao" value="V" />
 					</h:link>
 				</p:column>
 			</p:dataTable>

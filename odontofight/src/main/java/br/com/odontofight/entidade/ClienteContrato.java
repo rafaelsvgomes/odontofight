@@ -31,6 +31,10 @@ public class ClienteContrato extends EntidadeGenerica {
         super();
     }
 
+    public ClienteContrato(Long id) {
+        this.id = id;
+    }
+
     @Id
     @Column(name = "idClienteContrato")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqclientecontrato")
