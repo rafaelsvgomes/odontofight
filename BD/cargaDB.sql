@@ -90,11 +90,17 @@ insert into parentesco values (1,'Esposo(a)');
 insert into parentesco values (2,'Filho(a)');
 insert into parentesco values (3,'Pai');
 insert into parentesco values (4,'Mãe');
+insert into parentesco values (4,'Outros');
+
 
 --GRUPO
 insert into grupo values ('ADMIN');
 insert into grupo values ('CLIENTE');
 insert into grupo values ('GESTOR');
+
+--PlanoAssinatura
+insert into planoassinatura (nextval('seqplanoassinatura'),'Plano Padrão','Plano de 12X R$40,00',480.00,12,15,True);
+insert into planoassinatura (nextval('seqplanoassinatura'),'Plano Padrão','Plano de 3X R$160,00',480.00,3,15,True);
 
 --INSERT PESSOA GESTOR
 INSERT INTO pessoa values (nextval('seqpessoa'), null, 'Gestor Odontofight', null, 'F', '00000000000', '0000', 'SSPDF', 'M', '2000-01-01', '2000-01-01', 'gestor@odontofight.com.br');
