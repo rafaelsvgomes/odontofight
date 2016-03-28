@@ -12,15 +12,15 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
-import org.primefaces.event.RowEditEvent;
-
 import br.com.odontofight.entidade.Cliente;
 import br.com.odontofight.entidade.ClienteContrato;
+import br.com.odontofight.entidade.ClienteDependente;
 import br.com.odontofight.entidade.ClienteLuta;
 import br.com.odontofight.entidade.ContratoRateio;
 import br.com.odontofight.entidade.ContratoSituacao;
 import br.com.odontofight.entidade.ModalidadeLuta;
 import br.com.odontofight.entidade.OrigemPagamento;
+import br.com.odontofight.entidade.Parentesco;
 import br.com.odontofight.entidade.PessoaAcademia;
 import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PlanoAssinatura;
@@ -57,6 +57,10 @@ public class ClienteMB extends GenericPessoaMB {
 
     private List<PlanoAssinatura> listaPlanoAssinatura;
 
+    private List<Parentesco> listaParentesco;
+
+    private ClienteDependente dependente;
+
     public ClienteMB() {
     }
 
@@ -65,6 +69,7 @@ public class ClienteMB extends GenericPessoaMB {
     public void init() {
         setListaUfs(ejb.findAll(UF.class));
         listaModalidadeLuta = ejb.findAll(ModalidadeLuta.class);
+        listaParentesco = ejb.findAll(Parentesco.class);
     }
 
     public void iniciarIncluir() {
@@ -79,6 +84,8 @@ public class ClienteMB extends GenericPessoaMB {
             cliente.setClienteLuta(new ClienteLuta());
             iniciarTelefonePessoa(cliente);
             iniciarEnderecoPessoa(cliente);
+
+            dependente = new ClienteDependente();
         }
     }
 
@@ -152,6 +159,16 @@ public class ClienteMB extends GenericPessoaMB {
         return "lista_cliente?faces-redirect=true";
     }
 
+    public void onAddDependente() {
+        ClienteDependente dependente = new ClienteDependente();
+        dependente.setCliente(cliente);
+        cliente.getListaClienteDependente().add(dependente);
+    }
+
+    public void onDeleteLinhaDependente(ClienteDependente dependente) {
+        cliente.getListaClienteDependente().remove(dependente);
+    }
+
     @SuppressWarnings("unchecked")
     public void iniciarIncluirContratoCliente() {
         if (!isPostBack()) {
@@ -188,8 +205,8 @@ public class ClienteMB extends GenericPessoaMB {
         clienteContrato.setValorComissaoContrato(clienteContrato.getValorContrato().divide(new BigDecimal("12"), RoundingMode.CEILING));
     }
 
-    public void onRowDelete(RowEditEvent event) {
-        clienteContrato.getListaContratoRateio().remove(((ContratoRateio) event.getObject()));
+    public void onDeleteLinhaRateio(ContratoRateio rateio) {
+        clienteContrato.getListaContratoRateio().remove(rateio);
     }
 
     public String salvarContratoCliente() {
@@ -281,5 +298,13 @@ public class ClienteMB extends GenericPessoaMB {
 
     public List<PlanoAssinatura> getListaPlanoAssinatura() {
         return listaPlanoAssinatura;
+    }
+
+    public List<Parentesco> getListaParentesco() {
+        return listaParentesco;
+    }
+
+    public ClienteDependente getDependente() {
+        return dependente;
     }
 }

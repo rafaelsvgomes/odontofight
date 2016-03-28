@@ -95,11 +95,7 @@
 			<legend>
 				<small> <h:outputText value="Rateio" /></small>
 			</legend>
-			<p:dataTable id="dTableRateio" var="contratoRateio" value="#{clienteMB.clienteContrato.listaContratoRateio}" editable="true" style="margin-bottom:20px" disabled="#{clienteMB.operacao == 'V'}">
-
-<!-- 				<p:ajax event="rowEdit" listener="#{clienteMB.onRowEdit}" update="contrato:dTableRateio" /> -->
-				<p:ajax event="rowEditCancel" listener="#{clienteMB.onRowDelete}" update=":form_contrato:dTableRateio" />
-				
+			<p:dataTable id="dtable_rateio" var="contratoRateio" value="#{clienteMB.clienteContrato.listaContratoRateio}" editable="true" style="margin-bottom:20px" disabled="#{clienteMB.operacao == 'V'}">
 				<p:column  headerText="#{msg['label.pessoa.indicacao']}">
 					<p:cellEditor>
 						<f:facet name="output">
@@ -130,12 +126,16 @@
 				<p:column style="width:32px; text-align: center">
 					<p:rowEditor rendered="#{clienteMB.operacao != 'V'}" />
 				</p:column>
+				
+				<p:column style="width:32px; text-align: center">
+					<h:commandLink id="RemoveAjax" action="#{clienteMB.onDeleteLinhaRateio(contratoRateio)}">
+						<p:ajax process="@this" update="form_contrato:dtable_rateio" />
+						<i class="glyphicon glyphicon-trash" style="font-size: 12px;"></i>
+					</h:commandLink>
+				</p:column>
 			</p:dataTable>
-<!-- 			<h:commandButton id="botao_row_delete" value="Rem" action="#"  style="display:none;" > -->
-<!-- 				<p:ajax process="@this" update="form_contrato:dTableRateio" /> -->
-<!-- 			</h:commandButton> -->
 			<h:commandButton id="AddAjax" value="Add" action="#{clienteMB.addRow}" disabled="#{clienteMB.operacao == 'V'}">
-				<p:ajax process="@this" update="form_contrato:dTableRateio" />
+				<p:ajax process="@this" update="form_contrato:dtable_rateio" />
 			</h:commandButton>
 		</fieldset>
 		
@@ -143,7 +143,7 @@
 		<div class="controls">
 			<p:commandButton value="#{msg['button.salvar']}" action="#{clienteMB.salvarContratoCliente}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
 				oncomplete="PF('dlgExec').hide();" rendered="#{clienteMB.cliente != null}" disabled="#{clienteMB.operacao == 'V'}"/>
-			<p:button value="#{msg['button.cancelar']}" outcome="../cliente/lista_cliente.xhtml" styleClass="btn" disabled="#{clienteMB.operacao == 'V'}"/>
+			<p:button value="#{msg['button.cancelar']}" outcome="../cliente/lista_cliente.xhtml" styleClass="btn" />
 		</div>
 	    
 		

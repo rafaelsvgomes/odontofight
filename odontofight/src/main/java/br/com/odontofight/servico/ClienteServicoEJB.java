@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 
 import br.com.odontofight.entidade.Cliente;
 import br.com.odontofight.entidade.ClienteContrato;
+import br.com.odontofight.entidade.ClienteDependente;
 import br.com.odontofight.entidade.Pessoa;
 import br.com.odontofight.entidade.PessoaAcademia;
 import br.com.odontofight.entidade.PessoaEndereco;
@@ -55,7 +56,9 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
         cliente.setListaTelefone(em.createNamedQuery(PessoaTelefone.LISTAR_POR_ID_PESSOA).setParameter("idPessoa", id).getResultList());
         if (!cliente.getListaClienteContrato().isEmpty() && !cliente.getListaClienteContrato().get(0).getListaContratoRateio().isEmpty()) {
             cliente.getListaClienteContrato().get(0).getListaContratoRateio().get(0);
-
+        }
+        if (!cliente.getListaClienteDependente().isEmpty()) {
+            cliente.getListaClienteDependente().get(0);
         }
         return cliente;
     }
@@ -105,6 +108,7 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
     public void salvarCliente(Cliente cliente) {
         removerTelefone(cliente);
         removerEndereco(cliente);
+        removerDependentes(cliente);
         save(cliente);
     }
 
@@ -129,6 +133,10 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
             }
             cliente.removePessoaEndereco(endereco);
         }
+    }
+
+    public void removerDependentes(Cliente cliente) {
+        em.createNamedQuery(ClienteDependente.DELETE_CLIENTE_DEPENDENTE).setParameter("idCliente", cliente.getId()).executeUpdate();
     }
 
     public void salvarClienteContrato(ClienteContrato clienteContrato) {

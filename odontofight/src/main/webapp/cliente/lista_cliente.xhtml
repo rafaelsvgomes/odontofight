@@ -62,19 +62,18 @@
 					</f:facet>
 					<h:outputText value="#{cliente.situacao.descSituacao}" />
 				</p:column>
-				<p:column style="text-align: center">
+				<p:column style="text-align: center; width: 75px">
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.contrato']}" />
 					</f:facet>
-					<i class="glyphicon glyphicon-user"></i>
-		            <h:link outcome="../contrato/incluir_contrato_cliente.xhtml" rendered="#{cliente.listaClienteContrato.size() == 0}" >
-						<h:outputText value="Incluir Contrato" escape="false" />
+		            <h:link outcome="../contrato/incluir_contrato_cliente.xhtml" rendered="#{cliente.listaClienteContrato.size() == 0}">
+						<i class="glyphicon glyphicon-pencil" title="Incluir Contrato"></i>
 						<f:param name="cli" value="#{cliente.id}" />
 						<f:param name="operacao" value="I" />
 					</h:link>
 					
 					<h:link outcome="../contrato/incluir_contrato_cliente.xhtml" rendered="#{cliente.listaClienteContrato.size() != 0}" >
-						<h:outputText value="Ver Contrato" escape="false" />
+						<i class="glyphicon glyphicon-search" title="Visualizar Contrato"></i>
 						<f:param name="cli" value="#{cliente.id}" />
 						<f:param name="operacao" value="V" />
 					</h:link>

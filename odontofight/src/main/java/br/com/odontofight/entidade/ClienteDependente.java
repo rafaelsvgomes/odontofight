@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -19,8 +21,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ClienteDependente")
 @SequenceGenerator(name = "seqclientedependente", sequenceName = "seqclientedependente", allocationSize = 1)
+@NamedQueries({ @NamedQuery(name = ClienteDependente.DELETE_CLIENTE_DEPENDENTE, query = "DELETE FROM ClienteDependente cd WHERE cd.cliente.id = :idCliente") })
 public class ClienteDependente extends EntidadeGenerica {
     private static final long serialVersionUID = 1L;
+
+    public static final String DELETE_CLIENTE_DEPENDENTE = "ClienteDependente.obterPorDescUsuario";
 
     public ClienteDependente() {
         super();

@@ -11,7 +11,7 @@
 		</h3>
 	</div>
 	
-	<h:form styleClass="form-horizontal">
+	<h:form id="form_cliente" styleClass="form-horizontal">
 		<fieldset>
 			<legend>
 				<small> <h:outputText value="Indicação" /></small>
@@ -185,7 +185,6 @@
 				</div>
 			</div>
 		</fieldset>
-		
 		<fieldset>
 			<legend>
 				<small> <h:outputText value="Informações da Modalidade" /></small>
@@ -224,6 +223,68 @@
 					</p:inputMask>
 				</div>
 			</div>
+		</fieldset>
+		<fieldset>
+			<legend>
+				<small> <h:outputText value="Dependentes" /></small>
+			</legend>
+			
+			<p:dataTable id="dtable_dependente" var="dependente" value="#{clienteMB.cliente.listaClienteDependente}" editable="true" style="margin-bottom:20px">
+				<p:column headerText="#{msg['label.parentesco']}" style="width:200px; text-align: center">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{dependente.parentesco.descParentesco}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:selectOneMenu id="select_parentesco" value="#{dependente.parentesco}" converter="entityConverter" label="#{msg['label.parentesco']}" required="true" style="width:100%">
+								<f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
+								<f:selectItems value="#{clienteMB.listaParentesco}" var="p" itemLabel="#{p.descParentesco}" itemValue="#{p}" />
+							</p:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="#{msg['label.pessoa.nome']}" >
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{dependente.nomeDependente}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{dependente.nomeDependente}" label="#{msg['label.pessoa.nome']}" style="width:95%;" required="true"/>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				
+				<p:column headerText="#{msg['label.pessoa.dtnascimento']}" style="width:160px; text-align: center">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{dependente.dataNascimento}" >
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputMask value="#{dependente.dataNascimento}" mask="99/99/9999" label="#{msg['label.pessoa.dtnascimento']}" style="width:80%; text-align: center" required="true">
+								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+							</p:inputMask>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column style="width:32px">
+					<p:rowEditor />
+				</p:column>
+				
+				<p:column style="width:32px; text-align: center">
+					<h:commandLink id="RemoveAjax" action="#{clienteMB.onDeleteLinhaDependente(dependente)}">
+						<p:ajax process="@this" update="form_cliente:dtable_dependente" />
+						<i class="glyphicon glyphicon-trash" style="font-size: 12px;"></i>
+					</h:commandLink>
+				</p:column>
+			</p:dataTable>
+			
+			<h:commandButton id="AddAjax" value="Add" action="#{clienteMB.onAddDependente()}">
+				<p:ajax process="@this" update="form_cliente:dtable_dependente" />
+			</h:commandButton>
 		</fieldset>
 	
 		<p:separator/>
