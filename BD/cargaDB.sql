@@ -99,8 +99,8 @@ insert into grupo values ('CLIENTE');
 insert into grupo values ('GESTOR');
 
 --PlanoAssinatura
-insert into planoassinatura (nextval('seqplanoassinatura'),'Plano Padrão','Plano de 12X R$40,00',480.00,12,15,True);
-insert into planoassinatura (nextval('seqplanoassinatura'),'Plano Padrão','Plano de 3X R$160,00',480.00,3,15,True);
+insert into planoassinatura values (nextval('seqplanoassinatura'),'Padrão 12X','Plano de 12X R$40,00',480.00,12,15,True);
+insert into planoassinatura values (nextval('seqplanoassinatura'),'Padrão 3X','Plano de 3X R$160,00',480.00,3,15,True);
 
 --INSERT PESSOA GESTOR
 INSERT INTO pessoa values (nextval('seqpessoa'), null, 'Gestor Odontofight', null, 'F', '00000000000', '0000', 'SSPDF', 'M', '2000-01-01', '2000-01-01', 'gestor@odontofight.com.br');
