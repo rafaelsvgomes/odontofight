@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     21/03/2016 13:16:30                          */
+/* Created on:     29/03/2016 08:30:11                          */
 /*==============================================================*/
 
 
@@ -466,7 +466,7 @@ create table PESSOACONTA (
    IDTIPOCONTA          BIGINT               null,
    CODBANCO             INT4                 not null,
    NUMAGENCIA           VARCHAR(10)          not null,
-   NUMCONTA             BIGINT               not null,
+   NUMCONTA             VARCHAR(20)          not null,
    BOLCONTAPRINCIPAL    BOOL                 not null,
    constraint PK_PESSOACONTA primary key (IDPESSOACONTA)
 );
