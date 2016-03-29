@@ -12,6 +12,7 @@
 	</div>
 	
 	<h:form id="form_cliente" styleClass="form-horizontal">
+		<p:growl id="grow_form_cliente" showDetail="false" autoUpdate="true"/>
 		<fieldset>
 			<legend>
 				<small> <h:outputText value="Indicação" /></small>
@@ -24,6 +25,7 @@
 		                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
 		                <f:selectItems value="#{clienteMB.listaPessoasIndicacao}" var="pessoaIndica" itemLabel="#{pessoaIndica.id} - #{pessoaIndica.nomePessoa}" itemValue="#{pessoaIndica}"/>
 	    	        </p:selectOneMenu>
+	    	        <h:message for="selectPessoaIndicacao" styleClass="ui-message-error"/>
 				</div>
 			</div>
 		</fieldset>
@@ -46,12 +48,13 @@
 				<div class="control-group">
 					<div class="controls">
 						<p:outputLabel styleClass="control-label" value="#{clienteMB.cliente.tipoPessoa == 'J' ? msg['label.pessoa.cnpj'] : msg['label.pessoa.cpf']} *" /> 
-						<p:inputMask id="cnpj" mask="#{clienteMB.cliente.tipoPessoa == 'J' ? '99.999.999/9999-99' : '999.999.999-99'}" converter="converter.CpfCnpjConverter"   
+						<p:inputMask id="cpf_cnpj" mask="#{clienteMB.cliente.tipoPessoa == 'J' ? '99.999.999/9999-99' : '999.999.999-99'}" converter="converter.CpfCnpjConverter"   
 							label="#{clienteMB.cliente.tipoPessoa == 'J' ? msg['label.pessoa.cnpj'] : msg['label.pessoa.cpf']}" 
 							value="#{clienteMB.cliente.numCpfCnpj}" required="true" styleClass="input-large" 
 							validator="#{cpfCnpjUtilizadoValidator.validate}">
 							<f:param id="idSelecionado" name="idSelecionado" value="#{clienteMB.idSelecionado}"/>
 						</p:inputMask>
+						<h:message for="cpf_cnpj" styleClass="ui-message-error"/>
 					</div>
 				</div>
 			
@@ -61,6 +64,7 @@
 						<p:inputText id="nome" value="#{clienteMB.cliente.nomePessoa}" label="#{msg['label.pessoa.nome']}"  required="true" styleClass="input-large">
 							<f:validateLength minimum="5" maximum="100" />
 						</p:inputText>
+						<h:message for="nome" styleClass="ui-message-error"/>
 					</div>
 				</div>
 				<ui:fragment rendered="#{clienteMB.cliente.tipoPessoa == 'J'}" >
@@ -70,6 +74,7 @@
 							<p:inputText id="rzSocial" value="#{clienteMB.cliente.descRazaoSocial}" label="#{msg['label.pessoa.dsrazaosocial']}" required="true" 
 									rendered="#{clienteMB.cliente.tipoPessoa == 'J'}" styleClass="input-large"/>
 						</div>
+						<h:message for="rzSocial" styleClass="ui-message-error"/>
 					</div>
 				</ui:fragment>
 
@@ -78,12 +83,14 @@
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.rg']} *" />
 							<p:inputText id="rg" value="#{clienteMB.cliente.numRg}" label="#{msg['label.pessoa.rg']}" required="true" />
+							<h:message for="rg" styleClass="ui-message-error"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.orgao.emissor']} *" />
 							<p:inputText id="orgaoEmiss" value="#{clienteMB.cliente.descOrgaoEmissorRg}" label="#{msg['label.pessoa.orgao.emissor']}" required="true" style="text-transform: uppercase;" />
+							<h:message for="orgaoEmiss" styleClass="ui-message-error"/>
 						</div>
 					</div>
 					<div class="control-group">
@@ -92,6 +99,7 @@
 							<p:inputMask id="date" value="#{clienteMB.cliente.dataNascimento}" mask="99/99/9999" label="#{msg['label.pessoa.dtnascimento']}" required="true">
 								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
 							</p:inputMask>
+							<h:message for="date" styleClass="ui-message-error"/>
 						</div>
 					</div>
 				
@@ -113,21 +121,22 @@
 			        	styleClass="input-large" />
 				</div>
 			</div>
-			
 			<div class="control-group">
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.celular']} *" />
-			        <p:inputMask mask="(99)99999999?9" value="#{clienteMB.celular.descTelefone}"  converter="converter.TelefoneConverter" label="#{msg['label.pessoa.celular']}" 
+			        <p:inputMask id="celular" mask="(99)99999999?9" value="#{clienteMB.celular.descTelefone}"  converter="converter.TelefoneConverter" label="#{msg['label.pessoa.celular']}" 
 			        	required="true" styleClass="input-large" />
+					<h:message for="celular" styleClass="ui-message-error"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.email']} *" />
-					<p:inputText value="#{clienteMB.cliente.descEmail}" validator="#{emailValidator.validate}" label="#{msg['label.pessoa.email']}" 
+					<p:inputText id="email" value="#{clienteMB.cliente.descEmail}" validator="#{emailValidator.validate}" label="#{msg['label.pessoa.email']}" 
 						disabled="#{clienteMB.idSelecionado != null}" required="true" styleClass="input-large">
 						<f:validateLength minimum="5" maximum="100" />
 					</p:inputText>
+					<h:message for="email" styleClass="ui-message-error"/>
 				</div>
 			</div>
 		</fieldset>
@@ -290,18 +299,10 @@
 		<p:separator/>
 	
 		<div class="controls">
-			<p:commandButton value="#{msg['button.salvar']}" action="#{clienteMB.salvar}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
+			<p:commandButton value="#{msg['button.salvar']}" update="form_cliente" action="#{clienteMB.salvar}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
 				oncomplete="PF('dlgExec').hide();" rendered="#{clienteMB.cliente != null}" />
-			
 			<p:button value="#{msg['button.cancelar']}" outcome="lista_cliente" styleClass="btn" />
 		</div>
-		<p:confirmDialog id="confirmDialog" message="#{msg['excluir.cliente.confirma']}" header="#{msg['excluir.cliente']}" severity="alert" widgetVar="confirmation">  
-	        <p:commandButton id="confirm" value="#{msg['confirma.sim']}" update="messages" oncomplete="PF('confirmation').hide()" action="#{clienteMB.remover}" />  
-	        <p:commandButton id="decline" value="#{msg['confirma.nao']}" update="messages" onclick="PF('confirmation').hide()" type="button" />
-	    </p:confirmDialog>
-	    
-	    <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
-		
 		<h:inputHidden value="#{clienteMB.cliente.id}" />
 	</h:form>
 </ui:fragment>

@@ -138,15 +138,11 @@
 				<p:ajax process="@this" update="form_contrato:dtable_rateio" />
 			</h:commandButton>
 		</fieldset>
-		
-	    <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
 		<div class="controls">
 			<p:commandButton value="#{msg['button.salvar']}" action="#{clienteMB.salvarContratoCliente}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
 				oncomplete="PF('dlgExec').hide();" rendered="#{clienteMB.cliente != null}" disabled="#{clienteMB.operacao == 'V'}"/>
 			<p:button value="#{msg['button.cancelar']}" outcome="../cliente/lista_cliente.xhtml" styleClass="btn" />
 		</div>
-	    
-		
 		<h:inputHidden value="#{clienteMB.cliente.id}" />
 	</h:form>
 </ui:fragment>

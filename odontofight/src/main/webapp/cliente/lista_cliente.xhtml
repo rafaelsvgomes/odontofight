@@ -22,10 +22,10 @@
 		</div>
 		<h:form>
 			<p:dataTable id="dataTable" var="cliente"
-				value="#{clienteMB.listaClientes}" paginator="true" rows="10" paginatorPosition="bottom"
+				value="#{clienteMB.listaClientes}" paginator="true" rows="10" paginatorPosition="bottom" sortMode="multiple"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				currentPageReportTemplate="{currentPage} de {totalPages}" rowsPerPageTemplate="10,20,50" emptyMessage="#{msg['alerta.nenhum.cliente.encontrado']}" >
-				<p:column style="text-align: center; width: 20px">
+				<p:column sortBy="#{cliente.id}" style="text-align: center; width: 40px">
 					<f:facet name="header">
 						<h:outputText value="#" />
 					</f:facet>
@@ -38,7 +38,7 @@
 					</f:facet>
 					<h:link outcome="editar_cliente" value="#{cliente.nomePessoa}"
 						title="#{msg['label.editar']} #{cliente.nomePessoa}">
-						<f:param name="id" value="#{cliente.id}" />
+						<f:param name="cli" value="#{cliente.id}" />
 					</h:link>
 				</p:column>
 				
@@ -61,6 +61,12 @@
 						<h:outputText value="#{msg['label.cliente.situacao']}" />
 					</f:facet>
 					<h:outputText value="#{cliente.situacao.descSituacao}" />
+				</p:column>
+				<p:column sortBy="#{cliente.dataAtualizacao}">
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.dtatualizacao']}" />
+					</f:facet>
+					<h:outputText value="#{cliente.dataAtualizacao}" />
 				</p:column>
 				<p:column style="text-align: center; width: 75px">
 					<f:facet name="header">

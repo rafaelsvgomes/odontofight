@@ -37,12 +37,12 @@ public class UsuarioMB extends GenericMB {
     @EJB
     UsuarioServicoEJB ejb;
 
-    public void alterarSenha() {
+    public String alterarSenha() {
         try {
             Usuario usuario = ejb.find(getUsuarioLogado().getIdUsuario());
             if (!usuario.getDescSenha().equals(SenhaUtil.criptografarSenha(senhaAtual))) {
                 MensagemUtil.addMensagemErro("msg.erro.senha.atual.incorreta", "");
-                return;
+                return null;
             }
             usuario.setDescSenha(SenhaUtil.criptografarSenha(novaSenha));
             ejb.save(usuario);
@@ -51,6 +51,7 @@ public class UsuarioMB extends GenericMB {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.alterar.senha", ex.getMessage());
         }
+        return "/layout/home.xhtml";
     }
 
     public void efetuarLogout() throws IOException {

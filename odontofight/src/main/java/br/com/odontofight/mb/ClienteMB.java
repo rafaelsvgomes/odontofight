@@ -27,6 +27,7 @@ import br.com.odontofight.entidade.PlanoAssinatura;
 import br.com.odontofight.entidade.Situacao;
 import br.com.odontofight.entidade.UF;
 import br.com.odontofight.enums.TipoPessoa;
+import br.com.odontofight.enums.TipoSexo;
 import br.com.odontofight.servico.ClienteServicoEJB;
 import br.com.odontofight.util.DataUtil;
 import br.com.odontofight.util.MensagemUtil;
@@ -80,6 +81,7 @@ public class ClienteMB extends GenericPessoaMB {
 
             cliente = new Cliente();
             cliente.setTipoPessoa(TipoPessoa.F);
+            cliente.setTipoSexo(TipoSexo.M);
             cliente.setSituacao(new Situacao(Situacao.CADASTRADO));
             cliente.setClienteLuta(new ClienteLuta());
             iniciarTelefonePessoa(cliente);

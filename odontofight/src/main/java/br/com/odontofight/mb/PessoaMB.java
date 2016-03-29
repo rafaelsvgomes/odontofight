@@ -17,6 +17,7 @@ import br.com.odontofight.entidade.Situacao;
 import br.com.odontofight.entidade.TipoConta;
 import br.com.odontofight.entidade.UF;
 import br.com.odontofight.enums.TipoPessoa;
+import br.com.odontofight.enums.TipoSexo;
 import br.com.odontofight.servico.PessoaServicoEJB;
 import br.com.odontofight.util.MensagemUtil;
 
@@ -54,6 +55,7 @@ public class PessoaMB extends GenericPessoaMB {
     private void iniciarIncuir() {
         idSelecionado = null;
         pessoa.setTipoPessoa(TipoPessoa.F);
+        pessoa.setTipoSexo(TipoSexo.M);
         pessoa.setSituacao(new Situacao(Situacao.CADASTRADO));
         iniciarTelefonePessoa(pessoa);
         iniciarEnderecoPessoa(pessoa);

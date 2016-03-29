@@ -16,55 +16,54 @@
 				<small> <h:outputText value="#{msg['label.editar']}" /></small>
 			</h3>
 		</div>
-		<h:form  styleClass="form-horizontal">
-			<p:tab id="tabEditarSenha" title="Senha">
-				<fieldset>
-					<legend>
-						<small> <h:outputText value="#{msg['page.title.alterar.senha']}" /></small>
-					</legend>
-					
-					<div class="control-group">
-						<div class="controls">
-							<p:outputLabel styleClass="control-label" value="#{msg['label.usuario.login']} *" />
-							<p:inputText value="#{usuarioLogado.descUsuario}" label="#{msg['label.usuario.login']}" required="true" immediate="true" styleClass="input-large" disabled="true" />
-						</div>
+		<h:form id="form_senha" styleClass="form-horizontal">
+			<fieldset>
+				<legend>
+					<small> <h:outputText value="#{msg['page.title.alterar.senha']}" /></small>
+				</legend>
+				
+				<div class="control-group">
+					<div class="controls">
+						<p:outputLabel styleClass="control-label" value="#{msg['label.usuario.login']} *" />
+						<p:inputText value="#{usuarioLogado.descUsuario}" label="#{msg['label.usuario.login']}" required="true" immediate="true" styleClass="input-large" disabled="true" />
 					</div>
-					
-					<div class="control-group">
-						<div class="controls">
-							<p:outputLabel styleClass="control-label" value="#{msg['label.usuario.senha.atual']} *" />
-							<p:password id="senhaAtual" value="#{usuarioMB.senhaAtual}" label="#{msg['label.usuario.senha.atual']}" required="true" styleClass="input-large"/>
-						</div>
+				</div>
+				
+				<div class="control-group">
+					<div class="controls">
+						<p:outputLabel styleClass="control-label" value="#{msg['label.usuario.senha.atual']} *" />
+						<p:password id="senhaAtual" value="#{usuarioMB.senhaAtual}" label="#{msg['label.usuario.senha.atual']}" required="true" styleClass="input-large"/>
 					</div>
-					
-					<div class="control-group">
-						<div class="controls">
-							<p:outputLabel styleClass="control-label" value="#{msg['label.usuario.nova.senha']} *" />
-							<p:password id="pwd1" value="#{usuarioMB.novaSenha}" match="pwd2" label="#{msg['label.usuario.nova.senha']}" required="true" styleClass="input-large"
-							validatorMessage="Senhas não conferem" feedback="true" promptLabel="Digite a senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte" />
-						</div>
+				</div>
+				
+				<div class="control-group">
+					<div class="controls">
+						<p:outputLabel styleClass="control-label" value="#{msg['label.usuario.nova.senha']} *" />
+						<p:password id="pwd1" value="#{usuarioMB.novaSenha}" match="pwd2" label="#{msg['label.usuario.nova.senha']}" required="true" styleClass="input-large"
+						validatorMessage="Senhas não conferem" feedback="true" promptLabel="Digite a senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte" />
 					</div>
-					
-					<div class="control-group">
-						<div class="controls">
-							<p:outputLabel styleClass="control-label" value="#{msg['label.usuario.confirmar.nova.senha']} *" />
-							<p:password id="pwd2" value="#{usuarioMB.novaSenha}" label="#{msg['label.usuario.confirmar.nova.senha']}" required="true" styleClass="input-large" 
-							validatorMessage="Senhas não conferem" feedback="true" promptLabel="Confirme a senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte" />
-						</div>
+				</div>
+				
+				<div class="control-group">
+					<div class="controls">
+						<p:outputLabel styleClass="control-label" value="#{msg['label.usuario.confirmar.nova.senha']} *" />
+						<p:password id="pwd2" value="#{usuarioMB.novaSenha}" label="#{msg['label.usuario.confirmar.nova.senha']}" required="true" styleClass="input-large" 
+						validatorMessage="Senhas não conferem" feedback="true" promptLabel="Confirme a senha" weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte" />
 					</div>
-				</fieldset>
-			</p:tab>
+				</div>
+			</fieldset>
 			
 			<p:separator/>
 			<div class="controls">
 				<p:commandButton value="#{msg['button.salvar']}" oncomplete="(!args.validationFailed) ? PF('confirmation').show() : PF('confirmation').hide()" styleClass="btn btn-success" />
+				<p:button value="#{msg['button.cancelar']}" outcome="/layout/home.xhtml" styleClass="btn" />
 			</div>
 			<p:confirmDialog id="confirmDialog" message="#{msg['alterar.senha.confirma']}" header="#{msg['page.title.alterar.senha']}" severity="alert" widgetVar="confirmation">  
 		        <p:commandButton id="confirm" value="#{msg['confirma.sim']}"  action="#{usuarioMB.alterarSenha()}" update="messages, senhaGrowl" oncomplete="PF('confirmation').hide(); PF('dlgExec').hide();" onclick="PF('dlgExec').show();"/>  
 		        <p:commandButton id="decline" value="#{msg['confirma.nao']}" update="messages" onclick="PF('confirmation').hide()" type="button" />
 		    </p:confirmDialog>
 		    <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" severity="warn, error"/>
-		    <p:growl id="senhaGrowl" severity="info"/>
+		    <p:growl id="senhaGrowl" severity="info" showDetail="true"/>
 		</h:form>
 	</ui:define>
 </ui:composition>

@@ -11,7 +11,8 @@
 		</h3>
 	</div>
 	
-	<h:form styleClass="form-horizontal">
+	<h:form id="form_pessoa" styleClass="form-horizontal">
+		<p:growl id="grow_form_pessoa" showDetail="false" autoUpdate="true"/>
 		<fieldset>
 			<legend>
 				<small> <h:outputText value="Dados Pessoais" /></small>
@@ -24,18 +25,20 @@
 						<f:selectItem itemLabel="Pessoa Jurídica" itemValue="J" />
 						<p:ajax update="painelCpfCnpj" event="change" onstart="PF('dlgExec').show();" oncomplete="PF('dlgExec').hide();"/>
 					</p:selectOneRadio>
+					<h:message for="tppessoa" styleClass="ui-message-error"/>
 				</div>
 			</div>
 			<p:outputPanel id="painelCpfCnpj">
 				<div class="control-group">
 					<div class="controls">
 						<p:outputLabel styleClass="control-label" value="#{pessoaMB.pessoa.tipoPessoa == 'J' ? msg['label.pessoa.cnpj'] : msg['label.pessoa.cpf']} *" /> 
-						<p:inputMask id="cnpj" mask="#{pessoaMB.pessoa.tipoPessoa == 'J' ? '99.999.999/9999-99' : '999.999.999-99'}" converter="converter.CpfCnpjConverter"   
+						<p:inputMask id="cpf_cnpj" mask="#{pessoaMB.pessoa.tipoPessoa == 'J' ? '99.999.999/9999-99' : '999.999.999-99'}" converter="converter.CpfCnpjConverter"   
 							label="#{pessoaMB.pessoa.tipoPessoa == 'J' ? msg['label.pessoa.cnpj'] : msg['label.pessoa.cpf']}" 
 							value="#{pessoaMB.pessoa.numCpfCnpj}" required="true" styleClass="input-large" 
 							validator="#{cpfCnpjUtilizadoValidator.validate}">
 							<f:param id="idSelecionado" name="idSelecionado" value="#{pessoaMB.idSelecionado}"/>
 						</p:inputMask>
+						<h:message for="cpf_cnpj" styleClass="ui-message-error"/>
 					</div>
 				</div>
 			
@@ -45,6 +48,7 @@
 						<p:inputText id="nome" value="#{pessoaMB.pessoa.nomePessoa}" label="#{msg['label.pessoa.nome']}"  required="true" styleClass="input-large">
 							<f:validateLength minimum="5" maximum="100" />
 						</p:inputText>
+						<h:message for="nome" styleClass="ui-message-error"/>
 					</div>
 				</div>
 				<ui:fragment rendered="#{pessoaMB.pessoa.tipoPessoa == 'J'}" >
@@ -53,6 +57,7 @@
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.dsrazaosocial']} *" rendered="#{pessoaMB.pessoa.tipoPessoa == 'J'}" />
 							<p:inputText id="rzSocial" value="#{pessoaMB.pessoa.descRazaoSocial}" label="#{msg['label.pessoa.dsrazaosocial']}" required="true" 
 									rendered="#{pessoaMB.pessoa.tipoPessoa == 'J'}" styleClass="input-large"/>
+							<h:message for="rzSocial" styleClass="ui-message-error"/>
 						</div>
 					</div>
 				</ui:fragment>
@@ -62,12 +67,14 @@
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.rg']} *" />
 							<p:inputText id="rg" value="#{pessoaMB.pessoa.numRg}" label="#{msg['label.pessoa.rg']}" required="true" />
+							<h:message for="rg" styleClass="ui-message-error"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.orgao.emissor']} *" />
 							<p:inputText id="orgaoEmiss" value="#{pessoaMB.pessoa.descOrgaoEmissorRg}" label="#{msg['label.pessoa.orgao.emissor']}" required="true" style="text-transform: uppercase;" />
+							<h:message for="orgaoEmiss" styleClass="ui-message-error"/>
 						</div>
 					</div>
 					<div class="control-group">
@@ -76,6 +83,7 @@
 							<p:inputMask id="date" value="#{pessoaMB.pessoa.dataNascimento}" mask="99/99/9999" label="#{msg['label.pessoa.dtnascimento']}" required="true">
 								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
 							</p:inputMask>
+							<h:message for="date" styleClass="ui-message-error"/>
 						</div>
 					</div>
 				
@@ -97,21 +105,22 @@
 			        	styleClass="input-large" />
 				</div>
 			</div>
-			
 			<div class="control-group">
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.celular']} *" />
-			        <p:inputMask mask="(99)99999999?9" value="#{pessoaMB.celular.descTelefone}"  converter="converter.TelefoneConverter" label="#{msg['label.pessoa.celular']}" 
+			        <p:inputMask id="celular" mask="(99)99999999?9" value="#{pessoaMB.celular.descTelefone}" converter="converter.TelefoneConverter" label="#{msg['label.pessoa.celular']}" 
 			        	required="true" styleClass="input-large" />
+		        	<h:message for="celular" styleClass="ui-message-error"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.email']} *" />
-					<p:inputText value="#{pessoaMB.pessoa.descEmail}" validator="#{emailValidator.validate}" label="#{msg['label.pessoa.email']}" 
+					<p:inputText id="email" value="#{pessoaMB.pessoa.descEmail}" validator="#{emailValidator.validate}" label="#{msg['label.pessoa.email']}" 
 						disabled="#{pessoaMB.idSelecionado != null}" required="true" styleClass="input-large">
 						<f:validateLength minimum="5" maximum="100" />
 					</p:inputText>
+					<h:message for="email" styleClass="ui-message-error" />
 				</div>
 			</div>
 		</fieldset>
@@ -123,34 +132,38 @@
 				<div class="control-group">
 					<div class="controls">
 						<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.banco']} *" />
-						<p:selectOneMenu value="#{pessoaMB.pessoaConta.banco}" converter="bancoConverter" label="#{msg['label.pessoa.banco']}" required="true">
+						<p:selectOneMenu id="banco" value="#{pessoaMB.pessoaConta.banco}" converter="bancoConverter" label="#{msg['label.pessoa.banco']}" required="true">
 			                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
 			                <f:selectItems value="#{pessoaMB.listaBancos}" var="bc" itemLabel="#{bc.descBanco}" />
 		    	        </p:selectOneMenu>
+		    	        <h:message for="banco" styleClass="ui-message-error"/>
 					</div>
 				</div>
 				
 				<div class="control-group">
 					<div class="controls">
 						<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.tpconta']} *" />
-						<p:selectOneMenu value="#{pessoaMB.pessoaConta.tipoConta}" converter="entityConverter" label="#{msg['label.pessoa.tpconta']}" required="true">
+						<p:selectOneMenu id="tp_conta" value="#{pessoaMB.pessoaConta.tipoConta}" converter="entityConverter" label="#{msg['label.pessoa.tpconta']}" required="true">
 			                <f:selectItem itemLabel="Selecione..." itemValue="" noSelectionOption="true" />
 			                <f:selectItems value="#{pessoaMB.listaTipoConta}" var="tpConta" itemLabel="#{tpConta.descTipoConta}" />
 		    	        </p:selectOneMenu>
+		    	        <h:message for="tp_conta" styleClass="ui-message-error"/>
 					</div>
 				</div>
 				
 				<div class="control-group">
 					<div class="controls">
 						<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.agencia']} *" />
-				        <p:inputText value="#{pessoaMB.pessoaConta.numAgencia}" label="#{msg['label.pessoa.agencia']}" required="true" styleClass="input-small"/>
+				        <p:inputText id="agencia" value="#{pessoaMB.pessoaConta.numAgencia}" label="#{msg['label.pessoa.agencia']}" required="true" styleClass="input-small"/>
+						<h:message for="agencia" styleClass="ui-message-error"/>
 					</div>
 				</div>
 				
 				<div class="control-group">
 					<div class="controls">
 						<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.conta']} *" />
-				        <p:inputText value="#{pessoaMB.pessoaConta.numConta}" label="#{msg['label.pessoa.conta']}" required="true" styleClass="input-small"/>
+				        <p:inputText id="conta" value="#{pessoaMB.pessoaConta.numConta}" label="#{msg['label.pessoa.conta']}" required="true" styleClass="input-small"/>
+				        <h:message for="conta" styleClass="ui-message-error"/>
 					</div>
 				</div>
 			</fieldset>
@@ -214,17 +227,10 @@
 	
 		<div class="controls">
 			<p:commandButton value="#{msg['button.salvar']}" action="#{pessoaMB.salvar}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
-				oncomplete="PF('dlgExec').hide();" rendered="#{pessoaMB.pessoa != null}" />
+				oncomplete="PF('dlgExec').hide();" update="form_pessoa" rendered="#{pessoaMB.pessoa != null}" />
 			
 			<p:button value="#{msg['button.cancelar']}" outcome="/layout/home.xhtml" styleClass="btn" />
 		</div>
-		<p:confirmDialog id="confirmDialog" message="#{msg['excluir.cliente.confirma']}" header="#{msg['excluir.cliente']}" severity="alert" widgetVar="confirmation">  
-	        <p:commandButton id="confirm" value="#{msg['confirma.sim']}" update="messages" oncomplete="PF('confirmation').hide()" action="#{pessoaMB.remover}" />  
-	        <p:commandButton id="decline" value="#{msg['confirma.nao']}" update="messages" onclick="PF('confirmation').hide()" type="button" />
-	    </p:confirmDialog>
-	    
-	    <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true" />
-		
 		<h:inputHidden value="#{pessoaMB.pessoa.id}" />
 	</h:form>
 </ui:fragment>
