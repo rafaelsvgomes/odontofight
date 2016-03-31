@@ -55,6 +55,17 @@
 					</f:facet>
 					<h:outputText value="#{pessoa.numCpfCnpj}" />
 				</p:column>
+				<p:column style="text-align: center; width: 75px">
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.contrato']}" />
+					</f:facet>
+					<h:commandLink action="#{clienteMB.converterPessoaParaCliente(pessoa.id)}" >
+						<i class="glyphicon glyphicon-pencil" title="Converter para Cliente"></i>
+						<f:param name="cli" value="#{cliente.id}" />
+					</h:commandLink>
+		            <h:link outcome="../contrato/incluir_contrato_cliente.xhtml" rendered="#{cliente.listaClienteContrato.size() == 0}">
+					</h:link>
+				</p:column>
 			</p:dataTable>
 		</h:form>
 	</ui:define>

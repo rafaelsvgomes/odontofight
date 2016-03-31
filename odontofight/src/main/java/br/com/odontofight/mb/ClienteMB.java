@@ -249,6 +249,10 @@ public class ClienteMB extends GenericPessoaMB {
         return Boolean.FALSE;
     }
 
+    public void converterPessoaParaCliente(Long idPessoa) {
+        ejb.salvaCliente(idPessoa);
+    }
+
     public void iniciarListarClientes() {
         if (!isPostBack()) {
             listaClientes = ejb.listarClientesSimples();

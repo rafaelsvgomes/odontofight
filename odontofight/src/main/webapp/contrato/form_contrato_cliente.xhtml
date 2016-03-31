@@ -128,7 +128,7 @@
 				</p:column>
 				
 				<p:column style="width:32px; text-align: center">
-					<h:commandLink id="RemoveAjax" action="#{clienteMB.onDeleteLinhaRateio(contratoRateio)}">
+					<h:commandLink id="RemoveAjax" action="#{clienteMB.onDeleteLinhaRateio(contratoRateio)}" disabled="#{clienteMB.operacao == 'V'}">
 						<p:ajax process="@this" update="form_contrato:dtable_rateio" />
 						<i class="glyphicon glyphicon-trash" style="font-size: 12px;"></i>
 					</h:commandLink>
