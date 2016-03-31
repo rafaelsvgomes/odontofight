@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     31/03/2016 14:30:11                          */
+/* Created on:     31/03/2016 14:46:46                          */
 /*==============================================================*/
 
 
@@ -569,9 +569,9 @@ create table PLANOPAGAMENTO (
    IDCLIENTECONTRATO    BIGINT               null,
    IDSITUACAOPARCELA    BIGINT               null,
    NUMPARCELA           BIGINT               null,
-   DATAVENCIMENTOPARCELA TIMESTAMP            null,
+   DATAVENCIMENTOPARCELA DATE                 null,
    VLPARCELA            NUMERIC(12,2)        null,
-   DATAPAGAMENTOPARCELA TIMESTAMP            null,
+   DATAPAGAMENTOPARCELA DATE                 null,
    VLPAGO               NUMERIC(12,2)        null,
    constraint PK_PLANOPAGAMENTO primary key (IDPLANOPAGAMENTO)
 );
