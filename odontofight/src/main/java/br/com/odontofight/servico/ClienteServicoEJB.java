@@ -1,6 +1,8 @@
 package br.com.odontofight.servico;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -17,6 +19,9 @@ import br.com.odontofight.entidade.PessoaAcademia;
 import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
+import br.com.odontofight.entidade.PlanoPagamento;
+import br.com.odontofight.entidade.SituacaoParcela;
+import br.com.odontofight.util.DataUtil;
 
 /**
  * Session Bean implementation class ClienteEJB
@@ -109,6 +114,14 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
         removerTelefone(cliente);
         removerEndereco(cliente);
         removerDependentes(cliente);
+
+        if (cliente.getId() == null || cliente.getId() == 0) {
+            cliente.setDataCadastro(new Date());
+            cliente.setDataAtualizacao(new Date());
+        } else {
+            cliente.setDataAtualizacao(new Date());
+        }
+
         save(cliente);
     }
 
@@ -140,7 +153,36 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
     }
 
     public void salvarClienteContrato(ClienteContrato clienteContrato) {
+        setPlanoPagamentoContrato(clienteContrato);
         em.persist(clienteContrato);
+    }
+
+    private void setPlanoPagamentoContrato(ClienteContrato clienteContrato) {
+        Date dataVencimentoAux = DataUtil.getDataVencimentoMesAtual(clienteContrato.getDiaVencimentoParcela());
+        for (int i = 0; i < clienteContrato.getPlanoAssinatura().getQtdParcela(); i++) {
+            PlanoPagamento planoPagamento = new PlanoPagamento();
+            planoPagamento.setClienteContrato(clienteContrato);
+            planoPagamento.setValorParcela(clienteContrato.getValorParcela());
+            planoPagamento.setNumParcela(Long.valueOf(i + 1));
+
+            if (i != 0) {
+                planoPagamento.setSituacaoParcela(new SituacaoParcela(SituacaoParcela.ABERTO));
+                planoPagamento.setDataVencimentoParcela(getPoximaDataVencimento(dataVencimentoAux));
+            } else {
+                planoPagamento.setSituacaoParcela(new SituacaoParcela(SituacaoParcela.LIQUIDADO));
+                planoPagamento.setValorPago(clienteContrato.getValorParcela());
+                planoPagamento.setDataVencimentoParcela(new Date());
+                planoPagamento.setDataPagamentoParcela(new Date());
+            }
+            dataVencimentoAux = planoPagamento.getDataVencimentoParcela();
+
+            clienteContrato.getListaPlanoPagamentos().add(planoPagamento);
+        }
+
+    }
+
+    private Date getPoximaDataVencimento(Date dataUltimaParcela) {
+        return DataUtil.incrementarData(dataUltimaParcela, Calendar.MONTH, 1);
     }
 
 }

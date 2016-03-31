@@ -43,12 +43,15 @@ public class PlanoPagamento extends EntidadeGenerica {
     @Column(nullable = false)
     private Date dataVencimentoParcela;
 
-    @Column(nullable = false)
+    @Column(name = "vlParcela", nullable = false)
     private BigDecimal valorParcela;
 
     private Date dataPagamentoParcela;
 
+    @Column(name = "vlPago")
     private BigDecimal valorPago;
+
+    private Long numParcela;
 
     public Long getId() {
         return id;
@@ -104,6 +107,14 @@ public class PlanoPagamento extends EntidadeGenerica {
 
     public void setValorPago(BigDecimal valorPago) {
         this.valorPago = valorPago;
+    }
+
+    public Long getNumParcela() {
+        return numParcela;
+    }
+
+    public void setNumParcela(Long numParcela) {
+        this.numParcela = numParcela;
     }
 
 }

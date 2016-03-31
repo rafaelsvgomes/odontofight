@@ -58,6 +58,12 @@ public class DataUtil {
         return dataFormatada;
     }
 
+    public static Date getDataVencimentoMesAtual(Integer diaVencimento) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.DAY_OF_MONTH, diaVencimento);
+        return c.getTime();
+    }
+
     /**
      * Incrementa uma data a partir da sua escala, definida pelas constantes de Calendar.
      * 

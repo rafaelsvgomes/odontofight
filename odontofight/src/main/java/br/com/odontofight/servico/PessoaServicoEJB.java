@@ -1,6 +1,7 @@
 package br.com.odontofight.servico;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -94,7 +95,32 @@ public class PessoaServicoEJB extends GenericPersistencia<Pessoa, Long> {
     public void salvarPessoa(Pessoa pessoa) {
         removerTelefone(pessoa);
         removerEndereco(pessoa);
+
+        if (pessoa instanceof PessoaIndicacao) {
+            atualizarPessoaIndicacao((PessoaIndicacao) pessoa);
+        } else {
+            atualizarPessoaAcademia((PessoaAcademia) pessoa);
+        }
+
         save(pessoa);
+    }
+
+    private void atualizarPessoaIndicacao(PessoaIndicacao pessoa) {
+        if (pessoa.getId() == null || pessoa.getId() == 0) {
+            pessoa.setDataCadastro(new Date());
+            pessoa.setDataAtualizacao(new Date());
+        } else {
+            pessoa.setDataAtualizacao(new Date());
+        }
+    }
+
+    private void atualizarPessoaAcademia(PessoaAcademia pessoa) {
+        if (pessoa.getId() == null || pessoa.getId() == 0) {
+            pessoa.setDataCadastro(new Date());
+            pessoa.setDataAtualizacao(new Date());
+        } else {
+            pessoa.setDataAtualizacao(new Date());
+        }
     }
 
     public void removerTelefone(Pessoa cliente) {

@@ -32,7 +32,7 @@
 					<h:outputText value="#{cliente.id}"/>
 				</p:column>
 	
-				<p:column sortBy="#{cliente.nomePessoa}">
+				<p:column sortBy="#{cliente.nomePessoa}" style="width: 300px">
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.pessoa.nome']}" />
 					</f:facet>
@@ -41,19 +41,12 @@
 						<f:param name="cli" value="#{cliente.id}" />
 					</h:link>
 				</p:column>
-				
-				<p:column sortBy="#{cliente.tipoPessoa.descTipoPessoa}" style="text-align: center;">
-					<f:facet name="header">
-						<h:outputText value="#{msg['label.pessoa.tppessoa']}" />
-					</f:facet>
-					<h:outputText value="#{cliente.tipoPessoa.descTipoPessoa}" />
-				</p:column>
 	
-				<p:column sortBy="#{cliente.numCpfCnpj}">
+				<p:column sortBy="#{cliente.telefoneCelular.descTelefone}">
 					<f:facet name="header">
-						<h:outputText value="#{msg['label.pessoa.cpf.cnpj']}" />
+						<h:outputText value="#{msg['label.pessoa.celular']}" />
 					</f:facet>
-					<h:outputText value="#{cliente.numCpfCnpj}" />
+					<h:outputText value="#{cliente.telefoneCelular.descTelefone}" />
 				</p:column>
 				
 				<p:column sortBy="#{cliente.situacao.descSituacao}">
@@ -62,11 +55,13 @@
 					</f:facet>
 					<h:outputText value="#{cliente.situacao.descSituacao}" />
 				</p:column>
-				<p:column sortBy="#{cliente.dataAtualizacao}">
+				<p:column sortBy="#{cliente.dataAtualizacao}" style="text-align: center;">
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.dtatualizacao']}" />
 					</f:facet>
-					<h:outputText value="#{cliente.dataAtualizacao}" />
+					<h:outputText value="#{cliente.dataAtualizacao}" >
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+					</h:outputText>
 				</p:column>
 				<p:column style="text-align: center; width: 75px">
 					<f:facet name="header">

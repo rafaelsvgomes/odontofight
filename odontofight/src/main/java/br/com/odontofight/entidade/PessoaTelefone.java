@@ -34,6 +34,11 @@ public class PessoaTelefone extends EntidadeGenerica {
         this.pessoa = pessoa;
     }
 
+    public PessoaTelefone(TipoTelefone tipoTelefone, String numero) {
+        this.tipoTelefone = tipoTelefone;
+        this.descTelefone = numero;
+    }
+
     @Id
     @Column(name = "IDPessoaTelefone")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqpessoatelefone")

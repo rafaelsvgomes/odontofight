@@ -85,6 +85,15 @@ public abstract class Pessoa extends EntidadeGenerica {
         this.numCpfCnpj = numCpfCnpj;
     }
 
+    public Pessoa(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, String celular) {
+        this.id = id;
+        this.nomePessoa = nomePessoa;
+        this.tipoPessoa = tipoPessoa;
+        this.numCpfCnpj = numCpfCnpj;
+        this.listaTelefone = new ArrayList<PessoaTelefone>();
+        this.listaTelefone.add(new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), celular));
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqpessoa")
     @Column(name = "idPessoa", unique = true, nullable = false)
@@ -140,8 +149,9 @@ public abstract class Pessoa extends EntidadeGenerica {
     @Transient
     private Situacao situacao;
 
-    @Transient
-    private Date dataAtualizacao;
+    //
+    // @Transient
+    // private Date dataAtualizacao;
 
     public Long getId() {
         return id;
@@ -267,13 +277,14 @@ public abstract class Pessoa extends EntidadeGenerica {
         this.situacao = situacao;
     }
 
-    public Date getDataAtualizacao() {
-        return dataAtualizacao;
-    }
-
-    public void setDataAtualizacao(Date dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
-    }
+    //
+    // public Date getDataAtualizacao() {
+    // return dataAtualizacao;
+    // }
+    //
+    // public void setDataAtualizacao(Date dataAtualizacao) {
+    // this.dataAtualizacao = dataAtualizacao;
+    // }
 
     public PessoaTelefone getTelefoneCelular() {
         for (PessoaTelefone tel : this.getListaTelefone()) {

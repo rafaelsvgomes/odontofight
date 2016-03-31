@@ -66,7 +66,7 @@ public class PessoaConta extends EntidadeGenerica {
     private String numAgencia;
 
     @Column(nullable = false)
-    private Long numConta;
+    private String numConta;
 
     @Column(nullable = false)
     private Boolean bolContaPrincipal;
@@ -111,11 +111,11 @@ public class PessoaConta extends EntidadeGenerica {
         this.numAgencia = numAgencia;
     }
 
-    public Long getNumConta() {
+    public String getNumConta() {
         return numConta;
     }
 
-    public void setNumConta(Long numConta) {
+    public void setNumConta(String numConta) {
         this.numConta = numConta;
     }
 

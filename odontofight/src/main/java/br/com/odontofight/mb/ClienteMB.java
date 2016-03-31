@@ -112,13 +112,6 @@ public class ClienteMB extends GenericPessoaMB {
 
     public String salvar() {
         try {
-            if (cliente.getId() == null || cliente.getId() == 0) {
-                cliente.setDataCadastro(new Date());
-                cliente.setDataAtualizacao(new Date());
-            } else {
-                cliente.setDataAtualizacao(new Date());
-            }
-
             if (!salvarClienteLuta()) {
                 cliente.setClienteLuta(null);
             }

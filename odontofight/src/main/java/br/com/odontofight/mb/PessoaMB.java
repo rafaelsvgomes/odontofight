@@ -1,6 +1,5 @@
 package br.com.odontofight.mb;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -120,13 +119,6 @@ public class PessoaMB extends GenericPessoaMB {
 
     public String salvar() {
         try {
-            if (pessoa.getId() == null || pessoa.getId() == 0) {
-                pessoa.setDataCadastro(new Date());
-                pessoa.setDataAtualizacao(new Date());
-            } else {
-                pessoa.setDataAtualizacao(new Date());
-            }
-
             ejb.salvarPessoa(pessoa);
         } catch (Exception ex) {
             ex.printStackTrace();

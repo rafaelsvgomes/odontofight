@@ -30,7 +30,7 @@ import br.com.odontofight.enums.TipoSexo;
         @NamedQuery(name = Cliente.LISTAR_CLIENTES_SIMPLES, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.tipoPessoa, c.numCpfCnpj, c.situacao.id, "
                 + "c.situacao.descSituacao) FROM Cliente c"),
         @NamedQuery(name = Cliente.LISTAR_CLIENTES_SIMPLES_COM_CONTRATO, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.tipoPessoa, c.numCpfCnpj, c.situacao.id, "
-                + "c.situacao.descSituacao, cc.id) FROM Cliente c LEFT JOIN c.listaClienteContrato cc") })
+                + "c.situacao.descSituacao, pt.descTelefone, c.dataAtualizacao, cc.id) FROM PessoaTelefone pt, Cliente c LEFT JOIN c.listaClienteContrato cc WHERE c.id = pt.pessoa.id and pt.tipoTelefone.id = 2") })
 public class Cliente extends Pessoa {
     private static final long serialVersionUID = 1L;
 
@@ -38,6 +38,7 @@ public class Cliente extends Pessoa {
     public static final String OBTER_CLIENTE_EDITAR = "Cliente.obterClienteEditar";
     public static final String LISTAR_CLIENTES_SIMPLES = "Cliente.listarClientesSimples";
     public static final String LISTAR_CLIENTES_SIMPLES_COM_CONTRATO = "Cliente.listarClientesSimplesComContrato";
+    public static final String LISTAR_CLIENTES_SIMPLES_COM_CONTRATO_SQL = "Cliente.listarClientesSimplesComContratoSql";
 
     /**
      * LISTAR_CLIENTES_INDICADORES
@@ -64,19 +65,16 @@ public class Cliente extends Pessoa {
         if (idClienteContrato != null) {
             this.getListaClienteContrato().add(new ClienteContrato(idClienteContrato));
         }
-
     }
 
-    /**
-     * LISTAR_CLIENTES_SIMPLES_COM_CONTRATO
-     */
-    public Cliente(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, Long idSituacao, String descSituacao, ClienteContrato clienteContrato) {
-        super(id, nomePessoa, tipoPessoa, numCpfCnpj);
+    public Cliente(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, Long idSituacao, String descSituacao, String celular, Date dataAtualizacao,
+            Long idClienteContrato) {
+        super(id, nomePessoa, tipoPessoa, numCpfCnpj, celular);
         this.situacao = new Situacao(idSituacao, descSituacao);
-        if (clienteContrato != null) {
-            this.getListaClienteContrato().add(clienteContrato);
+        this.dataAtualizacao = dataAtualizacao;
+        if (idClienteContrato != null) {
+            this.getListaClienteContrato().add(new ClienteContrato(idClienteContrato));
         }
-
     }
 
     /**

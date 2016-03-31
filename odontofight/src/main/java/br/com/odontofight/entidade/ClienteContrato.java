@@ -76,6 +76,9 @@ public class ClienteContrato extends EntidadeGenerica {
     @OneToMany(mappedBy = "clienteContrato", cascade = CascadeType.ALL)
     private List<ContratoRateio> listaContratoRateio;
 
+    @OneToMany(mappedBy = "clienteContrato", cascade = CascadeType.ALL)
+    private List<PlanoPagamento> listaPlanoPagamentos;
+
     public Long getId() {
         return id;
     }
@@ -173,6 +176,17 @@ public class ClienteContrato extends EntidadeGenerica {
 
     public void setValorComissaoContrato(BigDecimal valorComissaoContrato) {
         this.valorComissaoContrato = valorComissaoContrato;
+    }
+
+    public List<PlanoPagamento> getListaPlanoPagamentos() {
+        if (listaPlanoPagamentos == null) {
+            listaPlanoPagamentos = new ArrayList<PlanoPagamento>();
+        }
+        return listaPlanoPagamentos;
+    }
+
+    public void setListaPlanoPagamentos(List<PlanoPagamento> listaPlanoPagamentos) {
+        this.listaPlanoPagamentos = listaPlanoPagamentos;
     }
 
 }
