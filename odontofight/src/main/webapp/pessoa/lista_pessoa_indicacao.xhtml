@@ -59,8 +59,8 @@
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.contrato']}" />
 					</f:facet>
-					<h:commandLink action="#{clienteMB.converterPessoaParaCliente(pessoa.id)}" >
-						<i class="glyphicon glyphicon-pencil" title="Converter para Cliente"></i>
+					<h:commandLink action="#{pessoaMB.converterPessoaParaCliente(pessoa.id)}" >
+						<i class="glyphicon glyphicon-share-alt" title="Converter para Cliente"></i>
 						<f:param name="cli" value="#{cliente.id}" />
 					</h:commandLink>
 		            <h:link outcome="../contrato/incluir_contrato_cliente.xhtml" rendered="#{cliente.listaClienteContrato.size() == 0}">

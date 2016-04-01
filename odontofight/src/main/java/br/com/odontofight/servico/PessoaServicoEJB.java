@@ -17,6 +17,7 @@ import br.com.odontofight.entidade.PessoaConta;
 import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
+import br.com.odontofight.entidade.Situacao;
 
 /**
  * Session Bean implementation class ClienteEJB
@@ -144,5 +145,36 @@ public class PessoaServicoEJB extends GenericPersistencia<Pessoa, Long> {
             }
             pessoa.removePessoaEndereco(endereco);
         }
+    }
+
+    /**
+     * Método responsável por converter uma pessoa para cliente.
+     * 
+     * @param idPessoa void
+     * @param idPessoaLogado
+     * 
+     */
+    public void salvaCliente(Long idPessoa, Long idPessoaLogado) {
+        Pessoa p = em.find(Pessoa.class, idPessoa);
+
+        Cliente cliente = new Cliente();
+        cliente.setId(p.getId());
+        cliente.setDataCadastro(p.getDataCadastro());
+        cliente.setDataNascimento(p.getDataNascimento());
+        cliente.setDescEmail(p.getDescEmail());
+        cliente.setDescOrgaoEmissorRg(p.getDescOrgaoEmissorRg());
+        cliente.setDescRazaoSocial(p.getDescRazaoSocial());
+        cliente.setNomePessoa(p.getNomePessoa());
+        cliente.setNumCpfCnpj(p.getNumCpfCnpj());
+        cliente.setNumRg(p.getNumRg());
+        cliente.setTipoPessoa(p.getTipoPessoa());
+        cliente.setTipoSexo(p.getTipoSexo());
+
+        cliente.setPessoaIndicacao(new PessoaIndicacao(idPessoaLogado));
+        cliente.setSituacao(new Situacao(Situacao.CADASTRADO));
+        cliente.setDataAtualizacao(new Date());
+
+        em.persist(cliente);
+
     }
 }

@@ -30,6 +30,10 @@ public class PessoaIndicacao extends Pessoa {
     public PessoaIndicacao() {
     }
 
+    public PessoaIndicacao(Long idPessoa) {
+        this.id = idPessoa;
+    }
+
     public PessoaIndicacao(Long id, String numCpfCnpj, String nomePessoa) {
         super(id, numCpfCnpj, nomePessoa);
     }

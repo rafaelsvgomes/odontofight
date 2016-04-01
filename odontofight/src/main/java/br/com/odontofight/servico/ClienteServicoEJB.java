@@ -183,14 +183,4 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
         return DataUtil.incrementarData(dataUltimaParcela, Calendar.MONTH, 1);
     }
 
-    /**
-     * Método responsável por converter uma pessoa para cliente.
-     * 
-     * @param idPessoa void
-     * 
-     */
-    public void salvaCliente(Long idPessoa) {
-
-    }
-
 }

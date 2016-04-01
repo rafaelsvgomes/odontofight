@@ -144,6 +144,10 @@ public class PessoaMB extends GenericPessoaMB {
         return "lista_pessoa?faces-redirect=true";
     }
 
+    public void converterPessoaParaCliente(Long idPessoa) {
+        ejb.salvaCliente(idPessoa, getUsuarioLogado().getIdPessoa());
+    }
+
     public void iniciarListarPessoasIndicacao() {
         if (!isPostBack()) {
             listaPessoas = ejb.listarPessoasIndicacaoSimples();
