@@ -38,7 +38,10 @@ public class Cliente extends Pessoa {
     public static final String OBTER_CLIENTE_EDITAR = "Cliente.obterClienteEditar";
     public static final String LISTAR_CLIENTES_SIMPLES = "Cliente.listarClientesSimples";
     public static final String LISTAR_CLIENTES_SIMPLES_COM_CONTRATO = "Cliente.listarClientesSimplesComContrato";
-    public static final String LISTAR_CLIENTES_SIMPLES_COM_CONTRATO_SQL = "Cliente.listarClientesSimplesComContratoSql";
+    public static final String LISTAR_CLIENTES_SIMPLES_COM_CONTRATO_SQL = "SELECT p.idpessoa, p.nomepessoa, p.codtipopessoa, p.numcpfcnpj, s.idsituacao, s.dssituacao, pt.dstelefone, c.dataatualizacao, cc.idclientecontrato "
+            + "FROM Pessoa p, PessoaTelefone pt, Situacao s, Cliente c LEFT JOIN ClienteContrato cc ON c.idcliente = cc.idcliente "
+            + "WHERE p.idpessoa = pt.idpessoa AND p.idpessoa = c.idcliente AND c.idsituacao = s.idsituacao AND pt.idtipotelefone = " + TipoTelefone.CELULAR;
+    public static final String INSERIR_CLIENTE_CONVERSAO_QUERY_SQL = "INSERT INTO CLIENTE (idCliente, idSituacao, idPessoaIndicacao, dataAtualizacao) VALUES (?,?,?,?)";
 
     /**
      * LISTAR_CLIENTES_INDICADORES

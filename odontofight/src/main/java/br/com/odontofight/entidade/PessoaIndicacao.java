@@ -20,12 +20,15 @@ import br.com.odontofight.enums.TipoPessoa;
 @NamedQueries({
         @NamedQuery(name = PessoaIndicacao.LISTAR_PESSOAS_INDICACAO, query = "SELECT new br.com.odontofight.entidade.PessoaIndicacao(p.id, p.numCpfCnpj, p.nomePessoa) FROM PessoaIndicacao p"),
         @NamedQuery(name = PessoaIndicacao.LISTAR_PESSOAS_SIMPLES, query = "SELECT new br.com.odontofight.entidade.PessoaIndicacao(p.id, p.nomePessoa, p.tipoPessoa, p.numCpfCnpj) "
-                + " FROM PessoaIndicacao p") })
+                + " FROM PessoaIndicacao p WHERE p.id NOT IN (1)") })
 public class PessoaIndicacao extends Pessoa {
     private static final long serialVersionUID = 1L;
 
     public static final String LISTAR_PESSOAS_INDICACAO = "PessoaIndicacao.listarPessoasIndicacao";
     public static final String LISTAR_PESSOAS_SIMPLES = "PessoaIndicacao.listarPessoasSimples";
+    public static final String LISTAR_PESSOA_SIMPLES_SQL = "SELECT p.idpessoa, p.nomepessoa, p.codtipopessoa, p.numcpfcnpj, s.idsituacao, s.dssituacao, pt.dstelefone, c.idcliente "
+            + "FROM pessoaindicacao pi, PessoaTelefone pt, Situacao s, Pessoa p LEFT JOIN Cliente c ON p.idpessoa = c.idcliente "
+            + "WHERE pi.idpessoaindicacao = p.idpessoa and p.idpessoa = pt.idpessoa AND pi.idsituacao = s.idsituacao AND pt.idtipotelefone = " + TipoTelefone.CELULAR;
 
     public PessoaIndicacao() {
     }

@@ -1,5 +1,7 @@
 package br.com.odontofight.servico;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import br.com.odontofight.entidade.Cliente;
 import br.com.odontofight.entidade.Pessoa;
@@ -18,6 +21,8 @@ import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
 import br.com.odontofight.entidade.Situacao;
+import br.com.odontofight.enums.TipoPessoa;
+import br.com.odontofight.exception.NegocioException;
 
 /**
  * Session Bean implementation class ClienteEJB
@@ -44,6 +49,21 @@ public class PessoaServicoEJB extends GenericPersistencia<Pessoa, Long> {
     }
 
     public List<Pessoa> listarPessoasIndicacaoSimples() {
+        List<PessoaIndicacao> listaClientes = new ArrayList<PessoaIndicacao>();
+        // p.idpessoa, p.nomepessoa, p.codtipopessoa, p.numcpfcnpj, s.idsituacao, s.dssituacao, pt.dstelefone, c.idcliente 
+        List<Object[]> listaClientesObject = em.createNativeQuery(PessoaIndicacao.LISTAR_PESSOA_SIMPLES_SQL).getResultList();
+        for (Object[] cliente : listaClientesObject) {
+            Long idPessoa = ((BigInteger) cliente[0]).longValue();
+            String nomePessoa = cliente[1].toString();
+            TipoPessoa tipoPessoa = TipoPessoa.valueOf(cliente[2].toString());
+            String numCpfCnpj = cliente[3].toString();
+            Long idSituacao = ((BigInteger) cliente[4]).longValue();
+            String descSituacao = cliente[5].toString();
+            String numCelular = cliente[6].toString();
+            Long idCliente = cliente[8] != null ? ((BigInteger) cliente[8]).longValue() : null;
+            listaClientes.add(new PessoaIndicacao(id, nomePessoa, tipoPessoa, numCpfCnpj) Cliente(idPessoa, nomePessoa, tipoPessoa, numCpfCnpj, idSituacao, descSituacao, numCelular, dataAtualizacao, idClienteContrato));
+        }
+
         return em.createNamedQuery(PessoaIndicacao.LISTAR_PESSOAS_SIMPLES).getResultList();
     }
 
@@ -152,29 +172,20 @@ public class PessoaServicoEJB extends GenericPersistencia<Pessoa, Long> {
      * 
      * @param idPessoa void
      * @param idPessoaLogado
+     * @throws NegocioException
      * 
      */
-    public void salvaCliente(Long idPessoa, Long idPessoaLogado) {
-        Pessoa p = em.find(Pessoa.class, idPessoa);
+    public void salvaCliente(Long idPessoa, Long idPessoaLogado) throws NegocioException {
+        Cliente cliente = em.find(Cliente.class, idPessoa);
+        if (cliente != null) {
+            throw new NegocioException("Pessoa já é um cliente.");
+        }
 
-        Cliente cliente = new Cliente();
-        cliente.setId(p.getId());
-        cliente.setDataCadastro(p.getDataCadastro());
-        cliente.setDataNascimento(p.getDataNascimento());
-        cliente.setDescEmail(p.getDescEmail());
-        cliente.setDescOrgaoEmissorRg(p.getDescOrgaoEmissorRg());
-        cliente.setDescRazaoSocial(p.getDescRazaoSocial());
-        cliente.setNomePessoa(p.getNomePessoa());
-        cliente.setNumCpfCnpj(p.getNumCpfCnpj());
-        cliente.setNumRg(p.getNumRg());
-        cliente.setTipoPessoa(p.getTipoPessoa());
-        cliente.setTipoSexo(p.getTipoSexo());
-
-        cliente.setPessoaIndicacao(new PessoaIndicacao(idPessoaLogado));
-        cliente.setSituacao(new Situacao(Situacao.CADASTRADO));
-        cliente.setDataAtualizacao(new Date());
-
-        em.persist(cliente);
-
+        Query query = em.createNativeQuery(Cliente.INSERIR_CLIENTE_CONVERSAO_QUERY_SQL);
+        query.setParameter(1, idPessoa);
+        query.setParameter(2, Situacao.ATIVO);
+        query.setParameter(3, idPessoaLogado);
+        query.setParameter(4, new Date());
+        query.executeUpdate();
     }
 }

@@ -145,7 +145,12 @@ public class PessoaMB extends GenericPessoaMB {
     }
 
     public void converterPessoaParaCliente(Long idPessoa) {
-        ejb.salvaCliente(idPessoa, getUsuarioLogado().getIdPessoa());
+        try {
+            ejb.salvaCliente(idPessoa, getUsuarioLogado().getIdPessoa());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            MensagemUtil.addMensagemErro("msg.erro.converter.pessoa", ex.getMessage());
+        }
     }
 
     public void iniciarListarPessoasIndicacao() {

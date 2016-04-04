@@ -11,7 +11,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  * Entity implementation class for Entity: Telefone
@@ -54,9 +53,6 @@ public class PessoaTelefone extends EntidadeGenerica {
 
     @Column(name = "dsTelefone", nullable = false)
     private String descTelefone;
-
-    @Transient
-    private Boolean apagar;
 
     /**
      * Método responsável por obter apenas o ddd
@@ -114,13 +110,5 @@ public class PessoaTelefone extends EntidadeGenerica {
 
     public void setDescTelefone(String descTelefone) {
         this.descTelefone = descTelefone;
-    }
-
-    public Boolean getApagar() {
-        return apagar;
-    }
-
-    public void setApagar(Boolean apagar) {
-        this.apagar = apagar;
     }
 }

@@ -46,7 +46,7 @@
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.pessoa.celular']}" />
 					</f:facet>
-					<h:outputText value="#{cliente.telefoneCelular.descTelefone}" />
+					<h:outputText value="#{cliente.telefoneCelular.descTelefone}" converter="converter.TelefoneConverter"/>
 				</p:column>
 				
 				<p:column sortBy="#{cliente.situacao.descSituacao}">

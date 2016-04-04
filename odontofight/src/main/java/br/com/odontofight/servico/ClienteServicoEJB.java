@@ -1,5 +1,7 @@
 package br.com.odontofight.servico;
 
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +23,7 @@ import br.com.odontofight.entidade.PessoaIndicacao;
 import br.com.odontofight.entidade.PessoaTelefone;
 import br.com.odontofight.entidade.PlanoPagamento;
 import br.com.odontofight.entidade.SituacaoParcela;
+import br.com.odontofight.enums.TipoPessoa;
 import br.com.odontofight.util.DataUtil;
 
 /**
@@ -48,7 +51,23 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
     }
 
     public List<Cliente> listarClientesSimples() {
-        return em.createNamedQuery(Cliente.LISTAR_CLIENTES_SIMPLES_COM_CONTRATO).getResultList();
+        List<Cliente> listaClientes = new ArrayList<Cliente>();
+        // p.idpessoa, p.nomepessoa, p.codtipopessoa, p.numcpfcnpj, s.idsituacao, s.dssituacao, pt.dstelefone, c.dataatualizacao, cc.idclientecontrato
+        List<Object[]> listaClientesObject = em.createNativeQuery(Cliente.LISTAR_CLIENTES_SIMPLES_COM_CONTRATO_SQL).getResultList();
+        for (Object[] cliente : listaClientesObject) {
+            Long idPessoa = ((BigInteger) cliente[0]).longValue();
+            String nomePessoa = cliente[1].toString();
+            TipoPessoa tipoPessoa = TipoPessoa.valueOf(cliente[2].toString());
+            String numCpfCnpj = cliente[3].toString();
+            Long idSituacao = ((BigInteger) cliente[4]).longValue();
+            String descSituacao = cliente[5].toString();
+            String numCelular = cliente[6].toString();
+            Date dataAtualizacao = new Date(((Timestamp) cliente[7]).getTime());
+            Long idClienteContrato = cliente[8] != null ? ((BigInteger) cliente[8]).longValue() : null;
+            listaClientes.add(new Cliente(idPessoa, nomePessoa, tipoPessoa, numCpfCnpj, idSituacao, descSituacao, numCelular, dataAtualizacao, idClienteContrato));
+        }
+
+        return listaClientes;
     }
 
     /**

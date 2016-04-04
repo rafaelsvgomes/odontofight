@@ -90,7 +90,7 @@ insert into parentesco values (1,'Esposo(a)');
 insert into parentesco values (2,'Filho(a)');
 insert into parentesco values (3,'Pai');
 insert into parentesco values (4,'Mãe');
-insert into parentesco values (4,'Outros');
+insert into parentesco values (5,'Outros');
 
 
 --GRUPO
@@ -107,5 +107,5 @@ INSERT INTO pessoa values (nextval('seqpessoa'), null, 'Gestor Odontofight', nul
 INSERT INTO USUARIO values (nextval('sequsuario'), 'gestor@odontofight.com.br', '39dce46dfe47195cc172948533d2e2d3');--gestorodonto123
 INSERT INTO usuariopessoa select nextval('sequsuariopessoa'), p.idpessoa, u.idusuario from pessoa p, usuario u where p.nomepessoa = 'Gestor Odontofight' and u.dsusuario = 'gestor@odontofight.com.br';
 INSERT INTO USUARIOGRUPO select nextval('sequsuariogrupo'), 'GESTOR', u.idusuario from usuario u where u.dsusuario = 'gestor@odontofight.com.br';
-
+INSERT INTO PESSOAINDICACAO VALUES (1, 2, now());
 
