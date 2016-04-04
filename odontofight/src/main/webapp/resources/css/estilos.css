@@ -67,7 +67,24 @@ body {
  padding:5px 10px;
  width:200px;
  }
- 
+
+.coluna_id {
+	width: 40px;
+	text-align: center; 
+}
+
+.coluna_telefone {
+	width: 135px;
+}
+
+.coluna_opcoes {
+	width: 75px;
+	text-align: center; 
+}
+
+.coluna_esq_grande{
+	width: 300px;
+}
  
 /*Botoes*/
 .btn {

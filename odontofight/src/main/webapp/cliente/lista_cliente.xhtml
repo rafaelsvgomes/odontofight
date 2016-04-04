@@ -14,7 +14,7 @@
 	</f:metadata>
 	
 	<ui:define name="content">
-		<div style="border-bottom: 1px solid #E5E5E5;">
+		<div>
 			<h3>
 				<h:outputText value="#{msg['label.clientes']}" />
 				<small> <h:outputText value="#{msg['label.listagem']}" /></small>
@@ -25,14 +25,14 @@
 				value="#{clienteMB.listaClientes}" paginator="true" rows="10" paginatorPosition="bottom" sortMode="multiple"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				currentPageReportTemplate="{currentPage} de {totalPages}" rowsPerPageTemplate="10,20,50" emptyMessage="#{msg['alerta.nenhum.cliente.encontrado']}" >
-				<p:column sortBy="#{cliente.id}" style="text-align: center; width: 40px">
+				<p:column sortBy="#{cliente.id}" styleClass="coluna_id">
 					<f:facet name="header">
 						<h:outputText value="#" />
 					</f:facet>
 					<h:outputText value="#{cliente.id}"/>
 				</p:column>
 	
-				<p:column sortBy="#{cliente.nomePessoa}" style="width: 300px">
+				<p:column sortBy="#{cliente.nomePessoa}" styleClass="coluna_esq_grande">
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.pessoa.nome']}" />
 					</f:facet>
@@ -42,7 +42,7 @@
 					</h:link>
 				</p:column>
 	
-				<p:column sortBy="#{cliente.telefoneCelular.descTelefone}">
+				<p:column sortBy="#{cliente.telefoneCelular.descTelefone}" styleClass="coluna_telefone">
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.pessoa.celular']}" />
 					</f:facet>
@@ -55,6 +55,7 @@
 					</f:facet>
 					<h:outputText value="#{cliente.situacao.descSituacao}" />
 				</p:column>
+				
 				<p:column sortBy="#{cliente.dataAtualizacao}" style="text-align: center;">
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.dtatualizacao']}" />
@@ -63,7 +64,8 @@
 						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
 					</h:outputText>
 				</p:column>
-				<p:column style="text-align: center; width: 75px">
+				
+				<p:column styleClass="coluna_opcoes">
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.contrato']}" />
 					</f:facet>

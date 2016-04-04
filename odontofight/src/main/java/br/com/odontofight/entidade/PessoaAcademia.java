@@ -26,6 +26,9 @@ public class PessoaAcademia extends Pessoa {
 
     public static final String LISTAR_PESSOAS_ACADEMIA = "PessoaAcademia.listarPessoasAcademia";
     public static final String LISTAR_PESSOAS_SIMPLES = "PessoaAcademia.listarPessoasSimples";
+    public static final String LISTAR_PESSOA_SIMPLES_SQL = "SELECT p.idpessoa, p.nomepessoa, p.codtipopessoa, p.numcpfcnpj, p.dsemail, s.idsituacao, s.dssituacao, pt.dstelefone, c.idcliente "
+            + "FROM PessoaAcademia pa, PessoaTelefone pt, Situacao s, Pessoa p LEFT JOIN Cliente c ON p.idpessoa = c.idcliente "
+            + "WHERE pa.idpessoaacademia = p.idpessoa and p.idpessoa = pt.idpessoa AND pa.idsituacao = s.idsituacao AND pt.idtipotelefone = " + TipoTelefone.CELULAR;
 
     public PessoaAcademia() {
     }

@@ -1,7 +1,6 @@
 package br.com.odontofight.servico;
 
 import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,26 +48,35 @@ public class PessoaServicoEJB extends GenericPersistencia<Pessoa, Long> {
     }
 
     public List<Pessoa> listarPessoasIndicacaoSimples() {
-        List<PessoaIndicacao> listaClientes = new ArrayList<PessoaIndicacao>();
-        // p.idpessoa, p.nomepessoa, p.codtipopessoa, p.numcpfcnpj, s.idsituacao, s.dssituacao, pt.dstelefone, c.idcliente 
-        List<Object[]> listaClientesObject = em.createNativeQuery(PessoaIndicacao.LISTAR_PESSOA_SIMPLES_SQL).getResultList();
-        for (Object[] cliente : listaClientesObject) {
-            Long idPessoa = ((BigInteger) cliente[0]).longValue();
-            String nomePessoa = cliente[1].toString();
-            TipoPessoa tipoPessoa = TipoPessoa.valueOf(cliente[2].toString());
-            String numCpfCnpj = cliente[3].toString();
-            Long idSituacao = ((BigInteger) cliente[4]).longValue();
-            String descSituacao = cliente[5].toString();
-            String numCelular = cliente[6].toString();
-            Long idCliente = cliente[8] != null ? ((BigInteger) cliente[8]).longValue() : null;
-            listaClientes.add(new PessoaIndicacao(id, nomePessoa, tipoPessoa, numCpfCnpj) Cliente(idPessoa, nomePessoa, tipoPessoa, numCpfCnpj, idSituacao, descSituacao, numCelular, dataAtualizacao, idClienteContrato));
-        }
-
-        return em.createNamedQuery(PessoaIndicacao.LISTAR_PESSOAS_SIMPLES).getResultList();
+        return listarPessoas(PessoaIndicacao.LISTAR_PESSOA_SIMPLES_SQL);
     }
 
     public List<Pessoa> listarPessoasAcademiaSimples() {
-        return em.createNamedQuery(PessoaAcademia.LISTAR_PESSOAS_SIMPLES).getResultList();
+        return listarPessoas(PessoaAcademia.LISTAR_PESSOA_SIMPLES_SQL);
+    }
+
+    public List<Pessoa> listarPessoas(String query) {
+        List<Pessoa> listaPessoas = new ArrayList<Pessoa>();
+        // p.idpessoa, p.nomepessoa, p.codtipopessoa, p.numcpfcnpj, s.idsituacao, s.dssituacao, pt.dstelefone, c.idcliente
+        List<Object[]> listaPessoaObject = em.createNativeQuery(query).getResultList();
+        for (Object[] pessoa : listaPessoaObject) {
+            listaPessoas.add(montarPessoa(pessoa));
+        }
+        return listaPessoas;
+    }
+
+    private Pessoa montarPessoa(Object[] pessoa) {
+        Long idPessoa = ((BigInteger) pessoa[0]).longValue();
+        String nomePessoa = pessoa[1].toString();
+        TipoPessoa tipoPessoa = TipoPessoa.valueOf(pessoa[2].toString());
+        String numCpfCnpj = pessoa[3].toString();
+        String descEmail = pessoa[4].toString();
+        Long idSituacao = ((BigInteger) pessoa[5]).longValue();
+        String descSituacao = pessoa[6].toString();
+        String numCelular = pessoa[7].toString();
+        Long idCliente = pessoa[8] != null ? ((BigInteger) pessoa[8]).longValue() : null;
+
+        return new PessoaIndicacao(idPessoa, nomePessoa, tipoPessoa, numCpfCnpj, descEmail, idSituacao, descSituacao, numCelular, idCliente);
     }
 
     /**
@@ -183,7 +191,7 @@ public class PessoaServicoEJB extends GenericPersistencia<Pessoa, Long> {
 
         Query query = em.createNativeQuery(Cliente.INSERIR_CLIENTE_CONVERSAO_QUERY_SQL);
         query.setParameter(1, idPessoa);
-        query.setParameter(2, Situacao.ATIVO);
+        query.setParameter(2, Situacao.CADASTRADO);
         query.setParameter(3, idPessoaLogado);
         query.setParameter(4, new Date());
         query.executeUpdate();

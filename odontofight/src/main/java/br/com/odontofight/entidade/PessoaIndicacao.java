@@ -26,7 +26,7 @@ public class PessoaIndicacao extends Pessoa {
 
     public static final String LISTAR_PESSOAS_INDICACAO = "PessoaIndicacao.listarPessoasIndicacao";
     public static final String LISTAR_PESSOAS_SIMPLES = "PessoaIndicacao.listarPessoasSimples";
-    public static final String LISTAR_PESSOA_SIMPLES_SQL = "SELECT p.idpessoa, p.nomepessoa, p.codtipopessoa, p.numcpfcnpj, s.idsituacao, s.dssituacao, pt.dstelefone, c.idcliente "
+    public static final String LISTAR_PESSOA_SIMPLES_SQL = "SELECT p.idpessoa, p.nomepessoa, p.codtipopessoa, p.numcpfcnpj, p.dsemail, s.idsituacao, s.dssituacao, pt.dstelefone, c.idcliente "
             + "FROM pessoaindicacao pi, PessoaTelefone pt, Situacao s, Pessoa p LEFT JOIN Cliente c ON p.idpessoa = c.idcliente "
             + "WHERE pi.idpessoaindicacao = p.idpessoa and p.idpessoa = pt.idpessoa AND pi.idsituacao = s.idsituacao AND pt.idtipotelefone = " + TipoTelefone.CELULAR;
 
@@ -53,6 +53,11 @@ public class PessoaIndicacao extends Pessoa {
     public PessoaIndicacao(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj) {
         super(id, nomePessoa, tipoPessoa, numCpfCnpj);
 
+    }
+
+    public PessoaIndicacao(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, String descEmail, Long idSituacao, String descSituacao, String celular,
+            Long idCliente) {
+        super(id, nomePessoa, tipoPessoa, numCpfCnpj, descEmail, idSituacao, descSituacao, celular, idCliente);
     }
 
     public Situacao getSituacao() {

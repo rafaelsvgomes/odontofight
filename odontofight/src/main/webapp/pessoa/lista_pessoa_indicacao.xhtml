@@ -14,7 +14,7 @@
 	</f:metadata>
 	
 	<ui:define name="content">
-		<div style="border-bottom: 1px solid #E5E5E5;">
+		<div>
 			<h3>
 				<h:outputText value="#{msg['label.pessoas.indicacao']}" />
 				<small> <h:outputText value="#{msg['label.listagem']}" /></small>
@@ -25,14 +25,14 @@
 				value="#{pessoaMB.listaPessoas}" paginator="true" rows="10" paginatorPosition="bottom"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				currentPageReportTemplate="{currentPage} de {totalPages}" rowsPerPageTemplate="10,20,50" emptyMessage="#{msg['alerta.nenhuma.pessoa.encontrada']}" >
-				<p:column style="text-align: center; width: 20px">
+				<p:column sortBy="#{pessoa.id}" styleClass="coluna_id">
 					<f:facet name="header">
 						<h:outputText value="#" />
 					</f:facet>
 					<h:outputText value="#{pessoa.id}"/>
 				</p:column>
 	
-				<p:column sortBy="#{pessoa.nomePessoa}">
+				<p:column sortBy="#{pessoa.nomePessoa}" styleClass="coluna_esq_grande">
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.pessoa.nome']}" />
 					</f:facet>
@@ -42,30 +42,29 @@
 					</h:link>
 				</p:column>
 				
-				<p:column sortBy="#{pessoa.tipoPessoa.descTipoPessoa}" style="text-align: center;">
+				<p:column sortBy="#{pessoa.telefoneCelular.descTelefone}" styleClass="coluna_telefone">
 					<f:facet name="header">
-						<h:outputText value="#{msg['label.pessoa.tppessoa']}" />
+						<h:outputText value="#{msg['label.pessoa.celular']}" />
 					</f:facet>
-					<h:outputText value="#{pessoa.tipoPessoa.descTipoPessoa}" />
+					<h:outputText value="#{pessoa.telefoneCelular.descTelefone}" converter="converter.TelefoneConverter"/>
 				</p:column>
-	
-				<p:column sortBy="#{pessoa.numCpfCnpj}">
+				
+				<p:column sortBy="#{pessoa.descEmail}">
 					<f:facet name="header">
-						<h:outputText value="#{msg['label.pessoa.cpf.cnpj']}" />
+						<h:outputText value="#{msg['label.pessoa.email']}" />
 					</f:facet>
-					<h:outputText value="#{pessoa.numCpfCnpj}" />
+					<h:outputText value="#{pessoa.descEmail}" />
 				</p:column>
-				<p:column style="text-align: center; width: 75px">
+				
+				<p:column styleClass="coluna_opcoes">
 					<f:facet name="header">
-						<h:outputText value="#{msg['label.conversao']}" />
+						<h:outputText value="#{msg['label.cliente']}" />
 					</f:facet>
-					<h:commandLink action="#{pessoaMB.converterPessoaParaCliente(pessoa.id)}" >
-						<i class="glyphicon glyphicon-share-alt" title="Converter para Cliente"></i>
-						<i class="glyphicon glyphicon-user" title="Converter para Cliente"></i>
+					<h:commandLink action="#{pessoaMB.converterPessoaParaCliente(pessoa.id)}" rendered="#{!pessoa.isCliente()}">
+						<i class="glyphicon glyphicon-share-alt" title="Tornar Cliente!"></i>
+						<i class="glyphicon glyphicon-user" title="Tornar Cliente!"></i>
 						<f:param name="cli" value="#{cliente.id}" />
 					</h:commandLink>
-		            <h:link outcome="../contrato/incluir_contrato_cliente.xhtml" rendered="#{cliente.listaClienteContrato.size() == 0}">
-					</h:link>
 				</p:column>
 			</p:dataTable>
 		</h:form>

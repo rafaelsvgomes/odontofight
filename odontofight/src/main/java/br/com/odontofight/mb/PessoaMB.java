@@ -42,6 +42,8 @@ public class PessoaMB extends GenericPessoaMB {
 
     private List<TipoConta> listaTipoConta;
 
+    private Boolean atualizarListagem = Boolean.FALSE;
+
     public PessoaMB() {
     }
 
@@ -151,16 +153,18 @@ public class PessoaMB extends GenericPessoaMB {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.converter.pessoa", ex.getMessage());
         }
+        atualizarListagem = Boolean.TRUE;
+        MensagemUtil.addMensagemSucesso("msg.sucesso.salvar.cliente");
     }
 
     public void iniciarListarPessoasIndicacao() {
-        if (!isPostBack()) {
+        if (!isPostBack() || atualizarListagem) {
             listaPessoas = ejb.listarPessoasIndicacaoSimples();
         }
     }
 
     public void iniciarListarPessoasAcademia() {
-        if (!isPostBack()) {
+        if (!isPostBack() || atualizarListagem) {
             listaPessoas = ejb.listarPessoasAcademiaSimples();
         }
     }

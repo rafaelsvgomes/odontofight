@@ -94,6 +94,26 @@ public abstract class Pessoa extends EntidadeGenerica {
         this.listaTelefone.add(new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), celular));
     }
 
+    public Pessoa(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, String descEmail, String celular) {
+        this.id = id;
+        this.nomePessoa = nomePessoa;
+        this.tipoPessoa = tipoPessoa;
+        this.numCpfCnpj = numCpfCnpj;
+        this.descEmail = descEmail;
+        this.listaTelefone = new ArrayList<PessoaTelefone>();
+        this.listaTelefone.add(new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), celular));
+    }
+
+    public Pessoa(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, String descEmail, Long idSituacao, String descSituacao, String celular, Long idCliente) {
+        this(id, nomePessoa, tipoPessoa, numCpfCnpj, descEmail, celular);
+        this.situacao = new Situacao(idSituacao, descSituacao);
+        if (idCliente != null) {
+            this.setIsCliente(Boolean.TRUE);
+        } else {
+            this.setIsCliente(Boolean.FALSE);
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqpessoa")
     @Column(name = "idPessoa", unique = true, nullable = false)
@@ -152,6 +172,9 @@ public abstract class Pessoa extends EntidadeGenerica {
     //
     // @Transient
     // private Date dataAtualizacao;
+
+    @Transient
+    private Boolean isCliente;
 
     public Long getId() {
         return id;
@@ -345,4 +368,11 @@ public abstract class Pessoa extends EntidadeGenerica {
         this.descOrgaoEmissorRg = descOrgaoEmissorRg;
     }
 
+    public Boolean isCliente() {
+        return isCliente;
+    }
+
+    public void setIsCliente(Boolean isCliente) {
+        this.isCliente = isCliente;
+    }
 }
