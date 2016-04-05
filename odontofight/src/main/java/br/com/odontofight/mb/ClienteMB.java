@@ -29,7 +29,9 @@ import br.com.odontofight.entidade.UF;
 import br.com.odontofight.enums.TipoPessoa;
 import br.com.odontofight.enums.TipoSexo;
 import br.com.odontofight.servico.ClienteServicoEJB;
+import br.com.odontofight.util.DadosEmail;
 import br.com.odontofight.util.DataUtil;
+import br.com.odontofight.util.EmailUtil;
 import br.com.odontofight.util.MensagemUtil;
 
 @ManagedBean(name = "clienteMB")
@@ -225,6 +227,15 @@ public class ClienteMB extends GenericPessoaMB {
             }
 
             ejb.salvarClienteContrato(clienteContrato);
+
+            DadosEmail dados = new DadosEmail();
+            dados.setDestino(cliente.getDescEmail());
+            dados.setTitulo("Seja Bem Vindo");
+            dados.setMensagem(EmailUtil.getConteudoEmailHtml("email_boas_vindas.html", cliente.getNomePessoa(), cliente.getId(), clienteContrato.getDataInicioContrato(),
+                    clienteContrato.getDataFimContrato()));
+
+            EmailUtil.enviaEmailHtml(dados);
+
         } catch (Exception ex) {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.salvar.contrato", ex.getMessage());

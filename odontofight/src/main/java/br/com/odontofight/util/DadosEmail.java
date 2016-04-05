@@ -1,6 +1,15 @@
 package br.com.odontofight.util;
 
-public class Email {
+public class DadosEmail {
+
+    public DadosEmail() {
+    }
+
+    public DadosEmail(String destino, String titulo, String mensagem) {
+        this.destino = destino;
+        this.titulo = titulo;
+        this.mensagem = mensagem;
+    }
 
     private String destino;
     private String titulo;
