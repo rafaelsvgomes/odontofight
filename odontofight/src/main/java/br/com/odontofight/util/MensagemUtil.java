@@ -22,6 +22,10 @@ public final class MensagemUtil {
         getCurrentInstance().addMessage(null, new FacesMessage(severity, titulo, detalhe));
     }
 
+    private static void addMessage(Boolean growlGeral, Severity severity, String titulo, String detalhe) {
+        getCurrentInstance().addMessage("geral", new FacesMessage(severity, titulo, detalhe));
+    }
+
     public static void addMensagemSucesso(String detalhe) {
         addMessage(FacesMessage.SEVERITY_INFO, SUCESSO, getMessageFromMessagesLabels(detalhe));
     }
@@ -31,11 +35,15 @@ public final class MensagemUtil {
     }
 
     public static void addMensagemAlerta(String titulo) {
-        addMessage(FacesMessage.SEVERITY_WARN, getMessageFromValidationMessages(titulo), "Alerta");
+        addMessage(FacesMessage.SEVERITY_WARN, getMessageFromValidationMessages(titulo), "");
+    }
+
+    public static void addMensagemAlerta(String titulo, Boolean growlGeral) {
+        addMessage(growlGeral, FacesMessage.SEVERITY_WARN, getMessageFromValidationMessages(titulo), "");
     }
 
     public static void addMensagemInfo(String titulo) {
-        addMessage(FacesMessage.SEVERITY_INFO, getMessageFromMessagesLabels(titulo), "Info");
+        addMessage(FacesMessage.SEVERITY_INFO, getMessageFromMessagesLabels(titulo), "");
     }
 
     /**

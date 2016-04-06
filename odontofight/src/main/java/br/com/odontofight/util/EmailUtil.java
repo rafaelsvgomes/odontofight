@@ -1,8 +1,7 @@
 package br.com.odontofight.util;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Date;
 
@@ -14,7 +13,8 @@ import org.apache.commons.mail.SimpleEmail;
 
 public class EmailUtil {
 
-    private static final String HOSTNAME = "smtp.gmail.com";
+    private static final String HOSTNAME = MensagemUtil.getPropriedades("email.smtp");
+    private static final Integer PORTA = Integer.valueOf(MensagemUtil.getPropriedades("email.porta.smtp"));
     private static final String USERNAME = MensagemUtil.getPropriedades("email.username");
     private static final String PASSWORD = MensagemUtil.getPropriedades("email.password");
     private static final String EMAILORIGEM = MensagemUtil.getPropriedades("email.remetente");
@@ -22,9 +22,10 @@ public class EmailUtil {
     public static Email conectaEmail() throws EmailException {
         Email email = new SimpleEmail();
         email.setHostName(HOSTNAME);
-        email.setSmtpPort(587);
+        email.setSmtpPort(PORTA);
         email.setAuthenticator(new DefaultAuthenticator(USERNAME, PASSWORD));
         email.setTLS(true);
+        email.setSSL(true);
         email.setFrom(EMAILORIGEM);
         return email;
     }
@@ -32,7 +33,7 @@ public class EmailUtil {
     public static HtmlEmail conectaEmailHtml() throws EmailException {
         HtmlEmail email = new HtmlEmail();
         email.setHostName(HOSTNAME);
-        email.setSmtpPort(587);
+        email.setSmtpPort(PORTA);
         email.setAuthenticator(new DefaultAuthenticator(USERNAME, PASSWORD));
         email.setSSL(true);
         email.setTLS(true);
@@ -51,12 +52,17 @@ public class EmailUtil {
         // mensagem.getDestino(), "Informacao"));
     }
 
-    public static void enviaEmailHtml(DadosEmail dados) throws EmailException, IOException {
-        HtmlEmail email = conectaEmailHtml();
-        email.setSubject(dados.getTitulo());
-        email.addTo(dados.getDestino());
-        email.setHtmlMsg(dados.getMensagem());
-        email.send();
+    public static void enviaEmailHtml(DadosEmail dados) throws EmailException {
+        try {
+            HtmlEmail email = conectaEmailHtml();
+            email.setSubject(dados.getTitulo());
+            email.addTo(dados.getDestino());
+            email.setHtmlMsg(dados.getMensagem());
+            email.send();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new EmailException("Erro ao enviar email");
+        }
 
         // configure uma mensagem alternativa caso o servidor não suporte HTML
         // email.setTextMsg("Seu servidor de e-mail não suporta mensagem HTML");
@@ -64,31 +70,25 @@ public class EmailUtil {
 
     }
 
-    public static void enviaEmailBoasVindas(DadosEmail dados, String arquivoHtml, String nomePessoa, Long codUsuario, Date dataInicioContrato, Date dataFimContrato)
-            throws IOException, EmailException {
-        // String conteudo = getConteudoEmailHtml(arquivoHtml, nomePessoa, codUsuario.toString(), DataUtil.toString(dataInicioContrato,
-        // DataUtil.DATA_DIA_MES_ANO),
-        // DataUtil.toString(dataFimContrato, DataUtil.DATA_DIA_MES_ANO));
-        // enviaEmailHtml(dados, conteudo);
-    }
+    public static String getConteudoEmailHtml(String arquivoHtml, String usuario, Long codUsuario, Date dtInicioContrato, Date dtFimContrato) throws EmailException {
+        try {
+            StringBuilder sb = new StringBuilder();
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            InputStream stream = classLoader.getResourceAsStream(arquivoHtml);
+            InputStreamReader reader = new InputStreamReader(stream);
+            BufferedReader br = new BufferedReader(reader);
+            String linha = br.readLine();
+            while (linha != null) {
+                sb.append(linha);
+                linha = br.readLine();
+            }
+            br.close();
 
-    public static String getConteudoEmailHtml(String arquivoHtml, String usuario, Long codUsuario, Date dtInicioContrato, Date dtFimContrato) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        FileInputStream stream = new FileInputStream("/resources/" + arquivoHtml);
-        InputStreamReader reader = new InputStreamReader(stream);
-        BufferedReader br = new BufferedReader(reader);
-        String linha = br.readLine();
-        while (linha != null) {
-            sb.append(linha);
-            linha = br.readLine();
+            return sb.toString().replace("@usuario", usuario).replace("@codusuario", codUsuario.toString())
+                    .replace("@validadeinicio", DataUtil.toString(dtInicioContrato, DataUtil.DATA_DIA_MES_ANO))
+                    .replace("@validadefim", DataUtil.toString(dtFimContrato, DataUtil.DATA_DIA_MES_ANO));
+        } catch (Exception e) {
+            throw new EmailException("Erro ao montar conteudo do email de boas vindas");
         }
-        br.close();
-
-        // System.out.println(sb.toString().replace("@usuario", usuario).replace("@codusuario", codUsuario).replace("@validadeinicio", dtInicioContrato)
-        // .replace("@validadefim", dtFimContrato));
-
-        return sb.toString().replace("@usuario", usuario).replace("@codusuario", codUsuario.toString())
-                .replace("@validadeinicio", DataUtil.toString(dtInicioContrato, DataUtil.DATA_DIA_MES_ANO))
-                .replace("@validadefim", DataUtil.toString(dtFimContrato, DataUtil.DATA_DIA_MES_ANO));
     }
 }

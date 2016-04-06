@@ -9,8 +9,13 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
+
+import org.apache.commons.mail.EmailException;
 
 import br.com.odontofight.entidade.Cliente;
 import br.com.odontofight.entidade.ClienteContrato;
@@ -228,20 +233,35 @@ public class ClienteMB extends GenericPessoaMB {
 
             ejb.salvarClienteContrato(clienteContrato);
 
-            DadosEmail dados = new DadosEmail();
-            dados.setDestino(cliente.getDescEmail());
-            dados.setTitulo("Seja Bem Vindo");
-            dados.setMensagem(EmailUtil.getConteudoEmailHtml("email_boas_vindas.html", cliente.getNomePessoa(), cliente.getId(), clienteContrato.getDataInicioContrato(),
-                    clienteContrato.getDataFimContrato()));
-
-            EmailUtil.enviaEmailHtml(dados);
-
+            EmailUtil.enviaEmailHtml(getDadosEmailBoasVindas());
+        } catch (EmailException emx) {
+            emx.printStackTrace();
+            MensagemUtil.addMensagemAlerta("msg.contrato.salvo.erro.enviar.email", Boolean.TRUE);
+            return "/layout/home.xhtml";
         } catch (Exception ex) {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.salvar.contrato", ex.getMessage());
             return "";
         }
         return "../cliente/lista_cliente.xhtml?faces-redirect=true";
+    }
+
+    private void message() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Flash flash = facesContext.getExternalContext().getFlash();
+        flash.setKeepMessages(true);
+        flash.setRedirect(true);
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sample info message", "PrimeFaces rocks!"));
+    }
+
+    private DadosEmail getDadosEmailBoasVindas() throws EmailException {
+        DadosEmail dados = new DadosEmail();
+        dados.setDestino(cliente.getDescEmail());
+        dados.setTitulo("Seja Bem Vindo");
+        dados.setMensagem(EmailUtil.getConteudoEmailHtml(MensagemUtil.getPropriedades("template.email.boasvindas"), cliente.getNomePessoa(), cliente.getId(),
+                clienteContrato.getDataInicioContrato(), clienteContrato.getDataFimContrato()));
+
+        return dados;
     }
 
     public void addRow() {
