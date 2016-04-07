@@ -61,7 +61,7 @@
 				<div class="control-group">
 					<div class="controls">
 						<p:outputLabel styleClass="control-label" value="#{clienteMB.cliente.tipoPessoa == 'J' ? msg['label.pessoa.nomeempresa'] : msg['label.pessoa.nome']} *" />
-						<p:inputText id="nome" value="#{clienteMB.cliente.nomePessoa}" label="#{msg['label.pessoa.nome']}"  required="true" styleClass="input-large">
+						<p:inputText id="nome" value="#{clienteMB.cliente.nomePessoa}" label="#{msg['label.pessoa.nome']}"  required="true" styleClass="input-xlarge">
 							<f:validateLength minimum="5" maximum="100" />
 						</p:inputText>
 						<h:message for="nome" styleClass="ui-message-error"/>
@@ -72,7 +72,7 @@
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.dsrazaosocial']} *" rendered="#{clienteMB.cliente.tipoPessoa == 'J'}" />
 							<p:inputText id="rzSocial" value="#{clienteMB.cliente.descRazaoSocial}" label="#{msg['label.pessoa.dsrazaosocial']}" required="true" 
-									rendered="#{clienteMB.cliente.tipoPessoa == 'J'}" styleClass="input-large"/>
+									rendered="#{clienteMB.cliente.tipoPessoa == 'J'}" styleClass="input-xlarge"/>
 						</div>
 						<h:message for="rzSocial" styleClass="ui-message-error"/>
 					</div>
@@ -82,21 +82,21 @@
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.rg']} *" />
-							<p:inputText id="rg" value="#{clienteMB.cliente.numRg}" label="#{msg['label.pessoa.rg']}" required="true" />
+							<p:inputText id="rg" value="#{clienteMB.cliente.numRg}" label="#{msg['label.pessoa.rg']}" required="true" styleClass="input-large"/>
 							<h:message for="rg" styleClass="ui-message-error"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.orgao.emissor']} *" />
-							<p:inputText id="orgaoEmiss" value="#{clienteMB.cliente.descOrgaoEmissorRg}" label="#{msg['label.pessoa.orgao.emissor']}" required="true" style="text-transform: uppercase;" />
+							<p:inputText id="orgaoEmiss" value="#{clienteMB.cliente.descOrgaoEmissorRg}" label="#{msg['label.pessoa.orgao.emissor']}" required="true" styleClass="input-small" style="text-transform: uppercase;" />
 							<h:message for="orgaoEmiss" styleClass="ui-message-error"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.dtnascimento']} *" />
-							<p:inputMask id="date" value="#{clienteMB.cliente.dataNascimento}" mask="99/99/9999" label="#{msg['label.pessoa.dtnascimento']}" required="true">
+							<p:inputMask id="date" value="#{clienteMB.cliente.dataNascimento}" mask="99/99/9999" label="#{msg['label.pessoa.dtnascimento']}" required="true" styleClass="input-large">
 								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
 							</p:inputMask>
 							<h:message for="date" styleClass="ui-message-error"/>
@@ -133,7 +133,7 @@
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.email']} *" />
 					<p:inputText id="email" value="#{clienteMB.cliente.descEmail}" validator="#{emailValidator.validate}" label="#{msg['label.pessoa.email']}" 
-						disabled="#{clienteMB.idSelecionado != null}" required="true" styleClass="input-large">
+						disabled="#{clienteMB.idSelecionado != null}" required="true" styleClass="input-xlarge">
 						<f:validateLength minimum="5" maximum="100" />
 					</p:inputText>
 					<h:message for="email" styleClass="ui-message-error"/>
@@ -157,7 +157,7 @@
 			<div class="control-group">
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco']}" />
-			        <p:inputText id="descendereco" value="#{clienteMB.endereco.descEndereco}" label="#{msg['label.pessoa.endereco']}" styleClass="input-large"/>
+			        <p:inputText id="descendereco" value="#{clienteMB.endereco.descEndereco}" label="#{msg['label.pessoa.endereco']}" styleClass="input-xlarge"/>
 				</div>
 			</div>
 			<div class="control-group">
@@ -169,7 +169,7 @@
 			<div class="control-group">
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.compl']}" />
-			        <p:inputText id="desc_compl" value="#{clienteMB.endereco.descComplemento}" label="#{msg['label.pessoa.endereco.compl']}" styleClass="input-large"/>
+			        <p:inputText id="desc_compl" value="#{clienteMB.endereco.descComplemento}" label="#{msg['label.pessoa.endereco.compl']}" styleClass="input-xlarge"/>
 				</div>
 			</div>
 			<div class="control-group">
@@ -227,7 +227,7 @@
 			<div class="control-group">
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.cliente.dt.inicio.academia']}" />
-			        <p:inputMask value="#{clienteMB.cliente.clienteLuta.dataInicioAcademia}" mask="99/99/9999" label="#{msg['label.cliente.dt.inicio.academia']}">
+			        <p:inputMask value="#{clienteMB.cliente.clienteLuta.dataInicioAcademia}" mask="99/99/9999" label="#{msg['label.cliente.dt.inicio.academia']}" styleClass="input-large">
 						 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
 					</p:inputMask>
 				</div>

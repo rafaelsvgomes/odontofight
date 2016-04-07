@@ -9,11 +9,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.context.Flash;
 
 import org.apache.commons.mail.EmailException;
 
@@ -34,7 +31,6 @@ import br.com.odontofight.entidade.UF;
 import br.com.odontofight.enums.TipoPessoa;
 import br.com.odontofight.enums.TipoSexo;
 import br.com.odontofight.servico.ClienteServicoEJB;
-import br.com.odontofight.util.DadosEmail;
 import br.com.odontofight.util.DataUtil;
 import br.com.odontofight.util.EmailUtil;
 import br.com.odontofight.util.MensagemUtil;
@@ -233,7 +229,7 @@ public class ClienteMB extends GenericPessoaMB {
 
             ejb.salvarClienteContrato(clienteContrato);
 
-            EmailUtil.enviaEmailHtml(getDadosEmailBoasVindas());
+            EmailUtil.enviaEmailBoasVindas(clienteContrato);
         } catch (EmailException emx) {
             emx.printStackTrace();
             MensagemUtil.addMensagemAlerta("msg.contrato.salvo.erro.enviar.email", Boolean.TRUE);
@@ -244,24 +240,6 @@ public class ClienteMB extends GenericPessoaMB {
             return "";
         }
         return "../cliente/lista_cliente.xhtml?faces-redirect=true";
-    }
-
-    private void message() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        Flash flash = facesContext.getExternalContext().getFlash();
-        flash.setKeepMessages(true);
-        flash.setRedirect(true);
-        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sample info message", "PrimeFaces rocks!"));
-    }
-
-    private DadosEmail getDadosEmailBoasVindas() throws EmailException {
-        DadosEmail dados = new DadosEmail();
-        dados.setDestino(cliente.getDescEmail());
-        dados.setTitulo("Seja Bem Vindo");
-        dados.setMensagem(EmailUtil.getConteudoEmailHtml(MensagemUtil.getPropriedades("template.email.boasvindas"), cliente.getNomePessoa(), cliente.getId(),
-                clienteContrato.getDataInicioContrato(), clienteContrato.getDataFimContrato()));
-
-        return dados;
     }
 
     public void addRow() {

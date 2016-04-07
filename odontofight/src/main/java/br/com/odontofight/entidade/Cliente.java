@@ -191,4 +191,11 @@ public class Cliente extends Pessoa {
         this.listaClienteDependente = listaClienteDependente;
     }
 
+    public String getCodCliente() {
+        String cod = id.toString();
+        while (cod.length() < 5) {
+            cod = "0" + cod;
+        }
+        return cod;
+    }
 }

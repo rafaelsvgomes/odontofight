@@ -45,7 +45,7 @@
 				<div class="control-group">
 					<div class="controls">
 						<p:outputLabel styleClass="control-label" value="#{pessoaMB.pessoa.tipoPessoa == 'J' ? msg['label.pessoa.nomeempresa'] : msg['label.pessoa.nome']} *" />
-						<p:inputText id="nome" value="#{pessoaMB.pessoa.nomePessoa}" label="#{msg['label.pessoa.nome']}"  required="true" styleClass="input-large">
+						<p:inputText id="nome" value="#{pessoaMB.pessoa.nomePessoa}" label="#{msg['label.pessoa.nome']}"  required="true" styleClass="input-xlarge">
 							<f:validateLength minimum="5" maximum="100" />
 						</p:inputText>
 						<h:message for="nome" styleClass="ui-message-error"/>
@@ -56,7 +56,7 @@
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.dsrazaosocial']} *" rendered="#{pessoaMB.pessoa.tipoPessoa == 'J'}" />
 							<p:inputText id="rzSocial" value="#{pessoaMB.pessoa.descRazaoSocial}" label="#{msg['label.pessoa.dsrazaosocial']}" required="true" 
-									rendered="#{pessoaMB.pessoa.tipoPessoa == 'J'}" styleClass="input-large"/>
+									rendered="#{pessoaMB.pessoa.tipoPessoa == 'J'}" styleClass="input-xlarge"/>
 							<h:message for="rzSocial" styleClass="ui-message-error"/>
 						</div>
 					</div>
@@ -66,21 +66,21 @@
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.rg']} *" />
-							<p:inputText id="rg" value="#{pessoaMB.pessoa.numRg}" label="#{msg['label.pessoa.rg']}" required="true" />
+							<p:inputText id="rg" value="#{pessoaMB.pessoa.numRg}" label="#{msg['label.pessoa.rg']}" required="true" styleClass="input-large"/>
 							<h:message for="rg" styleClass="ui-message-error"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.orgao.emissor']} *" />
-							<p:inputText id="orgaoEmiss" value="#{pessoaMB.pessoa.descOrgaoEmissorRg}" label="#{msg['label.pessoa.orgao.emissor']}" required="true" style="text-transform: uppercase;" />
+							<p:inputText id="orgaoEmiss" value="#{pessoaMB.pessoa.descOrgaoEmissorRg}" label="#{msg['label.pessoa.orgao.emissor']}" required="true" styleClass="input-small" style="text-transform: uppercase;" />
 							<h:message for="orgaoEmiss" styleClass="ui-message-error"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.dtnascimento']} *" />
-							<p:inputMask id="date" value="#{pessoaMB.pessoa.dataNascimento}" mask="99/99/9999" label="#{msg['label.pessoa.dtnascimento']}" required="true">
+							<p:inputMask id="date" value="#{pessoaMB.pessoa.dataNascimento}" mask="99/99/9999" label="#{msg['label.pessoa.dtnascimento']}" required="true" styleClass="input-large">
 								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
 							</p:inputMask>
 							<h:message for="date" styleClass="ui-message-error"/>
@@ -117,7 +117,7 @@
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.email']} *" />
 					<p:inputText id="email" value="#{pessoaMB.pessoa.descEmail}" validator="#{emailValidator.validate}" label="#{msg['label.pessoa.email']}" 
-						disabled="#{pessoaMB.idSelecionado != null}" required="true" styleClass="input-large">
+						disabled="#{pessoaMB.idSelecionado != null}" required="true" styleClass="input-xlarge">
 						<f:validateLength minimum="5" maximum="100" />
 					</p:inputText>
 					<h:message for="email" styleClass="ui-message-error" />
@@ -162,7 +162,7 @@
 				<div class="control-group">
 					<div class="controls">
 						<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.conta']} *" />
-				        <p:inputText id="conta" value="#{pessoaMB.pessoaConta.numConta}" label="#{msg['label.pessoa.conta']}" required="true" styleClass="input-small"/>
+				        <p:inputText id="conta" value="#{pessoaMB.pessoaConta.numConta}" label="#{msg['label.pessoa.conta']}" required="true" styleClass="input-large"/>
 				        <h:message for="conta" styleClass="ui-message-error"/>
 					</div>
 				</div>
@@ -185,7 +185,7 @@
 			<div class="control-group">
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco']}" />
-			        <p:inputText id="descendereco" value="#{pessoaMB.endereco.descEndereco}" label="#{msg['label.pessoa.endereco']}" styleClass="input-large"/>
+			        <p:inputText id="descendereco" value="#{pessoaMB.endereco.descEndereco}" label="#{msg['label.pessoa.endereco']}" styleClass="input-xlarge"/>
 				</div>
 			</div>
 			<div class="control-group">
@@ -197,7 +197,7 @@
 			<div class="control-group">
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.compl']}" />
-			        <p:inputText id="desc_compl" value="#{pessoaMB.endereco.descComplemento}" label="#{msg['label.pessoa.endereco.compl']}" styleClass="input-large"/>
+			        <p:inputText id="desc_compl" value="#{pessoaMB.endereco.descComplemento}" label="#{msg['label.pessoa.endereco.compl']}" styleClass="input-xlarge"/>
 				</div>
 			</div>
 			<div class="control-group">

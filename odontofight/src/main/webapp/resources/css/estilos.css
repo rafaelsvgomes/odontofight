@@ -40,7 +40,6 @@ body {
 }
 
 .usuario_logado {
-  background: url(ui-icon ui-icon-person) no-repeat top right;
   font-size: 12px;
   text-align: right;
   position: absolute;
@@ -84,6 +83,34 @@ body {
 
 .coluna_esq_grande{
 	width: 300px;
+}
+
+.form-horizontal .controls .input-mini {
+	width: 60px
+}
+
+.form-horizontal .controls .input-small {
+	width: 90px
+}
+
+.form-horizontal .controls .input-medium {
+	width: 150px
+}
+
+.form-horizontal .controls .input-large {
+	width: 210px
+}
+
+.form-horizontal .controls .input-xlarge {
+	width: 270px
+}
+
+.form-horizontal .controls .input-xxlarge {
+	width: 530px
+}
+
+.input-valor input{
+    width: 150px !important;   
 }
  
 /*Botoes*/

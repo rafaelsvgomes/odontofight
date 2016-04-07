@@ -11,6 +11,8 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
 
+import br.com.odontofight.entidade.ClienteContrato;
+
 public class EmailUtil {
 
     private static final String HOSTNAME = MensagemUtil.getPropriedades("email.smtp");
@@ -70,7 +72,21 @@ public class EmailUtil {
 
     }
 
-    public static String getConteudoEmailHtml(String arquivoHtml, String usuario, Long codUsuario, Date dtInicioContrato, Date dtFimContrato) throws EmailException {
+    public static void enviaEmailBoasVindas(ClienteContrato clienteContrato) throws EmailException {
+        enviaEmailHtml(getDadosEmailBoasVindas(clienteContrato));
+    }
+
+    private static DadosEmail getDadosEmailBoasVindas(ClienteContrato clienteContrato) throws EmailException {
+        DadosEmail dados = new DadosEmail();
+        dados.setDestino(clienteContrato.getCliente().getDescEmail());
+        dados.setTitulo("Seja Bem Vindo a ODONTOFight");
+        dados.setMensagem(EmailUtil.getConteudoEmailHtml(MensagemUtil.getPropriedades("template.email.boasvindas"), clienteContrato.getCliente().getNomePessoa(), clienteContrato
+                .getCliente().getCodCliente(), clienteContrato.getDataInicioContrato(), clienteContrato.getDataFimContrato()));
+
+        return dados;
+    }
+
+    public static String getConteudoEmailHtml(String arquivoHtml, String usuario, String codCliente, Date dtInicioContrato, Date dtFimContrato) throws EmailException {
         try {
             StringBuilder sb = new StringBuilder();
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -84,7 +100,7 @@ public class EmailUtil {
             }
             br.close();
 
-            return sb.toString().replace("@usuario", usuario).replace("@codusuario", codUsuario.toString())
+            return sb.toString().replace("@usuario", usuario).replace("@codusuario", codCliente.toString())
                     .replace("@validadeinicio", DataUtil.toString(dtInicioContrato, DataUtil.DATA_DIA_MES_ANO))
                     .replace("@validadefim", DataUtil.toString(dtFimContrato, DataUtil.DATA_DIA_MES_ANO));
         } catch (Exception e) {

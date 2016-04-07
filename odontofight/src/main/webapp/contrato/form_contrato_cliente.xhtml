@@ -44,39 +44,39 @@
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.valorcontrato']} *" />
 					        <pe:inputNumber emptyValue="0" id="valorContrato" minValue="0" symbol="R$ " label="#{msg['label.contrato.valorcontrato']}" required="true" disabled="true"
-					        	  value="#{clienteMB.clienteContrato.valorContrato}" decimalSeparator="," thousandSeparator="."/>
+					        	  value="#{clienteMB.clienteContrato.valorContrato}" decimalSeparator="," thousandSeparator="." styleClass="input-valor"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.qtdparcelas']} *" />
-							<p:inputText id="qtdParcela" value="#{clienteMB.clienteContrato.qtdParcela}" label="#{msg['label.contrato.qtdparcelas']}" required="true" disabled="true"/>
+							<p:inputText id="qtdParcela" value="#{clienteMB.clienteContrato.qtdParcela}" label="#{msg['label.contrato.qtdparcelas']}" required="true" disabled="true" styleClass="input-small"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.valorparcela']} *" />
 					        <pe:inputNumber emptyValue="0" id="valorParcela" minValue="0" symbol="R$ " label="#{msg['label.contrato.valorparcela']}" required="true" disabled="true"
-					        	  value="#{clienteMB.clienteContrato.valorParcela}" decimalSeparator="," thousandSeparator="."/>
+					        	  value="#{clienteMB.clienteContrato.valorParcela}" decimalSeparator="," thousandSeparator="." styleClass="input-valor"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.diavencimento']} *" />
-							<p:inputText id="diaVenc" value="#{clienteMB.clienteContrato.diaVencimentoParcela}" label="#{msg['label.contrato.diavencimento']}" required="true" disabled="#{clienteMB.operacao == 'V'}"/>
+							<p:inputText id="diaVenc" value="#{clienteMB.clienteContrato.diaVencimentoParcela}" label="#{msg['label.contrato.diavencimento']}" required="true" styleClass="input-small" disabled="#{clienteMB.operacao == 'V'}"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.contrato.valorcomissao']} *" />
 					        <pe:inputNumber emptyValue="0" id="valorComissao" minValue="0" symbol="R$ " label="#{msg['label.contrato.valorcomissao']}" required="true" disabled="#{clienteMB.operacao == 'V'}"
-					        	  value="#{clienteMB.clienteContrato.valorComissaoContrato}" decimalSeparator="," thousandSeparator="."/>
+					        	  value="#{clienteMB.clienteContrato.valorComissaoContrato}" decimalSeparator="," thousandSeparator="." styleClass="input-valor"/>
 						</div>
 					</div>
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.dtinicio']} *" />
-							<p:inputMask id="dataIni" value="#{clienteMB.clienteContrato.dataInicioContrato}" mask="99/99/9999" label="#{msg['label.dtinicio']}" required="true" disabled="#{clienteMB.operacao == 'V'}">
+							<p:inputMask id="dataIni" value="#{clienteMB.clienteContrato.dataInicioContrato}" mask="99/99/9999" label="#{msg['label.dtinicio']}" required="true" styleClass="input-medium" disabled="#{clienteMB.operacao == 'V'}">
 								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
 							</p:inputMask>
 						</div>
@@ -84,7 +84,7 @@
 					<div class="control-group">
 						<div class="controls">
 							<p:outputLabel styleClass="control-label" value="#{msg['label.dtfim']} *" />
-							<p:inputMask id="dataFim" value="#{clienteMB.clienteContrato.dataFimContrato}" mask="99/99/9999" label="#{msg['label.dtfim']}" required="true" disabled="#{clienteMB.operacao == 'V'}">
+							<p:inputMask id="dataFim" value="#{clienteMB.clienteContrato.dataFimContrato}" mask="99/99/9999" label="#{msg['label.dtfim']}" required="true" styleClass="input-medium" disabled="#{clienteMB.operacao == 'V'}">
 								 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
 							</p:inputMask>
 						</div>
@@ -138,6 +138,9 @@
 				<p:ajax process="@this" update="form_contrato:dtable_rateio" />
 			</h:commandButton>
 		</fieldset>
+		
+		<p:separator/>
+		
 		<div class="controls">
 			<p:commandButton value="#{msg['button.salvar']}" action="#{clienteMB.salvarContratoCliente}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
 				oncomplete="PF('dlgExec').hide();" rendered="#{clienteMB.cliente != null}" disabled="#{clienteMB.operacao == 'V'}"/>
