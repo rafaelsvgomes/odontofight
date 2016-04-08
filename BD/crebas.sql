@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      PostgreSQL 8                                 */
-/* Created on:     31/03/2016 14:46:46                          */
+/* Created on:     08/04/2016 14:20:40                          */
 /*==============================================================*/
 
 
@@ -423,6 +423,7 @@ create table PESSOA (
    DATANASCIMENTO       DATE                 null,
    DATACADASTRO         DATE                 not null,
    DSEMAIL              VARCHAR(50)          null,
+   BOLEMAILVALIDADO     BOOL                 null,
    constraint PK_PESSOA primary key (IDPESSOA)
 );
 
