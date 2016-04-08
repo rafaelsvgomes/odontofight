@@ -177,7 +177,7 @@
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.cep']}" />
 			        <p:inputMask id="cliente_cep" mask="99999-999" valueChangeListener="#{pessoaMB.buscarCep}" value="#{pessoaMB.endereco.numCep}" label="#{msg['label.pessoa.endereco.cep']}" 
-			        	styleClass="input-small"  >
+			        	styleClass="input-medium"  >
 						<p:ajax event="blur" process="@this" update="descendereco, end_num, desc_compl, bairro, cidade, select_uf" onstart="PF('dlgExec').show();" oncomplete="PF('dlgExec').hide();"/>
 					</p:inputMask>
 				</div>
@@ -226,9 +226,7 @@
 		<p:separator/>
 	
 		<div class="controls">
-			<p:commandButton value="#{msg['button.salvar']}" action="#{pessoaMB.salvar}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
-				oncomplete="PF('dlgExec').hide();" update="form_pessoa" rendered="#{pessoaMB.pessoa != null}" />
-			
+			<p:commandButton value="#{msg['button.salvar']}" action="#{pessoaMB.salvar}" styleClass="btn btn-success" update="form_pessoa" rendered="#{pessoaMB.pessoa != null}" />
 			<p:button value="#{msg['button.cancelar']}" outcome="/layout/home.xhtml" styleClass="btn" />
 		</div>
 		<h:inputHidden value="#{pessoaMB.pessoa.id}" />

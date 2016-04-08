@@ -41,7 +41,7 @@
 	</f:view>
 	
 	<!-- Auxiliar para paginas -->
-	
+	<p:ajaxStatus onstart="PF('dlgExec').show()" onsuccess="PF('dlgExec').hide()" />
 	<p:dialog id="dialog" header="#{msg['dialog.emexecucao.titulo']}" widgetVar="dlgExec" modal="true">  
     	<h:outputText value="#{msg['dialog.emexecucao.aguarde']}" />  
 	</p:dialog>

@@ -149,7 +149,7 @@
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.endereco.cep']}" />
 			        <p:inputMask id="cliente_cep" mask="99999-999" valueChangeListener="#{clienteMB.buscarCep}" value="#{clienteMB.endereco.numCep}" label="#{msg['label.pessoa.endereco.cep']}" 
-			        	styleClass="input-small"  >
+			        	styleClass="input-medium"  >
 						<p:ajax event="blur" process="@this" update="descendereco, end_num, desc_compl, bairro, cidade, select_uf" onstart="PF('dlgExec').show();" oncomplete="PF('dlgExec').hide();"/>
 					</p:inputMask>
 				</div>
@@ -284,24 +284,23 @@
 				</p:column>
 				
 				<p:column style="width:32px; text-align: center">
-					<h:commandLink id="RemoveAjax" action="#{clienteMB.onDeleteLinhaDependente(dependente)}">
-						<p:ajax process="@this" update="form_cliente:dtable_dependente" />
+					<h:commandLink id="RemoveAjax" action="#{clienteMB.onDeleteLinhaDependente(dependente)}" >
+						<p:ajax process="@this" update="form_cliente:dtable_dependente"/>
 						<i class="glyphicon glyphicon-trash" style="font-size: 12px;"></i>
 					</h:commandLink>
 				</p:column>
 			</p:dataTable>
 			
-			<h:commandButton id="AddAjax" value="Add" action="#{clienteMB.onAddDependente()}">
-				<p:ajax process="@this" update="form_cliente:dtable_dependente" />
+			<h:commandButton id="AddAjax" value="Add" action="#{clienteMB.onAddDependente()}" >
+				<p:ajax process="@this" update="form_cliente:dtable_dependente"/>
 			</h:commandButton>
 		</fieldset>
 	
 		<p:separator/>
 	
 		<div class="controls">
-			<p:commandButton value="#{msg['button.salvar']}" update="form_cliente" action="#{clienteMB.salvar}" styleClass="btn btn-success" onclick="PF('dlgExec').show();" 
-				oncomplete="PF('dlgExec').hide();" rendered="#{clienteMB.cliente != null}" />
-			<p:button value="#{msg['button.cancelar']}" outcome="lista_cliente" styleClass="btn" />
+			<p:commandButton value="#{msg['button.salvar']}" update="form_cliente" action="#{clienteMB.salvar}" styleClass="btn btn-success" rendered="#{clienteMB.cliente != null}" />
+			<p:button value="#{msg['button.cancelar']}" outcome="/layout/home.xhtml" styleClass="btn" />
 		</div>
 		<h:inputHidden value="#{clienteMB.cliente.id}" />
 	</h:form>
