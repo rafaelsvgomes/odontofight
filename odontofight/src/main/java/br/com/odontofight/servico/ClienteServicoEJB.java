@@ -202,4 +202,8 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
         return DataUtil.incrementarData(dataUltimaParcela, Calendar.MONTH, 1);
     }
 
+    public void validarEmail(Long idCliente, String emailCliente) {
+        Cliente cliente = find(idCliente);
+        cliente.setBolEmailValidado(Boolean.TRUE);
+    }
 }

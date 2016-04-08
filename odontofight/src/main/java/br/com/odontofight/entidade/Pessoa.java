@@ -150,6 +150,8 @@ public abstract class Pessoa extends EntidadeGenerica {
     @Column(name = "dsEmail", nullable = false)
     private String descEmail;
 
+    private Boolean bolEmailValidado;
+
     @Column(name = "dataCadastro")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataCadastro;
@@ -374,5 +376,13 @@ public abstract class Pessoa extends EntidadeGenerica {
 
     public void setIsCliente(Boolean isCliente) {
         this.isCliente = isCliente;
+    }
+
+    public Boolean getBolEmailValidado() {
+        return bolEmailValidado;
+    }
+
+    public void setBolEmailValidado(Boolean bolEmailValidado) {
+        this.bolEmailValidado = bolEmailValidado;
     }
 }

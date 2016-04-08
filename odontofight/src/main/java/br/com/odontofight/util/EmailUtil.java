@@ -81,12 +81,13 @@ public class EmailUtil {
         dados.setDestino(clienteContrato.getCliente().getDescEmail());
         dados.setTitulo("Seja Bem Vindo a ODONTOFight");
         dados.setMensagem(EmailUtil.getConteudoEmailHtml(MensagemUtil.getPropriedades("template.email.boasvindas"), clienteContrato.getCliente().getNomePessoa(), clienteContrato
-                .getCliente().getCodCliente(), clienteContrato.getDataInicioContrato(), clienteContrato.getDataFimContrato()));
+                .getCliente().getCodCliente(), clienteContrato.getCliente().getDescEmail(), clienteContrato.getDataInicioContrato(), clienteContrato.getDataFimContrato()));
 
         return dados;
     }
 
-    public static String getConteudoEmailHtml(String arquivoHtml, String usuario, String codCliente, Date dtInicioContrato, Date dtFimContrato) throws EmailException {
+    public static String getConteudoEmailHtml(String arquivoHtml, String nomeCliente, String codCliente, String email, Date dtInicioContrato, Date dtFimContrato)
+            throws EmailException {
         try {
             StringBuilder sb = new StringBuilder();
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -100,9 +101,9 @@ public class EmailUtil {
             }
             br.close();
 
-            return sb.toString().replace("@usuario", usuario).replace("@codusuario", codCliente.toString())
-                    .replace("@validadeinicio", DataUtil.toString(dtInicioContrato, DataUtil.DATA_DIA_MES_ANO))
-                    .replace("@validadefim", DataUtil.toString(dtFimContrato, DataUtil.DATA_DIA_MES_ANO));
+            return sb.toString().replace("@nome_cliente", nomeCliente).replace("@cod_cliente", codCliente.toString())
+                    .replace("@inicio_contrato", DataUtil.toString(dtInicioContrato, DataUtil.DATA_DIA_MES_ANO))
+                    .replace("@fim_contrato", DataUtil.toString(dtFimContrato, DataUtil.DATA_DIA_MES_ANO)).replace("@email", email);
         } catch (Exception e) {
             throw new EmailException("Erro ao montar conteudo do email de boas vindas");
         }
