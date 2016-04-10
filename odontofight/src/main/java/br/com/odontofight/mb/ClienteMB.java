@@ -65,6 +65,8 @@ public class ClienteMB extends GenericPessoaMB {
 
     private ClienteDependente dependente;
 
+    private String emailAtual;
+
     public ClienteMB() {
     }
 
@@ -85,8 +87,9 @@ public class ClienteMB extends GenericPessoaMB {
             cliente = new Cliente();
             cliente.setTipoPessoa(TipoPessoa.F);
             cliente.setTipoSexo(TipoSexo.M);
-            cliente.setSituacao(new Situacao(Situacao.CADASTRADO));
+            cliente.setSituacao(new Situacao(Situacao.ATIVO));
             cliente.setClienteLuta(new ClienteLuta());
+            cliente.setBolEmailValidado(Boolean.FALSE);
             iniciarTelefonePessoa(cliente);
             iniciarEnderecoPessoa(cliente);
 
@@ -110,7 +113,17 @@ public class ClienteMB extends GenericPessoaMB {
             if (cliente.getClienteLuta() == null) {
                 cliente.setClienteLuta(new ClienteLuta());
             }
+
+            emailAtual = cliente.getDescEmail();
         }
+    }
+
+    private void initListaPessoasIndicacao() {
+        listaPessoasIndicacao = ejb.listarPessoasIndicacao();
+    }
+
+    private void initListaPessoasAcademia() {
+        listaPessoasAcademia = ejb.listarPessoasAcademia();
     }
 
     public String salvar() {
@@ -119,7 +132,19 @@ public class ClienteMB extends GenericPessoaMB {
                 cliente.setClienteLuta(null);
             }
 
+            if (idSelecionado != null && emailAlterado()) {
+                cliente.setBolEmailValidado(Boolean.FALSE);
+            }
+
             ejb.salvarCliente(cliente);
+
+            if (idSelecionado != null && emailAlterado()) {
+                EmailUtil.enviaEmailAlteracaoEmail(cliente);
+            }
+        } catch (EmailException emx) {
+            emx.printStackTrace();
+            MensagemUtil.addMensagemAlerta("msg.contrato.salvo.erro.enviar.email", Boolean.TRUE);
+            return OUTCOME_HOME;
         } catch (Exception ex) {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.salvar.cliente", ex.getMessage());
@@ -129,12 +154,12 @@ public class ClienteMB extends GenericPessoaMB {
         return "lista_cliente?faces-redirect=true";
     }
 
-    private void initListaPessoasIndicacao() {
-        listaPessoasIndicacao = ejb.listarPessoasIndicacao();
-    }
+    private Boolean emailAlterado() {
+        if (!cliente.getDescEmail().equals(emailAtual)) {
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
 
-    private void initListaPessoasAcademia() {
-        listaPessoasAcademia = ejb.listarPessoasAcademia();
     }
 
     private Boolean salvarClienteLuta() {
@@ -179,7 +204,7 @@ public class ClienteMB extends GenericPessoaMB {
             } else {
                 clienteContrato = new ClienteContrato();
                 clienteContrato.setCliente(cliente);
-                clienteContrato.setContratoSituacao(new ContratoSituacao(ContratoSituacao.CADASTRADO));
+                clienteContrato.setContratoSituacao(new ContratoSituacao(ContratoSituacao.ATIVO));
 
                 ContratoRateio rateio = new ContratoRateio();
                 rateio.setClienteContrato(clienteContrato);
@@ -233,7 +258,7 @@ public class ClienteMB extends GenericPessoaMB {
         } catch (EmailException emx) {
             emx.printStackTrace();
             MensagemUtil.addMensagemAlerta("msg.contrato.salvo.erro.enviar.email", Boolean.TRUE);
-            return "/layout/home.xhtml";
+            return OUTCOME_HOME;
         } catch (Exception ex) {
             ex.printStackTrace();
             MensagemUtil.addMensagemErro("msg.erro.salvar.contrato", ex.getMessage());

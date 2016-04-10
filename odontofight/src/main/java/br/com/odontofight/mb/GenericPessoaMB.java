@@ -19,6 +19,8 @@ abstract class GenericPessoaMB extends GenericMB {
 
     private static final long serialVersionUID = 1L;
 
+    public static final String OUTCOME_HOME = "/layout/home.xhtml";
+
     private PessoaEndereco endereco;
 
     private PessoaTelefone telefone;

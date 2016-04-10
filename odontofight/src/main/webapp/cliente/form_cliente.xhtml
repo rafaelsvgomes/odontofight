@@ -133,7 +133,7 @@
 				<div class="controls">
 					<p:outputLabel styleClass="control-label" value="#{msg['label.pessoa.email']} *" />
 					<p:inputText id="email" value="#{clienteMB.cliente.descEmail}" validator="#{emailValidator.validate}" label="#{msg['label.pessoa.email']}" 
-						disabled="#{clienteMB.idSelecionado != null}" required="true" styleClass="input-xlarge">
+						required="true" styleClass="input-xlarge">
 						<f:validateLength minimum="5" maximum="100" />
 					</p:inputText>
 					<h:message for="email" styleClass="ui-message-error"/>

@@ -11,6 +11,7 @@ import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.SimpleEmail;
 
+import br.com.odontofight.entidade.Cliente;
 import br.com.odontofight.entidade.ClienteContrato;
 
 public class EmailUtil {
@@ -74,6 +75,16 @@ public class EmailUtil {
 
     public static void enviaEmailBoasVindas(ClienteContrato clienteContrato) throws EmailException {
         enviaEmailHtml(getDadosEmailBoasVindas(clienteContrato));
+    }
+
+    public static void enviaEmailAlteracaoEmail(Cliente cliente) throws EmailException {
+        DadosEmail dados = new DadosEmail();
+        dados.setDestino(cliente.getDescEmail());
+        dados.setTitulo("Aviso Alteração de e-mail ODONTOFight");
+        dados.setMensagem(EmailUtil.getConteudoEmailHtml(MensagemUtil.getPropriedades("template.email.alteracao_email"), cliente.getNomePessoa(), cliente.getCodCliente(),
+                cliente.getDescEmail(), new Date(), new Date()));
+
+        enviaEmailHtml(dados);
     }
 
     private static DadosEmail getDadosEmailBoasVindas(ClienteContrato clienteContrato) throws EmailException {

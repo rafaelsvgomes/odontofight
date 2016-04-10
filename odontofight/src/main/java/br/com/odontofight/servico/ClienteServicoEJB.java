@@ -59,12 +59,14 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
             String nomePessoa = cliente[1].toString();
             TipoPessoa tipoPessoa = TipoPessoa.valueOf(cliente[2].toString());
             String numCpfCnpj = cliente[3].toString();
-            Long idSituacao = ((BigInteger) cliente[4]).longValue();
-            String descSituacao = cliente[5].toString();
-            String numCelular = cliente[6].toString();
-            Date dataAtualizacao = new Date(((Timestamp) cliente[7]).getTime());
-            Long idClienteContrato = cliente[8] != null ? ((BigInteger) cliente[8]).longValue() : null;
-            listaClientes.add(new Cliente(idPessoa, nomePessoa, tipoPessoa, numCpfCnpj, idSituacao, descSituacao, numCelular, dataAtualizacao, idClienteContrato));
+            Boolean bolEmailValidado = new Boolean(cliente[4].toString());
+            Long idSituacao = ((BigInteger) cliente[5]).longValue();
+            String descSituacao = cliente[6].toString();
+            String numCelular = cliente[7].toString();
+            Date dataAtualizacao = new Date(((Timestamp) cliente[8]).getTime());
+            Long idClienteContrato = cliente[9] != null ? ((BigInteger) cliente[9]).longValue() : null;
+            listaClientes
+                    .add(new Cliente(idPessoa, nomePessoa, tipoPessoa, numCpfCnpj, bolEmailValidado, idSituacao, descSituacao, numCelular, dataAtualizacao, idClienteContrato));
         }
 
         return listaClientes;
@@ -87,9 +89,9 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
         return cliente;
     }
 
-    public Boolean emailJaUtilizado(String descUsuario) {
+    public Boolean emailJaUtilizado(String descUsuario, Long idCliente) {
         try {
-            em.createNamedQuery(Cliente.OBTER_POR_DESC_USUARIO).setParameter("descUsuario", descUsuario).getSingleResult();
+            em.createNamedQuery(Cliente.OBTER_POR_DESC_USUARIO).setParameter("descUsuario", descUsuario).setParameter("idCliente", idCliente).getSingleResult();
             return Boolean.TRUE;
         } catch (NoResultException e) {
             return Boolean.FALSE;

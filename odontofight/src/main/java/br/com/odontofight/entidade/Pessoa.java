@@ -94,6 +94,16 @@ public abstract class Pessoa extends EntidadeGenerica {
         this.listaTelefone.add(new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), celular));
     }
 
+    public Pessoa(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, Boolean bolEmailValidado, String celular) {
+        this.id = id;
+        this.nomePessoa = nomePessoa;
+        this.tipoPessoa = tipoPessoa;
+        this.numCpfCnpj = numCpfCnpj;
+        this.bolEmailValidado = bolEmailValidado;
+        this.listaTelefone = new ArrayList<PessoaTelefone>();
+        this.listaTelefone.add(new PessoaTelefone(new TipoTelefone(TipoTelefone.CELULAR), celular));
+    }
+
     public Pessoa(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, String descEmail, String celular) {
         this.id = id;
         this.nomePessoa = nomePessoa;

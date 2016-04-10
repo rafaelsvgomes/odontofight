@@ -23,22 +23,19 @@ import br.com.odontofight.enums.TipoSexo;
 @Entity
 @PrimaryKeyJoinColumn(name = "idCliente", referencedColumnName = "idPessoa")
 @NamedQueries({
-        @NamedQuery(name = Cliente.OBTER_POR_DESC_USUARIO, query = "SELECT c.id FROM Cliente c WHERE c.descEmail = :descUsuario"),
+        @NamedQuery(name = Cliente.OBTER_POR_DESC_USUARIO, query = "SELECT c.id FROM Cliente c WHERE c.descEmail = :descUsuario and c.id not in (:idCliente)"),
         @NamedQuery(name = Cliente.OBTER_CLIENTE_EDITAR, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.descRazaoSocial, c.tipoPessoa, c.numCpfCnpj, "
                 + "c.tipoSexo, c.dataNascimento, c.descEmail, c.dataCadastro, c.situacao.id, c.situacao.descSituacao, c.pessoaIndicacao.id, c.pessoaIndicacao.nomePessoa) "
                 + "FROM Cliente c WHERE c.id = :idCliente"),
         @NamedQuery(name = Cliente.LISTAR_CLIENTES_SIMPLES, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.tipoPessoa, c.numCpfCnpj, c.situacao.id, "
-                + "c.situacao.descSituacao) FROM Cliente c"),
-        @NamedQuery(name = Cliente.LISTAR_CLIENTES_SIMPLES_COM_CONTRATO, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.tipoPessoa, c.numCpfCnpj, c.situacao.id, "
-                + "c.situacao.descSituacao, pt.descTelefone, c.dataAtualizacao, cc.id) FROM PessoaTelefone pt, Cliente c LEFT JOIN c.listaClienteContrato cc WHERE c.id = pt.pessoa.id and pt.tipoTelefone.id = 2") })
+                + "c.situacao.descSituacao) FROM Cliente c") })
 public class Cliente extends Pessoa {
     private static final long serialVersionUID = 1L;
 
     public static final String OBTER_POR_DESC_USUARIO = "Cliente.obterPorDescUsuario";
     public static final String OBTER_CLIENTE_EDITAR = "Cliente.obterClienteEditar";
     public static final String LISTAR_CLIENTES_SIMPLES = "Cliente.listarClientesSimples";
-    public static final String LISTAR_CLIENTES_SIMPLES_COM_CONTRATO = "Cliente.listarClientesSimplesComContrato";
-    public static final String LISTAR_CLIENTES_SIMPLES_COM_CONTRATO_SQL = "SELECT p.idpessoa, p.nomepessoa, p.codtipopessoa, p.numcpfcnpj, s.idsituacao, s.dssituacao, pt.dstelefone, c.dataatualizacao, cc.idclientecontrato "
+    public static final String LISTAR_CLIENTES_SIMPLES_COM_CONTRATO_SQL = "SELECT p.idpessoa, p.nomepessoa, p.codtipopessoa, p.numcpfcnpj, p.bolemailvalidado, s.idsituacao, s.dssituacao, pt.dstelefone, c.dataatualizacao, cc.idclientecontrato "
             + "FROM Pessoa p, PessoaTelefone pt, Situacao s, Cliente c LEFT JOIN ClienteContrato cc ON c.idcliente = cc.idcliente "
             + "WHERE p.idpessoa = pt.idpessoa AND p.idpessoa = c.idcliente AND c.idsituacao = s.idsituacao AND pt.idtipotelefone = " + TipoTelefone.CELULAR;
     public static final String INSERIR_CLIENTE_CONVERSAO_QUERY_SQL = "INSERT INTO CLIENTE (idCliente, idSituacao, idPessoaIndicacao, dataAtualizacao) VALUES (?,?,?,?)";
@@ -70,9 +67,9 @@ public class Cliente extends Pessoa {
         }
     }
 
-    public Cliente(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, Long idSituacao, String descSituacao, String celular, Date dataAtualizacao,
-            Long idClienteContrato) {
-        super(id, nomePessoa, tipoPessoa, numCpfCnpj, celular);
+    public Cliente(Long id, String nomePessoa, TipoPessoa tipoPessoa, String numCpfCnpj, Boolean bolEmailValidado, Long idSituacao, String descSituacao, String celular,
+            Date dataAtualizacao, Long idClienteContrato) {
+        super(id, nomePessoa, tipoPessoa, numCpfCnpj, bolEmailValidado, celular);
         this.situacao = new Situacao(idSituacao, descSituacao);
         this.dataAtualizacao = dataAtualizacao;
         if (idClienteContrato != null) {

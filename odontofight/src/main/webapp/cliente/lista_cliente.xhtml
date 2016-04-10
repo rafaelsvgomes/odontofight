@@ -42,7 +42,7 @@
 					</h:link>
 				</p:column>
 	
-				<p:column sortBy="#{cliente.telefoneCelular.descTelefone}" styleClass="coluna_telefone">
+				<p:column sortBy="#{cliente.telefoneCelular.descTelefone}">
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.pessoa.celular']}" />
 					</f:facet>
@@ -65,9 +65,17 @@
 					</h:outputText>
 				</p:column>
 				
+				<p:column sortBy="#{cliente.bolEmailValidado}" styleClass="coluna_opcoes">
+					<f:facet name="header">
+						<i class="glyphicon glyphicon-envelope" title="Email Validado" />
+					</f:facet>
+					<ui:fragment rendered="#{cliente.bolEmailValidado}"><i class="glyphicon glyphicon-ok-sign" style="color: green;" title="Email Validado" /></ui:fragment>
+					<ui:fragment rendered="#{!cliente.bolEmailValidado}"><i class="glyphicon glyphicon-remove-sign" style="color: red;" title="Email Não Validado"/></ui:fragment>
+				</p:column>
+				
 				<p:column styleClass="coluna_opcoes">
 					<f:facet name="header">
-						<h:outputText value="#{msg['label.contrato']}" />
+						<i class="glyphicon glyphicon-file" title="Contrato" />
 					</f:facet>
 		            <h:link outcome="../contrato/incluir_contrato_cliente.xhtml" rendered="#{cliente.listaClienteContrato.size() == 0}">
 						<i class="glyphicon glyphicon-pencil" title="Incluir Contrato"></i>
