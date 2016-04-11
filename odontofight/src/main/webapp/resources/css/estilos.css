@@ -81,6 +81,11 @@ body {
 	text-align: center; 
 }
 
+.coluna_tornar_cliente {
+	width: 60px;
+	text-align: center; 
+}
+
 .coluna_esq_grande{
 	width: 300px;
 }

@@ -10,13 +10,11 @@ import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import br.com.odontofight.entidade.Cliente;
 import br.com.odontofight.entidade.ClienteContrato;
 import br.com.odontofight.entidade.ClienteDependente;
-import br.com.odontofight.entidade.Pessoa;
 import br.com.odontofight.entidade.PessoaAcademia;
 import br.com.odontofight.entidade.PessoaEndereco;
 import br.com.odontofight.entidade.PessoaIndicacao;
@@ -87,29 +85,6 @@ public class ClienteServicoEJB extends GenericPersistencia<Cliente, Long> {
             cliente.getListaClienteDependente().get(0);
         }
         return cliente;
-    }
-
-    public Boolean emailJaUtilizado(String descUsuario, Long idCliente) {
-        try {
-            em.createNamedQuery(Cliente.OBTER_POR_DESC_USUARIO).setParameter("descUsuario", descUsuario).setParameter("idCliente", idCliente).getSingleResult();
-            return Boolean.TRUE;
-        } catch (NoResultException e) {
-            return Boolean.FALSE;
-        }
-    }
-
-    public Boolean cpfCnpjJaUtilizado(String numCpfCnpj, Long idClienteSelecionado) {
-        try {
-            if (idClienteSelecionado != null) {
-                em.createNamedQuery(Pessoa.OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO).setParameter("numCpfCnpj", numCpfCnpj).setParameter("idSelecionado", idClienteSelecionado)
-                        .getSingleResult();
-            } else {
-                em.createNamedQuery(Pessoa.OBTER_POR_NUM_CPF_CNPJ).setParameter("numCpfCnpj", numCpfCnpj).getSingleResult();
-            }
-            return Boolean.TRUE;
-        } catch (NoResultException e) {
-            return Boolean.FALSE;
-        }
     }
 
     /**

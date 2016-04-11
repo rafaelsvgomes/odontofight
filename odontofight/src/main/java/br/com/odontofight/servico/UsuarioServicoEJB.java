@@ -32,21 +32,15 @@ public class UsuarioServicoEJB extends GenericPersistencia<Usuario, Long> {
         super(Usuario.class);
     }
 
-    // TODO: rafalel - Se o usuario estiver em mais de um grupo vai retornar mais de um registro.
+    // TODO: rafalel - Se o usuario estiver em mais de um grupo vai retornar mais de um registro e vai dar problema na montagem do objeto.
     public UsuarioLogado obterUsuario(String userName) {
-        String sql = "SELECT p.idpessoa, u.dsusuario, ug.cdgrupo, u.idusuario, p.nomepessoa FROM usuario u, usuariopessoa up, usuariogrupo ug, pessoa p "
-                + "WHERE p.idpessoa = up.idpessoa and u.idusuario = up.idusuario and u.idusuario = ug.idusuario and u.dsusuario = :userName";
-
-        Object[] usuario = (Object[]) em.createNativeQuery(sql).setParameter("userName", userName).getSingleResult();
+        Object[] usuario = (Object[]) em.createNativeQuery(Usuario.OBTER_POR_USERNAME).setParameter("userName", userName).getSingleResult();
 
         return montarUsuarioLogado(usuario);
     }
 
     public UsuarioLogado obterUsuario(Long idUser) {
-        String sql = "SELECT p.idpessoa, u.dsusuario, ug.cdgrupo, u.idusuario, p.nomepessoa FROM usuario u, usuariopessoa up, usuariogrupo ug, pessoa p "
-                + "WHERE p.idpessoa = up.idpessoa and u.idusuario = up.idusuario and u.idusuario = ug.idusuario and u.idusuario = :idUser";
-
-        Object[] usuario = (Object[]) em.createNativeQuery(sql).setParameter("idUser", idUser).getSingleResult();
+        Object[] usuario = (Object[]) em.createNativeQuery(Usuario.OBTER_POR_ID_USUARIO).setParameter("idUser", idUser).getSingleResult();
 
         return montarUsuarioLogado(usuario);
     }

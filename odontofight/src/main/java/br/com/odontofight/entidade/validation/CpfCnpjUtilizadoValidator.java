@@ -10,7 +10,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-import br.com.odontofight.servico.ClienteServicoEJB;
+import br.com.odontofight.servico.PessoaServicoEJB;
 import br.com.odontofight.util.MensagemUtil;
 
 @ManagedBean(name = "cpfCnpjUtilizadoValidator")
@@ -18,7 +18,7 @@ import br.com.odontofight.util.MensagemUtil;
 public class CpfCnpjUtilizadoValidator implements Validator {
 
     @EJB
-    private ClienteServicoEJB ejb;
+    private PessoaServicoEJB ejb;
 
     public void validate(FacesContext context, UIComponent component, Object submittedValue) throws ValidatorException {
         new CpfCnpjValidator().validate(context, component, submittedValue);
@@ -28,9 +28,9 @@ public class CpfCnpjUtilizadoValidator implements Validator {
         }
         String numCpfCnpj = String.valueOf(submittedValue);
         UIParameter p = (UIParameter) component.findComponent("idSelecionado");
-        Long idClienteSelecionado = p.getValue() != null ? (Long) p.getValue() : null;
+        Long idPessoaSelecionado = p.getValue() != null ? (Long) p.getValue() : null;
 
-        if (ejb.cpfCnpjJaUtilizado(numCpfCnpj, idClienteSelecionado)) {
+        if (ejb.cpfCnpjJaUtilizado(numCpfCnpj, idPessoaSelecionado)) {
             String label = (String) component.getAttributes().get("label");
             throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, MensagemUtil.getMessageFromValidationMessages("cpfcnpj.ja.cadastrado", label), null));
         }

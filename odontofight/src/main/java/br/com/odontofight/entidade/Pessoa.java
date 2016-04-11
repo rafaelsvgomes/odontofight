@@ -34,13 +34,17 @@ import br.com.odontofight.enums.TipoSexo;
 @Inheritance(strategy = InheritanceType.JOINED)
 @SequenceGenerator(name = "seqpessoa", sequenceName = "seqpessoa", allocationSize = 1)
 @NamedQueries({
-        @NamedQuery(name = Cliente.OBTER_POR_NUM_CPF_CNPJ, query = "SELECT p.id FROM Pessoa p WHERE p.numCpfCnpj = :numCpfCnpj"),
-        @NamedQuery(name = Cliente.OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO, query = "SELECT p.id FROM Pessoa p WHERE p.numCpfCnpj = :numCpfCnpj and p.id not in (:idSelecionado)"), })
+        @NamedQuery(name = Pessoa.OBTER_POR_DESC_EMAIL, query = "SELECT p.id FROM Pessoa p WHERE p.descEmail = :descEmail"),
+        @NamedQuery(name = Pessoa.OBTER_POR_DESC_EMAIL_IGNORA_SELECIONADO, query = "SELECT p.id FROM Pessoa p WHERE p.descEmail = :descEmail and p.id not in (:idPessoaSelecionado)"),
+        @NamedQuery(name = Pessoa.OBTER_POR_NUM_CPF_CNPJ, query = "SELECT p.id FROM Pessoa p WHERE p.numCpfCnpj = :numCpfCnpj"),
+        @NamedQuery(name = Pessoa.OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO, query = "SELECT p.id FROM Pessoa p WHERE p.numCpfCnpj = :numCpfCnpj and p.id not in (:idPessoaSelecionado)"), })
 public abstract class Pessoa extends EntidadeGenerica {
     private static final long serialVersionUID = -8922414503953244338L;
 
-    public static final String OBTER_POR_NUM_CPF_CNPJ = "obterPorNumCpfCnpj";
-    public static final String OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO = "obterPorNumCpfCnpjIgnoraSelecionado";
+    public static final String OBTER_POR_DESC_EMAIL = "Pessoa.obterPorDescUsuario";
+    public static final String OBTER_POR_DESC_EMAIL_IGNORA_SELECIONADO = "Pessoa.obterPorDescUsuarioIgnoraSelecionado";
+    public static final String OBTER_POR_NUM_CPF_CNPJ = "Pessoa.obterPorNumCpfCnpj";
+    public static final String OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO = "Pessoa.obterPorNumCpfCnpjIgnoraSelecionado";
 
     public Pessoa() {
     }

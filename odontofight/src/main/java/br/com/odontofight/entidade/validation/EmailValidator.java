@@ -10,7 +10,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
-import br.com.odontofight.servico.ClienteServicoEJB;
+import br.com.odontofight.servico.PessoaServicoEJB;
 import br.com.odontofight.util.MensagemUtil;
 
 @ManagedBean(name = "emailValidator")
@@ -18,9 +18,7 @@ import br.com.odontofight.util.MensagemUtil;
 public class EmailValidator implements Validator {
 
     @EJB
-    private ClienteServicoEJB ejb;
-
-    // TODO: Verificar validação, esta apenas para cliente.
+    private PessoaServicoEJB ejb;
 
     public void validate(FacesContext context, UIComponent component, Object submittedValue) throws ValidatorException {
         if (submittedValue == null) {
@@ -28,9 +26,9 @@ public class EmailValidator implements Validator {
         }
         String username = (String) submittedValue;
         UIParameter p = (UIParameter) component.findComponent("idSelecionado");
-        Long idClienteSelecionado = p.getValue() != null ? (Long) p.getValue() : null;
+        Long idPessoaSelecionado = p.getValue() != null ? (Long) p.getValue() : null;
 
-        if (ejb.emailJaUtilizado(username, idClienteSelecionado)) {
+        if (ejb.emailJaUtilizado(username, idPessoaSelecionado)) {
             throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, MensagemUtil.getMessageFromValidationMessages("email.ja.cadastrado"), null));
         }
 

@@ -12,6 +12,8 @@
 	</div>
 	
 	<h:form id="form_pessoa" styleClass="form-horizontal">
+		<h:inputHidden value="#{pessoaMB.pessoa.id}" />
+		<f:param id="idSelecionado" name="idSelecionado" value="#{pessoaMB.idSelecionado}"/>
 		<p:growl id="grow_form_pessoa" showDetail="false" autoUpdate="true"/>
 		<fieldset>
 			<legend>
@@ -36,7 +38,6 @@
 							label="#{pessoaMB.pessoa.tipoPessoa == 'J' ? msg['label.pessoa.cnpj'] : msg['label.pessoa.cpf']}" 
 							value="#{pessoaMB.pessoa.numCpfCnpj}" required="true" styleClass="input-large" 
 							validator="#{cpfCnpjUtilizadoValidator.validate}">
-							<f:param id="idSelecionado" name="idSelecionado" value="#{pessoaMB.idSelecionado}"/>
 						</p:inputMask>
 						<h:message for="cpf_cnpj" styleClass="ui-message-error"/>
 					</div>
@@ -229,6 +230,5 @@
 			<p:commandButton value="#{msg['button.salvar']}" action="#{pessoaMB.salvar}" styleClass="btn btn-success" update="form_pessoa" rendered="#{pessoaMB.pessoa != null}" />
 			<p:button value="#{msg['button.cancelar']}" outcome="/layout/home.xhtml" styleClass="btn" />
 		</div>
-		<h:inputHidden value="#{pessoaMB.pessoa.id}" />
 	</h:form>
 </ui:fragment>

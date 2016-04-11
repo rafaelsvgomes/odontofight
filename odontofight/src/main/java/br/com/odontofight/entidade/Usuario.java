@@ -24,6 +24,11 @@ public class Usuario extends EntidadeGenerica {
 
     private static final long serialVersionUID = 1L;
 
+    public static final String OBTER_POR_USERNAME = "SELECT p.idpessoa, u.dsusuario, ug.cdgrupo, u.idusuario, p.nomepessoa FROM usuario u, usuariopessoa up, usuariogrupo ug, pessoa p "
+            + "WHERE p.idpessoa = up.idpessoa and u.idusuario = up.idusuario and u.idusuario = ug.idusuario and u.dsusuario = :userName";
+    public static final String OBTER_POR_ID_USUARIO = "SELECT p.idpessoa, u.dsusuario, ug.cdgrupo, u.idusuario, p.nomepessoa FROM usuario u, usuariopessoa up, usuariogrupo ug, pessoa p "
+            + "WHERE p.idpessoa = up.idpessoa and u.idusuario = up.idusuario and u.idusuario = ug.idusuario and u.idusuario = :idUser";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequsuario")
     @Column(name = "idusuario", unique = true, nullable = false)

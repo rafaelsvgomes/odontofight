@@ -98,22 +98,27 @@ public class PessoaServicoEJB extends GenericPersistencia<Pessoa, Long> {
         return pessoa;
     }
 
-    public Boolean emailJaUtilizado(String descUsuario) {
+    public Boolean emailJaUtilizado(String descEmail, Long idPessoaSelecionado) {
         try {
-            em.createNamedQuery(Cliente.OBTER_POR_DESC_USUARIO).setParameter("descUsuario", descUsuario).getSingleResult();
+            if (idPessoaSelecionado != null) {
+                em.createNamedQuery(Pessoa.OBTER_POR_DESC_EMAIL_IGNORA_SELECIONADO).setParameter("descEmail", descEmail).setParameter("idPessoaSelecionado", idPessoaSelecionado)
+                        .getSingleResult();
+            } else {
+                em.createNamedQuery(Pessoa.OBTER_POR_DESC_EMAIL).setParameter("descEmail", descEmail).getSingleResult();
+            }
             return Boolean.TRUE;
         } catch (NoResultException e) {
             return Boolean.FALSE;
         }
     }
 
-    public Boolean cpfCnpjJaUtilizado(String numCpfCnpj, Long idClienteSelecionado) {
+    public Boolean cpfCnpjJaUtilizado(String numCpfCnpj, Long idPessoaSelecionado) {
         try {
-            if (idClienteSelecionado != null) {
-                em.createNamedQuery(Cliente.OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO).setParameter("numCpfCnpj", numCpfCnpj).setParameter("idSelecionado", idClienteSelecionado)
-                        .getSingleResult();
+            if (idPessoaSelecionado != null) {
+                em.createNamedQuery(Pessoa.OBTER_POR_NUM_CPF_CNPJ_IGNORA_SELECIONADO).setParameter("numCpfCnpj", numCpfCnpj)
+                        .setParameter("idPessoaSelecionado", idPessoaSelecionado).getSingleResult();
             } else {
-                em.createNamedQuery(Cliente.OBTER_POR_NUM_CPF_CNPJ).setParameter("numCpfCnpj", numCpfCnpj).getSingleResult();
+                em.createNamedQuery(Pessoa.OBTER_POR_NUM_CPF_CNPJ).setParameter("numCpfCnpj", numCpfCnpj).getSingleResult();
             }
             return Boolean.TRUE;
         } catch (NoResultException e) {

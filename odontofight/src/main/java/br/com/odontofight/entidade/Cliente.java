@@ -23,7 +23,6 @@ import br.com.odontofight.enums.TipoSexo;
 @Entity
 @PrimaryKeyJoinColumn(name = "idCliente", referencedColumnName = "idPessoa")
 @NamedQueries({
-        @NamedQuery(name = Cliente.OBTER_POR_DESC_USUARIO, query = "SELECT c.id FROM Cliente c WHERE c.descEmail = :descUsuario and c.id not in (:idCliente)"),
         @NamedQuery(name = Cliente.OBTER_CLIENTE_EDITAR, query = "SELECT new br.com.odontofight.entidade.Cliente(c.id, c.nomePessoa, c.descRazaoSocial, c.tipoPessoa, c.numCpfCnpj, "
                 + "c.tipoSexo, c.dataNascimento, c.descEmail, c.dataCadastro, c.situacao.id, c.situacao.descSituacao, c.pessoaIndicacao.id, c.pessoaIndicacao.nomePessoa) "
                 + "FROM Cliente c WHERE c.id = :idCliente"),
@@ -32,7 +31,6 @@ import br.com.odontofight.enums.TipoSexo;
 public class Cliente extends Pessoa {
     private static final long serialVersionUID = 1L;
 
-    public static final String OBTER_POR_DESC_USUARIO = "Cliente.obterPorDescUsuario";
     public static final String OBTER_CLIENTE_EDITAR = "Cliente.obterClienteEditar";
     public static final String LISTAR_CLIENTES_SIMPLES = "Cliente.listarClientesSimples";
     public static final String LISTAR_CLIENTES_SIMPLES_COM_CONTRATO_SQL = "SELECT p.idpessoa, p.nomepessoa, p.codtipopessoa, p.numcpfcnpj, p.bolemailvalidado, s.idsituacao, s.dssituacao, pt.dstelefone, c.dataatualizacao, cc.idclientecontrato "

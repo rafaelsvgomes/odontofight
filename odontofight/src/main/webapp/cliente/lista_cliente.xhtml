@@ -22,7 +22,7 @@
 		</div>
 		<h:form>
 			<p:dataTable id="dataTable" var="cliente"
-				value="#{clienteMB.listaClientes}" paginator="true" rows="10" paginatorPosition="bottom" sortMode="multiple"
+				value="#{clienteMB.listaClientes}" paginator="true" rows="10" paginatorPosition="bottom" sortMode="multiple" resizableColumns="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				currentPageReportTemplate="{currentPage} de {totalPages}" rowsPerPageTemplate="10,20,50" emptyMessage="#{msg['alerta.nenhum.cliente.encontrado']}" >
 				<p:column sortBy="#{cliente.id}" styleClass="coluna_id">

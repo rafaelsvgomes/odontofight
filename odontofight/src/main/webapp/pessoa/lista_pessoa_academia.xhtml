@@ -22,7 +22,7 @@
 		</div>
 		<h:form>
 			<p:dataTable id="dataTable" var="pessoa"
-				value="#{pessoaMB.listaPessoas}" paginator="true" rows="10" paginatorPosition="bottom"
+				value="#{pessoaMB.listaPessoas}" paginator="true" rows="10" paginatorPosition="bottom" sortMode="multiple" resizableColumns="true"
 				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 				currentPageReportTemplate="{currentPage} de {totalPages}" rowsPerPageTemplate="10,20,50" emptyMessage="#{msg['alerta.nenhuma.pessoa.encontrada']}" >
 				<p:column sortBy="#{pessoa.id}" styleClass="coluna_id">
@@ -36,7 +36,7 @@
 					<f:facet name="header">
 						<h:outputText value="#{msg['label.pessoa.nome']}" />
 					</f:facet>
-					<h:link outcome="editar_pessoa_indicacao" value="#{pessoa.nomePessoa}"
+					<h:link outcome="editar_pessoa_academia" value="#{pessoa.nomePessoa}"
 						title="#{msg['label.editar']} #{pessoa.nomePessoa}">
 						<f:param name="id" value="#{pessoa.id}" />
 					</h:link>
@@ -56,10 +56,11 @@
 					<h:outputText value="#{pessoa.descEmail}" />
 				</p:column>
 				
-				<p:column styleClass="coluna_opcoes">
+				<p:column styleClass="coluna_tornar_cliente">
 					<f:facet name="header">
-						<h:outputText value="#{msg['label.cliente']}" />
+						<i class="glyphicon glyphicon-user" title="Cliente?" />
 					</f:facet>
+					<ui:fragment rendered="#{pessoa.isCliente()}"><i class="glyphicon glyphicon-user" style="color: green;" title="Já é cliente!" /></ui:fragment>
 					<h:commandLink action="#{pessoaMB.converterPessoaParaCliente(pessoa.id)}" rendered="#{!pessoa.isCliente()}">
 						<i class="glyphicon glyphicon-share-alt" title="Tornar Cliente!"></i>
 						<i class="glyphicon glyphicon-user" title="Tornar Cliente!"></i>
