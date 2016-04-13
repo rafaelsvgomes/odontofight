@@ -254,7 +254,7 @@ public class ClienteMB extends GenericPessoaMB {
 
             ejb.salvarClienteContrato(clienteContrato);
 
-            EmailUtil.enviaEmailBoasVindas(clienteContrato);
+            enviarEmailAdesaoContrato();
         } catch (EmailException emx) {
             emx.printStackTrace();
             MensagemUtil.addMensagemAlerta("msg.contrato.salvo.erro.enviar.email", Boolean.TRUE);
@@ -265,6 +265,11 @@ public class ClienteMB extends GenericPessoaMB {
             return "";
         }
         return "../cliente/lista_cliente.xhtml?faces-redirect=true";
+    }
+
+    private void enviarEmailAdesaoContrato() throws EmailException {
+        EmailUtil.enviaEmailBoasVindas(clienteContrato);
+        EmailUtil.enviaEmailAdesao(clienteContrato);
     }
 
     public void addRow() {
